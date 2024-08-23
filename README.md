@@ -54,7 +54,9 @@ Total mutants killed: 4
 ╰────────────────────────────────────────────────┴────────────────┴────────────────┴────────────╯
 ```
 
-The specification testing tool respects the `RUST_LOG` variable, and it will print out as much information as the variable allows. There is possibility to enable logging only for the specific modules. Please refer to the[env_logger](https://docs.rs/env_logger/latest/env_logger/) documentation for more details.
+The specification testing tool respects the `RUST_LOG` variable, and it will print out as much information as the variable allows.
+There is possibility to enable logging only for the specific modules.
+Please refer to the [env_logger](https://docs.rs/env_logger/latest/env_logger/) documentation for more details.
 
 To generate a report in a JSON format, use the `-o` option:
 ```bash
