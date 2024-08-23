@@ -31,10 +31,10 @@ serde_json = "1.0"
 tempfile = "3.10"
 toml = "0.5"
 
-move-command-line-common = { path = "../../move-command-line-common" }
-move-compiler = { path = "../../move-compiler" }
-move-compiler-v2 = { path = "../../move-compiler-v2" }
-move-ir-types = { path = "../../move-ir/types" }
-move-model = { path = "../../move-model" }
-move-package = { path = "../move-package" }
-move-symbol-pool = { path = "../../move-symbol-pool" }
+move-command-line-common = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-compiler = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-compiler-v2 = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-ir-types = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-model = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-package = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-symbol-pool = { git = "https://github.com/Rqnsom/aptos-core.git" }
