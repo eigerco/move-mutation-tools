@@ -2,16 +2,19 @@
 
 ## Overview
 
-The Move mutator is a tool that mutates Move source code. It can be used to help test the robustness of Move specifications and tests by generating different code versions (mutants).
+The Move mutator is a tool that mutates Move source code.
+It can be used to help test the robustness of Move specifications and tests by generating different code versions (mutants).
 
-The Move Specification Test tool uses the Move Mutator tool to generate mutants of the Move code. Then, it runs the Move Prover tool to check if the mutants are killed (so Prover will catch an error) by the original specifications. If the mutants are not killed, it means that the specification has issues and is incorrect or not tight enough to catch such cases, so it should be improved.
+The Move Specification Test tool uses the Move Mutator tool to generate mutants of the Move code.
+Then, it runs the Move Prover tool to check if the mutants are killed (so Prover will catch an error) by the original specifications.
+If the mutants are not killed, it means that the specification has issues and is incorrect or not tight enough to catch such cases, so it should be improved.
 
 ## Install
 
 To build the tools run:
 ```bash
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch "eiger/move-spec-verifier" move-mutator
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch "eiger/move-spec-verifier" move-spec-test
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git move-mutator
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git move-spec-test
 ```
 
 That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
@@ -28,11 +31,11 @@ $ cargo uninstall move-spec-test
 
 ## Usage
 
-To check how Move Specification Test tool works, it must be run over the Move code. Some examples are provided [here](https://github.com/eigerco/move-spec-testing/tree/eiger/move-spec-verifier/third_party/move/tools/move-mutator/tests/move-assets).
+To check how Move Specification Test tool works, it must be run over the Move code. Some examples are provided [here](https://github.com/eigerco/move-spec-testing/tree/main/move-mutator/tests/move-assets).
 
 To start specification testing run the following command (assuming that is downloaded from the provided link):
 ```bash
-$ move-spec-test -p third_party/move/tools/move-mutator/tests/move-assets/same_names
+$ move-spec-test -p move-mutator/tests/move-assets/same_names
 ```
 
 There should be output generated similar to the following (there may also be
@@ -44,13 +47,13 @@ Total mutants killed: 4
 ╭────────────────────────────────────────────────┬────────────────┬────────────────┬────────────╮
 │ Module                                         │ Mutants tested │ Mutants killed │ Percentage │
 ├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
-│ ./sources/m1/m1_1/Negation.move::Negation_m1_1 │ 1              │ 1              │ 100.00%    │
+│ sources/m1/m1_1/Negation.move::Negation_m1_1   │ 1              │ 1              │ 100.00%    │
 ├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
-│ ./sources/m2/Negation.move::Negation_m2        │ 1              │ 1              │ 100.00%    │
+│ sources/m2/Negation.move::Negation_m2          │ 1              │ 1              │ 100.00%    │
 ├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
-│ ./sources/m1/Negation.move::Negation_m1        │ 1              │ 1              │ 100.00%    │
+│ sources/m1/Negation.move::Negation_m1          │ 1              │ 1              │ 100.00%    │
 ├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
-│ ./sources/Negation.move::Negation_main         │ 1              │ 1              │ 100.00%    │
+│ sources/Negation.move::Negation_main           │ 1              │ 1              │ 100.00%    │
 ╰────────────────────────────────────────────────┴────────────────┴────────────────┴────────────╯
 ```
 
@@ -60,7 +63,7 @@ Please refer to the [env_logger](https://docs.rs/env_logger/latest/env_logger/) 
 
 To generate a report in a JSON format, use the `-o` option:
 ```bash
-$ move-spec-test -p third_party/move/tools/move-mutator/tests/move-assets/poor_spec -o report.json
+$ move-spec-test -p move-mutator/tests/move-assets/poor_spec -o report.json
 ```
 
 The sample report generated for the above test will look as follows:
@@ -98,7 +101,7 @@ By default, the output shall be stored in the `mutants_output` directory unless 
 
 To generate mutants for all files within a test project (for the whole Move package) run:
 ```bash
-$ move-mutator -p third_party/move/tools/move-mutator/tests/move-assets/simple/
+$ move-mutator -p move-mutator/tests/move-assets/simple/
 ```
 
 ## License

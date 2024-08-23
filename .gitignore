@@ -59,3 +59,7 @@ build/
 # ignore compiler artifacts
 *.dot
 *.bytecode
+
+# move-mutator and move-spec-test output files
+report.json
+mutants_output

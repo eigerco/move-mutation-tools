@@ -27,11 +27,10 @@ and scripts.
 ### Presentation layer
 
 In this project, the presentation layer execution modules (displaying and
-fetching data from/to the user) are moved to the `aptos` and `move` command
-line interfaces.
+fetching data from/to the user) is kept under the `move-mutator` binary.
 
-Mutator itself provides a CLI module, which is integrated into the existing
-Aptos repository - it handles options that the mutator tool can use.
+Mutator itself provides a CLI module, which can be easily integrated into the
+existing Aptos repository - it handles options that the mutator tool can use.
 
 There are two types of output that the Move mutator tool generates:
 - the actual mutants (source code files)
@@ -222,17 +221,15 @@ Move mutator can be integrated with any command line interface. To do so, CLI
 application needs to collect arguments and call the `run_move_mutator` function
 from the `move_mutator` crate.
 
-Currently, the Move mutator tool is integrated with the `move-cli` and `aptos`
-command line interfaces. A new command has been introduced: `mutate,` which
-allows the mutator arguments to be passed. Check README.md for more details.    
+Currently, the Move mutator tool is integrated within the `move-mutator`
+command line interface binary. Check README.md for more details.
 
 ## Specification testing tool
 
 The Move mutator tool is designed to create mutants only. It does not perform
 the proving process as it is not the goal of the tool.
 
-The specification verification tool is a tool placed inside the `aptos`
-repository, which provides an additional `aptos` subcommand - `spec-test` 
+The specification verification tool placed inside the `move-spec-test` tool,
 which does the following:
 1. Takes arguments both for the Move Prover tool and for the Move mutator tool.
 It can also read the configuration from the JSON configuration file.
