@@ -1,0 +1,32 @@
+[package]
+name = "move-prover-boogie-backend"
+version = "0.1.0"
+authors = ["Diem Association <opensource@diem.com>"]
+description = "Move prover Boogie backend"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+async-trait = { workspace = true }
+codespan = { workspace = true }
+codespan-reporting = { workspace = true }
+futures = { workspace = true }
+itertools = { workspace = true }
+log = { workspace = true }
+move-binary-format = { path = "../../move-binary-format" }
+move-command-line-common = { path = "../../move-command-line-common" }
+move-compiler = { path = "../../move-compiler" }
+move-core-types = { path = "../../move-core/types" }
+move-model = { path = "../../move-model" }
+move-prover-bytecode-pipeline = { path = "../bytecode-pipeline" }
+move-stackless-bytecode = { path = "../../move-model/bytecode" }
+num = { workspace = true }
+once_cell = { workspace = true }
+pretty = { workspace = true }
+rand = { workspace = true }
+regex = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+tera = { workspace = true }
+tokio = { workspace = true, features = ["full"] }

@@ -1,0 +1,37 @@
+[package]
+name = "move-abigen"
+version = "0.1.0"
+authors = ["Diem Association <opensource@diem.com>"]
+publish = false
+edition = "2021"
+license = "Apache-2.0"
+
+[dependencies]
+anyhow = { workspace = true }
+move-binary-format = { path = "../../move-binary-format" }
+move-bytecode-verifier = { path = "../../move-bytecode-verifier" }
+move-command-line-common = { path = "../../move-command-line-common" }
+move-core-types = { path = "../../move-core/types" }
+# Move dependencies
+move-model = { path = "../../move-model" }
+
+bcs = { workspace = true }
+heck = { workspace = true }
+
+# external dependencies
+log = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+
+[dev-dependencies]
+codespan-reporting = { workspace = true }
+datatest-stable = { workspace = true }
+move-prover = { path = ".." }
+move-prover-test-utils = { path = "../test-utils" }
+tempfile = { workspace = true }
+
+# force more deterministic tests
+move-stdlib = { path = "../../move-stdlib" }
+
+[[test]]
+name = "testsuite"
+harness = false
