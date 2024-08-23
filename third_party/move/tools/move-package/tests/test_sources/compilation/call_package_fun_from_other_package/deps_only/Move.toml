@@ -1,7 +1,0 @@
-[package]
-name = "deps"
-version = "1.0.0"
-authors = []
-
-[addresses]
-B = "0x42"
