@@ -29,6 +29,7 @@ pub(crate) const MOVE_ADDR_MAX: &str =
     "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF";
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct ExpLoc {
     pub exp: Exp,
     pub loc: Loc,

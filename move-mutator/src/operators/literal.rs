@@ -197,7 +197,7 @@ mod tests {
             loc,
         );
         let source = "51";
-        let expected = vec![
+        let expected = [
             u8::MIN.to_string(),
             u8::MAX.to_string(),
             "52".to_owned(),
@@ -222,7 +222,7 @@ mod tests {
             loc,
         );
         let source = "963";
-        let expected = vec![
+        let expected = [
             u16::MIN.to_string(),
             u16::MAX.to_string(),
             "964".to_owned(),
@@ -247,7 +247,7 @@ mod tests {
             loc,
         );
         let source = "1000963";
-        let expected = vec![
+        let expected = [
             u32::MIN.to_string(),
             u32::MAX.to_string(),
             "1000964".to_owned(),
@@ -272,7 +272,7 @@ mod tests {
             loc,
         );
         let source = "963251000963";
-        let expected = vec![
+        let expected = [
             u64::MIN.to_string(),
             u64::MAX.to_string(),
             "963251000964".to_owned(),
@@ -297,7 +297,7 @@ mod tests {
             loc,
         );
         let source = "123963251000963";
-        let expected = vec![
+        let expected = [
             u128::MIN.to_string(),
             u128::MAX.to_string(),
             "123963251000964".to_owned(),
