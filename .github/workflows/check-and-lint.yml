@@ -1,0 +1,32 @@
+name: Basic check and lint
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  basic-lint-and-check:
+    runs-on: ubuntu-latest
+    name: Basic ci-check for fmt/clippy/check
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: default
+          toolchain: nightly
+
+      - name: Run check
+        run: cargo +nightly check --all-targets
+
+      - name: Run fmt
+        run: cargo +nightly fmt --all -- --check
+
+      - name: Run clippy
+        run: cargo +nightly clippy --all-targets -- -D warnings

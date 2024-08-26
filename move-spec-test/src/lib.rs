@@ -2,6 +2,8 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
+#![allow(clippy::too_long_first_doc_paragraph)]
+
 mod benchmark;
 pub mod cli;
 mod prover;
@@ -22,8 +24,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
-/// This function runs the specification testing, which is a combination of the
-/// mutator tool and the prover tool
+/// This function runs the specification testing, which is a combination of the mutator tool and the prover tool.
+///
 /// It takes the CLI options and constructs appropriate options for the
 /// Move Mutator tool and Move Prover tool. Then it mutates the code storing
 /// results in a temporary directory. Then it runs the prover on the mutated

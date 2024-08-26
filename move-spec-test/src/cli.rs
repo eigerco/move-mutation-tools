@@ -2,6 +2,8 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
+#![allow(clippy::too_long_first_doc_paragraph)]
+
 use clap::Parser;
 use move_mutator::cli::ModuleFilter;
 use serde::{Deserialize, Serialize};

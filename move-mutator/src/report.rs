@@ -136,6 +136,7 @@ impl Range {
 }
 
 /// The `Mutation` struct represents a modification that was applied to a file.
+///
 /// It contains the location of the modification, the name of the mutation operator, the old value and the new value.
 /// It is used to represent a single modification inside a `ReportEntry`.
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
