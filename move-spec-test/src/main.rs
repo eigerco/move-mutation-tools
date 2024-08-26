@@ -6,8 +6,7 @@
 
 use clap::Parser;
 use move_package::BuildConfig;
-use move_spec_test::cli::CLIOptions;
-use move_spec_test::run_spec_test;
+use move_spec_test::{cli::CLIOptions, run_spec_test};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 

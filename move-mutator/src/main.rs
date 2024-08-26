@@ -5,8 +5,7 @@
 #![forbid(unsafe_code)]
 
 use clap::Parser;
-use move_mutator::cli::CLIOptions;
-use move_mutator::run_move_mutator;
+use move_mutator::{cli::CLIOptions, run_move_mutator};
 use move_package::BuildConfig;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
