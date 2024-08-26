@@ -26,8 +26,8 @@ tabled = "0.15"
 tempfile = "3.10"
 termcolor = "1.1"
 
-move-command-line-common = { git = "https://github.com/Rqnsom/aptos-core.git" }
-move-model = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-model = { git = "https://github.com/aptos-labs/aptos-core.git" }
 move-mutator = { path = "../move-mutator" }
-move-package = { git = "https://github.com/Rqnsom/aptos-core.git" }
-move-prover = { git = "https://github.com/Rqnsom/aptos-core.git" }
+move-package = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-prover = { git = "https://github.com/aptos-labs/aptos-core.git" }
