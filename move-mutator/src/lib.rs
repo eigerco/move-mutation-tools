@@ -77,7 +77,7 @@ pub fn run_move_mutator(
             .as_path(),
     )?;
 
-    trace!("Generated AST.");
+    trace!("Generated AST");
 
     let mutants = mutate::mutate(&env, &mutator_configuration)?;
     let output_dir = output::setup_output_dir(&mutator_configuration)?;
