@@ -124,9 +124,9 @@ fn check_mutator_fails_on_non_existing_output_path() {
     assert!(result.is_err());
 }
 
-// Check if the mutator works with single files.
+// Check if the mutator works with single files that do not require deps/address resolving.
 #[test]
-fn check_mutator_works_with_single_files() {
+fn check_mutator_works_with_simple_single_files() {
     let outdir = tempdir().unwrap().into_path();
 
     let options = CLIOptions {
@@ -152,6 +152,33 @@ fn check_mutator_works_with_single_files() {
 
     let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
     assert!(!report.get_mutants().is_empty());
+}
+
+// Check if the mutator fails properly with single files that do require deps/address resolving.
+#[test]
+fn check_mutator_properly_fails_with_single_files_that_require_dep_or_addr_resolving() {
+    let outdir = tempdir().unwrap().into_path();
+
+    let options = CLIOptions {
+        move_sources: vec!["tests/move-assets/simple/sources/Sum.move".into()],
+        mutate_modules: ModuleFilter::All,
+        out_mutant_dir: Some(outdir.clone()),
+        verify_mutants: false,
+        no_overwrite: false,
+        downsample_filter: None,
+        downsampling_ratio_percentage: None,
+        configuration_file: None,
+    };
+
+    let config = BuildConfig::default();
+
+    let package_path = Path::new(".");
+
+    let result = move_mutator::run_move_mutator(options.clone(), &config, package_path);
+    assert!(result.is_err());
+
+    let report_path = outdir.join("report.json");
+    assert!(!report_path.exists());
 }
 
 // Check if the mutator produce zero mutants if verification is enabled for

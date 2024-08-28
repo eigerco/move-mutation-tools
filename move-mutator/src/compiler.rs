@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use crate::configuration::Configuration;
+use codespan_reporting::diagnostic::Severity;
 use either::Either;
 use itertools::Itertools;
 use move_command_line_common::{address::NumericalAddress, parser::NumberFormat};
@@ -72,6 +73,12 @@ pub fn generate_ast(
     };
 
     let env = run_checker(options.clone())?;
+
+    if env.has_errors() {
+        let mut error_writer = termcolor::StandardStream::stderr(termcolor::ColorChoice::Auto);
+        env.report_diag(&mut error_writer, Severity::Warning);
+        anyhow::bail!("AST generation failed");
+    }
 
     trace!("Sources parsed successfully, AST generated");
 
