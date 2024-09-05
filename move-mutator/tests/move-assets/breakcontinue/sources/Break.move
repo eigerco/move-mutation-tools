@@ -9,4 +9,19 @@ module TestAccount::Break {
 
         i
     }
+
+    // We won't be able to kill two mutants:
+    //  - while (i < n)
+    //  - if (n % i <= 0) break;
+    #[test]
+    fun smallest_factor_test() {
+        // These two should fail - but let's keep imperfect code here
+        assert!(smallest_factor(0) == 2, 0);
+        assert!(smallest_factor(1) == 2, 0);
+
+        assert!(smallest_factor(2) == 2, 0);
+        assert!(smallest_factor(9) == 3, 0);
+        assert!(smallest_factor(35) == 5, 0);
+        assert!(smallest_factor(91) == 7, 0);
+    }
 }
