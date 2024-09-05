@@ -4,7 +4,9 @@ version = "0.0.0"
 
 [dependencies]
 p1 = { local = "../p1" }
+MoveStdlib = { git = "https://github.com/move-language/move.git", subdir = "language/move-stdlib", rev = "main" }
 
 [addresses]
+std =  "0x1"
 CafeAccount = "0xCAFE"
 TestAccount = "0xCAFE2"

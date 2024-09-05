@@ -46,6 +46,13 @@ module TestAccount::Operators {
         assert!(mul(7, 7) == 49, 0);
     }
 
+    #[test, expected_failure(arithmetic_error, location = TestAccount::Operators)]
+    fun mul_overflow_failure_test() {
+        let a = 1 << 64;
+        let b = 1 << 64;
+        assert!(mul(a, b) != 0, 0);
+    }
+
     fun mod(x: u64, y: u64): u64 {
         x % y
     }
@@ -162,7 +169,6 @@ module TestAccount::Operators {
         x << y
     }
 
-    // TODO: the prototype tool requires --verify-mutants flag here, investigate this a bit
     #[test]
     fun lsh_valid_usage_test() {
         assert!(lsh(0, 0) == 0, 0);
@@ -233,7 +239,6 @@ module TestAccount::Operators {
         !x
     }
 
-    //// TODO: the prototype tool requires --verify-mutants flag here, investigate this a bit
     #[test]
     fun logical_not_valid_usage_test() {
         assert!(logical_not(true) == false, 0);
