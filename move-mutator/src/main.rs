@@ -13,10 +13,10 @@ use std::path::PathBuf;
 #[derive(Default, Parser, Debug, Clone, Deserialize, Serialize)]
 #[serde(default, deny_unknown_fields)]
 pub struct Opts {
-    /// The path where to put the output files.
+    /// The path to the target Move package.
     #[clap(long, short, value_parser)]
     pub package_path: Option<PathBuf>,
-    /// Command line options for mutator
+    /// Command line options for mutator.
     #[clap(flatten)]
     pub cli_options: CLIOptions,
     /// The build configuration for the Move package.
