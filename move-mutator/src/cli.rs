@@ -2,6 +2,7 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
+use crate::configuration::FunctionFilter;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, str::FromStr};
@@ -15,24 +16,35 @@ pub struct CLIOptions {
     /// The paths to the Move sources.
     #[clap(long, short, value_parser)]
     pub move_sources: Vec<PathBuf>,
+
     /// Module names to be mutated.
     #[clap(long, value_parser, default_value = "all")]
     pub mutate_modules: ModuleFilter,
+
+    /// Function names to be mutated.
+    #[clap(short = 'f', long, value_parser, default_value = "all")]
+    pub mutate_functions: FunctionFilter,
+
     /// The path where to put the output files.
     #[clap(long, short, value_parser)]
     pub out_mutant_dir: Option<PathBuf>,
+
     /// Indicates if mutants should be verified and made sure mutants can compile.
     #[clap(long, default_value = "false")]
     pub verify_mutants: bool,
+
     /// Indicates if the output files should be overwritten.
     #[clap(long, short, default_value = "false")]
     pub no_overwrite: bool,
+
     /// Name of the filter to use for downsampling. Downsampling reduces the amount of mutants to the desired amount.
     #[clap(long, hide = true)]
     pub downsample_filter: Option<String>,
+
     /// Remove averagely given percentage of mutants. See the doc for more details.
     #[clap(long)]
     pub downsampling_ratio_percentage: Option<usize>,
+
     /// Optional configuration file. If provided, it will override the default configuration.
     #[clap(long, short, value_parser)]
     pub configuration_file: Option<PathBuf>,
@@ -46,6 +58,7 @@ impl Default for CLIOptions {
         Self {
             move_sources: vec![],
             mutate_modules: ModuleFilter::All,
+            mutate_functions: FunctionFilter::All,
             out_mutant_dir: Some(PathBuf::from(DEFAULT_OUTPUT_DIR)),
             verify_mutants: false,
             no_overwrite: false,
@@ -71,7 +84,7 @@ impl FromStr for ModuleFilter {
         match s {
             "all" => Ok(ModuleFilter::All),
             _ => Ok(ModuleFilter::Selected(
-                s.split(',').map(String::from).collect(),
+                s.split(&[';', '-', ',']).map(String::from).collect(),
             )),
         }
     }
