@@ -50,7 +50,7 @@ pub fn run_spec_test(
     package_path: &Path,
 ) -> anyhow::Result<()> {
     // We need to initialize logger using try_init() as it might be already initialized in some other tool
-    // (e.g. spec-test). If we use init() instead, we will get an abort.
+    // (e.g. move-mutator). If we use init() instead, we will get an abort.
     let _ = pretty_env_logger::try_init();
 
     // Check if package is correctly structured.
