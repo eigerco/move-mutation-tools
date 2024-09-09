@@ -24,6 +24,7 @@ diffy = "0.3"
 either = "1.9"
 itertools = "0.12"
 log = "0.4"
+fixed = "= 1.25.1"
 move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git" }
 move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git" }
 move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git" }
