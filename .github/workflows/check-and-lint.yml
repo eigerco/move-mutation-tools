@@ -16,6 +16,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install required deps
+        run: sudo apt-get install libudev-dev libdw-dev
+
       - name: Setup Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
