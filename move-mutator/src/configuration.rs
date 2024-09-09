@@ -135,24 +135,26 @@ pub struct FileConfiguration {
     /// Names of the mutation operators to use. If not provided, all operators will be used.
     pub mutation_operators: Option<MutationConfig>,
     /// Mutate only the functions with the given names.
-    pub include_functions: IncludeFunctions,
+    pub mutate_functions: FunctionFilter,
 }
 
 /// Filter for the functions to mutate.
 #[derive(Default, Debug, Clone, Deserialize, Serialize, PartialEq)]
-pub enum IncludeFunctions {
+pub enum FunctionFilter {
     #[default]
     All,
     Selected(Vec<String>),
 }
 
-impl FromStr for IncludeFunctions {
+impl FromStr for FunctionFilter {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "all" => Ok(IncludeFunctions::All),
-            _ => Ok(IncludeFunctions::Selected(vec![s.to_string()])),
+            "all" => Ok(FunctionFilter::All),
+            _ => Ok(FunctionFilter::Selected(
+                s.split(&[';', '-', ',']).map(String::from).collect(),
+            )),
         }
     }
 }
@@ -175,7 +177,7 @@ mod tests {
             [[individual]]
             file = "/path/to/file"
             verify_mutants = true
-            include_functions = "All"
+            mutate_functions = "All"
         "#;
         fs::write("test.toml", toml_content).unwrap();
         let config = Configuration::from_toml_file(Path::new("test.toml")).unwrap();
@@ -194,10 +196,7 @@ mod tests {
         assert_eq!(config.individual.len(), 1);
         assert_eq!(config.individual[0].file, PathBuf::from("/path/to/file"));
         assert!(config.individual[0].verify_mutants);
-        assert_eq!(
-            config.individual[0].include_functions,
-            IncludeFunctions::All
-        );
+        assert_eq!(config.individual[0].mutate_functions, FunctionFilter::All);
     }
 
     #[test]
@@ -244,7 +243,7 @@ mod tests {
                             "operators": ["operator3", "operator4"],
                             "categories": ["category3", "category4"]
                         },
-                        "include_functions": "All"
+                        "mutate_functions": "All"
                     }
                 ]
             }
@@ -324,7 +323,7 @@ mod tests {
             file: file_path.clone(),
             verify_mutants: true,
             mutation_operators: None,
-            include_functions: IncludeFunctions::All,
+            mutate_functions: FunctionFilter::All,
         };
         let config = Configuration {
             project: CLIOptions::default(),

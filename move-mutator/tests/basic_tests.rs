@@ -2,7 +2,10 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use move_mutator::cli::{CLIOptions, ModuleFilter};
+use move_mutator::{
+    cli::{CLIOptions, ModuleFilter},
+    configuration::FunctionFilter,
+};
 use move_package::BuildConfig;
 use std::path::{Path, PathBuf};
 use tempfile::tempdir;
@@ -25,6 +28,7 @@ fn check_mutator_works_correctly() {
     let options = CLIOptions {
         move_sources: vec![],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some(outdir.clone()),
         verify_mutants: false,
         no_overwrite: false,
@@ -56,6 +60,7 @@ fn check_mutator_verify_mutants_correctly() {
     let options = CLIOptions {
         move_sources: vec![],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some(outdir.clone()),
         verify_mutants: true,
         no_overwrite: false,
@@ -86,6 +91,7 @@ fn check_mutator_fails_on_non_existing_path() {
     let options = CLIOptions {
         move_sources: vec![],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some(outdir.clone()),
         verify_mutants: false,
         no_overwrite: false,
@@ -108,6 +114,7 @@ fn check_mutator_fails_on_non_existing_output_path() {
     let options = CLIOptions {
         move_sources: vec![],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some("/very/bad/path".into()),
         verify_mutants: false,
         no_overwrite: false,
@@ -132,6 +139,7 @@ fn check_mutator_works_with_simple_single_files() {
     let options = CLIOptions {
         move_sources: vec!["tests/move-assets/file_without_package/Sub.move".into()],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some(outdir.clone()),
         verify_mutants: false,
         no_overwrite: false,
@@ -162,6 +170,7 @@ fn check_mutator_properly_fails_with_single_files_that_require_dep_or_addr_resol
     let options = CLIOptions {
         move_sources: vec!["tests/move-assets/simple/sources/Sum.move".into()],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some(outdir.clone()),
         verify_mutants: false,
         no_overwrite: false,
@@ -190,6 +199,7 @@ fn check_mutator_fails_verify_file_without_package() {
     let options = CLIOptions {
         move_sources: vec!["tests/move-assets/file_without_package/Sub.move".into()],
         mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::All,
         out_mutant_dir: Some(outdir.clone()),
         verify_mutants: true,
         no_overwrite: false,
@@ -210,4 +220,54 @@ fn check_mutator_fails_verify_file_without_package() {
 
     let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
     assert!(report.get_mutants().is_empty());
+}
+
+// Check that the mutator will apply function-filters correctly and generate mutants only for
+// specified functions.
+#[test]
+fn check_mutator_cli_filters_functions_properly() {
+    let outdir = tempdir().unwrap().into_path();
+
+    // All these functions exist in the project `simple`.
+    let target_function_1 = "or";
+    let target_function_2 = "sum";
+    let not_included = "and";
+
+    let options = CLIOptions {
+        move_sources: vec![],
+        mutate_modules: ModuleFilter::All,
+        mutate_functions: FunctionFilter::Selected(vec![
+            target_function_1.into(),
+            target_function_2.into(),
+        ]),
+        out_mutant_dir: Some(outdir.clone()),
+        verify_mutants: false, // skip verifying, this is a huge project
+        no_overwrite: false,
+        downsample_filter: None,
+        downsampling_ratio_percentage: None,
+        configuration_file: None,
+    };
+
+    let config = BuildConfig::default();
+    let package_path = Path::new("tests/move-assets/simple");
+
+    let result = move_mutator::run_move_mutator(options.clone(), &config, package_path);
+    assert!(result.is_ok());
+
+    let report_path = outdir.join("report.json");
+    assert!(report_path.exists());
+
+    let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
+
+    // Ensure the report list is not empty.
+    assert!(!report.get_mutants().is_empty());
+
+    // Ensure that all mutations belong to a single function.
+    for mutant in report.get_mutants() {
+        let mutated_func = mutant.get_function_name();
+        assert_ne!(mutated_func, not_included);
+
+        // We expect that the mutated function must be one of the following target functions:
+        assert!((target_function_1 == mutated_func) ^ (target_function_2 == mutated_func));
+    }
 }
