@@ -4,7 +4,7 @@
 
 use crate::{
     cli,
-    configuration::{Configuration, IncludeFunctions},
+    configuration::{Configuration, FunctionFilter},
     mutant::Mutant,
     operator::MutationOp,
     operators::{
@@ -131,23 +131,30 @@ fn traverse_function(
         }
     }
 
-    let mut is_inside_spec = false;
+    let mut included_funcs = vec![];
 
-    let function_name = function.get_name_str();
+    // Check if any function is included in an individual configuration.
     let filename = function.module_env.get_source_path();
-
-    // Check if function is included in individual configuration.
     if let Some(ind) = conf.get_file_configuration(Path::new(filename)) {
-        if let IncludeFunctions::Selected(funcs) = &ind.include_functions {
-            if !funcs.contains(&function_name) {
-                trace!("Skipping function {}", &function_name);
-                return Ok(vec![]);
-            }
+        if let FunctionFilter::Selected(funcs) = &ind.mutate_functions {
+            included_funcs = funcs.iter().collect();
         }
+    }
+    // Check if any function is included in the general project configuration.
+    if let FunctionFilter::Selected(funcs) = &conf.project.mutate_functions {
+        included_funcs = included_funcs.into_iter().chain(funcs.iter()).collect();
+    }
+
+    // Mutate only the specified functions, if any. Otherwise, mutate all functions.
+    let function_name = &function.get_name_str();
+    if !included_funcs.is_empty() && !included_funcs.contains(&function_name) {
+        trace!("Skipping function {}", &function_name);
+        return Ok(vec![]);
     }
 
     trace!("Traversing function {}", &function_name);
     let mut result = Vec::<Mutant>::new();
+    let mut is_inside_spec = false;
     if let Some(exp) = function.get_def() {
         exp.visit_pre_post(&mut |asc, exp_data| {
             // Collect the spec blocks locations.
