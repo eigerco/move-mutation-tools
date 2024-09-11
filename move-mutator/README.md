@@ -2,13 +2,13 @@
 
 ## Summary
 
-The `move-mutator` tool is a mutation testing tool for the Move language.
+The `move-mutator` tool is a tool that is used to mutate the Move language.
 
 ## Overview
 
-The Move mutator is a tool that mutates Move source code. It can be used to
-help test the robustness of Move specifications and tests by generating 
-different code versions (mutants).
+The Move mutator is a tool that mutates Move source code.
+It can help test the robustness of Move specifications and tests by generating different code versions (mutants).
+The tool mutates only the source code. Unit tests and specification blocks are not affected by the tool.
 
 Please refer to the design document for more details: [Move Mutator Design](doc/design.md).
 
@@ -26,11 +26,7 @@ cargo test -p move-mutator
 
 ## Usage
 
-The `move-mutator` tool can be run using the `move-cli` tool or the `aptos`
-tool. The command line options are slightly different for both tools. Last 
-section of this document describes the command line options for both tools. For
-the rest of this document, we will use the `aptos` tool.
-
+To run the tool, use the command:
 ```bash
 ./target/release/move-mutator -m move-mutator/tests/move-assets/simple/sources/Sum.move
 ```
@@ -69,6 +65,11 @@ It's also possible to generate mutants for a specific module by using the `--mut
 ```bash
 ./target/release/move-mutator --package-path move-mutator/tests/move-assets/simple/ --mutate-modules "Sum"
 ```
+Or use the tool to generate mutants for specific functions:
+```bash
+# This command will generate mutants only for functions named: 'or', 'and' and 'sum'
+./target/release/move-mutator --package-path move-mutator/tests/move-assets/simple/ --mutate-functions or,and,sum
+```
 
 The mutator tool generates:
 - mutants (modified move source code)
@@ -76,13 +77,11 @@ The mutator tool generates:
 
 Generating mutants for the whole package can be time-consuming. To speed up the
 process, mutant verification is disabled by default. To enable it, use the
-`--verify-mutants
-
-` option:
+`--verify-mutants` option:
 ```bash
 ./target/release/move-mutator --package-path move-mutator/tests/move-assets/simple/ --verify-mutants
 ```
-Mutants verification is done by compiling them. If the compilation fails,
+Mutants verification is performed by compiling them. If the compilation fails,
 the mutant is considered invalid. It's highly recommended to enable this option
 as it helps to filter out invalid mutants, which would be a waste of time to
 prove.
@@ -95,59 +94,35 @@ directory. They can be used to check the mutator tool as well.
 To check possible options run:
 ```bash
 ./target/release/move-mutator --help
+
 Package and build system for Move code
 
 Usage: move-mutator [OPTIONS]
 
 Options:
-  -p, --package-path <PACKAGE_PATH>
-          The path where to put the output files
-  -m, --move-sources <MOVE_SOURCES>
-          The paths to the Move sources
-      --mutate-modules <MUTATE_MODULES>
-          Module names to be mutated [default: all]
-  -o, --out-mutant-dir <OUT_MUTANT_DIR>
-          The path where to put the output files
-      --verify-mutants
-          Indicates if mutants should be verified and made sure mutants can compile
-  -n, --no-overwrite
-          Indicates if the output files should be overwritten
-      --downsampling-ratio-percentage <DOWNSAMPLING_RATIO_PERCENTAGE>
-          Remove averagely given percentage of mutants. See the doc for more details
-  -c, --configuration-file <CONFIGURATION_FILE>
-          Optional configuration file. If provided, it will override the default configuration
-  -d, --dev
-          Compile in 'dev' mode. The 'dev-addresses' and 'dev-dependencies' fields will be used if this flag is set. This flag is useful for development of packages that expose named addresses that are not set to a specific value
-      --test
-          Compile in 'test' mode. The 'dev-addresses' and 'dev-dependencies' fields will be used along with any code in the 'tests' directory
-      --override-std <OVERRIDE_STD>
-          Whether to override the standard library with the given version [possible values: mainnet, testnet, devnet]
-      --doc
-          Generate documentation for packages
-      --abi
-          Generate ABIs for packages
-      --install-dir <INSTALL_DIR>
-          Installation directory for compiled artifacts. Defaults to current directory
-      --force
-          Force recompilation of all packages
+  -p, --package-path <PACKAGE_PATH>                                    The path to the target Move package
+  -m, --move-sources <MOVE_SOURCES>                                    The paths to the Move sources
+      --mutate-modules <MUTATE_MODULES>                                Module names to be mutated [default: all]
+  -f, --mutate-functions <MUTATE_FUNCTIONS>                            Function names to be mutated [default: all]
+  -o, --out-mutant-dir <OUT_MUTANT_DIR>                                The path where to put the output files
+      --verify-mutants                                                 Indicates if mutants should be verified and made sure mutants can compile
+  -n, --no-overwrite                                                   Indicates if the output files should be overwritten
+      --downsampling-ratio-percentage <DOWNSAMPLING_RATIO_PERCENTAGE>  Remove averagely given percentage of mutants. See the doc for more details
+  -c, --configuration-file <CONFIGURATION_FILE>                        Optional configuration file. If provided, it will override the default configuration
+  -d, --dev                                                            Compile in 'dev' mode. The 'dev-addresses' and 'dev-dependencies' fields will be used if this flag is set. This flag is useful for development of packages that expose named addresses that are not set to a specific value
+      --test                                                           Compile in 'test' mode. The 'dev-addresses' and 'dev-dependencies' fields will be used along with any code in the 'tests' directory
+      --override-std <OVERRIDE_STD>                                    Whether to override the standard library with the given version [possible values: mainnet, testnet, devnet]
+      --doc                                                            Generate documentation for packages
+      --abi                                                            Generate ABIs for packages
+      --install-dir <INSTALL_DIR>                                      Installation directory for compiled artifacts. Defaults to current directory
+      --force                                                          Force recompilation of all packages
       --arch <ARCHITECTURE>
-
-      --fetch-deps-only
-          Only fetch dependency repos to MOVE_HOME
-      --skip-fetch-latest-git-deps
-          Skip fetching latest git dependencies
-      --bytecode-version <BYTECODE_VERSION>
-          Bytecode version to compile move code
-      --skip-attribute-checks
-          Do not complain about an unknown attribute in Move code
-      --compiler-version <COMPILER_VERSION>
-          Compiler version to use
-      --language-version <LANGUAGE_VERSION>
-          Language version to support
-      --experiments <EXPERIMENTS>
-          Experiments for v2 compiler to set to true
-  -h, --help
-          Print help
-  -V, --version
-          Print version
-```
+      --fetch-deps-only                                                Only fetch dependency repos to MOVE_HOME
+      --skip-fetch-latest-git-deps                                     Skip fetching latest git dependencies
+      --bytecode-version <BYTECODE_VERSION>                            Bytecode version to compile move code
+      --skip-attribute-checks                                          Do not complain about an unknown attribute in Move code
+      --compiler-version <COMPILER_VERSION>                            Compiler version to use
+      --language-version <LANGUAGE_VERSION>                            Language version to support
+      --experiments <EXPERIMENTS>                                      Experiments for v2 compiler to set to true
+  -h, --help                                                           Print help
+  -V, --version                                                        Print version```
