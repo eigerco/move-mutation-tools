@@ -201,7 +201,6 @@ operators = ["operator1", "operator2"]
 file = "/path/to/file"
 verify_mutants = true
 include_functions = ["function1", "function2"]
-exclude_functions = ["function3", "function4"]
 ```
 
 ### Cross layer
