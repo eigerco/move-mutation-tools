@@ -1,20 +1,32 @@
-**Move Specification Tester** and **Move Mutator** are tools to test the quality of the Move specifications.
-
 ## Overview
 
-The Move mutator is a tool that mutates Move source code.
-It can be used to help test the robustness of Move specifications and tests by generating different code versions (mutants).
+The **Move Mutator** is a tool that mutates Move source code.
+It can help test the robustness of Move specifications and tests by generating different code versions (mutants).
+The tool mutates only the source code. Unit tests and specification blocks are not affected by the tool.
 
-The Move Specification Test tool uses the Move Mutator tool to generate mutants of the Move code.
-Then, it runs the Move Prover tool to check if the mutants are killed (so Prover will catch an error) by the original specifications.
-If the mutants are not killed, it means that the specification has issues and is incorrect or not tight enough to catch such cases, so it should be improved.
+The **Move Specification Tester** is a tool used to test the quality of the Move specifications.
+How it works:
+1. Runs the _Move Prover_ on the original source code to ensure the original specification is valid.
+2. Internally runs the _Move Mutator_ tool to generate mutants.
+3. Runs the _Move Prover_ tool on all mutants to check if the mutants are killed (so _Prover_ will catch an error) by the original specifications.
+
+If some mutants are not killed, it means that the specification has issues and is incorrect or not tight enough to catch such cases, so it should be improved.
+
+The **Move Mutation Tester** is a tool used to test the quality of the test suite and the source code.
+How it works:
+1. Runs tests on the original source code to ensure the original tests are valid.
+2. Internally runs the _Move Mutator_ tool to generate mutants.
+3. Runs the tests for all mutants to check if the mutants are killed by the original test suite.
+
+If the mutants are not killed, it might indicate the quality of the test suite could be improved, or in some rare cases, it might indicate an error in the original source code.
 
 ## Install
 
-To build the tools run:
+To build the tools, run:
 ```bash
 $ cargo install --git https://github.com/eigerco/move-spec-testing.git move-mutator
 $ cargo install --git https://github.com/eigerco/move-spec-testing.git move-spec-test
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git move-mutation-test
 ```
 
 That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
@@ -23,23 +35,36 @@ Ensure to have this path in your `PATH` environment. This step can be done with 
 $ export PATH=~/.cargo/bin:$PATH
 ```
 
-To uninstall tools run:
+To uninstall tools, run:
 ```bash
 $ cargo uninstall move-mutator
 $ cargo uninstall move-spec-test
+$ cargo uninstall move-mutation-test
 ```
 
 ## Usage
 
-To check how Move Specification Test tool works, it must be run over the Move code. Some examples are provided [here](https://github.com/eigerco/move-spec-testing/tree/main/move-mutator/tests/move-assets).
+The basic tool overview is shown in the below chapters. To dive more deeply into each tool, please check out the documentation here:
 
-To start specification testing run the following command (assuming that is downloaded from the provided link):
+ - [`move-mutator` documentation](move-mutator/README.md)
+ - [`move-spec-test` documentation](move-spec-test/README.md)
+ - [`move-mutation-test` documentation](move-mutation-test/README.md)
+
+All tools respect the `RUST_LOG` variable, and it will print out as much information as the variable allows.
+There is possibility to enable logging only for the specific modules.
+Please refer to the [env_logger](https://docs.rs/env_logger/latest/env_logger/) documentation for more details.
+
+_To run these tools, example projects shall be used that are provided [here](https://github.com/eigerco/move-spec-testing/tree/main/move-mutator/tests/move-assets)._
+
+#### Move Specification Test
+
+To start specification testing, run the following command from the repo directory:
 ```bash
 $ move-spec-test -p move-mutator/tests/move-assets/same_names
 ```
 
-There should be output generated similar to the following (there may also be
-some additional Prover logs visible):
+The generated output should be very similar to the following (there may also be
+some additional _Prover_ logs visible):
 ```text
 Total mutants tested: 4
 Total mutants killed: 4
@@ -57,16 +82,13 @@ Total mutants killed: 4
 ╰────────────────────────────────────────────────┴────────────────┴────────────────┴────────────╯
 ```
 
-The specification testing tool respects the `RUST_LOG` variable, and it will print out as much information as the variable allows.
-There is possibility to enable logging only for the specific modules.
-Please refer to the [env_logger](https://docs.rs/env_logger/latest/env_logger/) documentation for more details.
 
 To generate a report in a JSON format, use the `-o` option:
 ```bash
 $ move-spec-test -p move-mutator/tests/move-assets/poor_spec -o report.json
 ```
 
-The sample report generated for the above test will look as follows:
+The sample report generated for the above command will look as follows:
 ```json
 {
   "files": {
@@ -87,26 +109,85 @@ The sample report generated for the above test will look as follows:
 }
 ```
 
-To check possible options run:
+To check possible options, run:
 ```bash
 $ move-spec-test --help
 ```
 
-Move Specification tool runs Move Mutator internally, however there is a possibility to run it manually. To check possible options run:
+#### Move Mutation Tester
+
+To start mutation test, run the following command from the repo directory:
+```bash
+$ move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt
+```
+A shortened sample output for the above command will look as follows:
+```text
+Total mutants tested: 229
+Total mutants killed: 203
+
+╭────────────────────────────────────────────────┬────────────────┬────────────────┬────────────╮
+│ Module                                         │ Mutants tested │ Mutants killed │ Percentage │
+├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
+│ sources/Operators.move::Operators::and         │ 3              │ 2              │ 66.67%     │
+├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
+│ sources/Operators.move::Operators::div         │ 5              │ 5              │ 100.00%    │
+├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
+│ sources/Operators.move::Operators::eq          │ 5              │ 5              │ 100.00%    │
+├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
+│ sources/Operators.move::Operators::gt          │ 6              │ 6              │ 100.00%    │
+├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
+│ sources/StillSimple.move::StillSimple::sample6 │ 30             │ 30             │ 100.00%    │
+├────────────────────────────────────────────────┼────────────────┼────────────────┼────────────┤
+│ sources/Sum.move::Sum::sum                     │ 4              │ 4              │ 100.00%    │
+╰────────────────────────────────────────────────┴────────────────┴────────────────┴────────────╯
+```
+
+The sample `report.txt` generated for the above command will look as follows:
+```json
+{
+  "files": {
+    "sources/Operators.move": [
+      {
+        "module_func": "Operators::and",
+        "tested": 3,
+        "killed": 2,
+        "mutants_alive_diffs": [
+          "--- original\n+++ modified\n@@ -108,7 +108,7 @@\n     }\n\n     fun and(x: u64, y: u64): u64 {\n-        x & y\n+        y&x\n     }\n\n     // Info: we won't kill a mutant that swaps places (false-positive)\n"
+        ]
+      },
+      {
+        "module_func": "Operators::div",
+        "tested": 5,
+        "killed": 5,
+        "mutants_alive_diffs": []
+      },
+      [...]
+```
+
+To explore other tool options, run:
+```bash
+$ move-mutation-test --help
+```
+
+#### Move Mutator
+
+_Move Specification tool_ runs **Move Mutator** internally, however there is a possibility to run it manually.
+
+To generate mutants for all files within a test project (for the whole Move package), run:
+```bash
+$ move-mutator -p move-mutator/tests/move-assets/simple/
+```
+By default, the output shall be stored in the `mutants_output` directory unless otherwise specified.
+To check possible options, run:
 ```bash
 $ move-mutator --help
 ```
 
-By default, the output shall be stored in the `mutants_output` directory unless otherwise specified. The mutator tool also respects the `RUST_LOG` variable.
 
-To generate mutants for all files within a test project (for the whole Move package) run:
-```bash
-$ move-mutator -p move-mutator/tests/move-assets/simple/
-```
 
 ## License
 
-**Move Specification Tester** and **Move Mutator** are released under the open source [Apache License](LICENSE)
+All tools in this repo are released under the open source [Apache License](LICENSE)
 
 ## About [Eiger](https://www.eiger.co)
 
