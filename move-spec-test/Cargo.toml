@@ -1,10 +1,8 @@
 [package]
 name = "move-spec-test"
 version = "0.1.0"
-authors = ["Eiger <hello@eiger.co>"]
-
 description = "Move specification testing tool"
-
+authors.workspace = true
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
@@ -16,18 +14,16 @@ name = "move-spec-test"
 path = "src/main.rs"
 
 [dependencies]
-anyhow = "1.0"
-clap = { version = "4.3", features = ["derive"] }
-log = "0.4"
-pretty_env_logger = "0.5"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1"
-tabled = "0.15"
-tempfile = "3.10"
-termcolor = "1.1"
-
-move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-model = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-mutator = { path = "../move-mutator" }
-move-package = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-prover = { git = "https://github.com/aptos-labs/aptos-core.git" }
+anyhow = { workspace = true }
+clap = { workspace = true }
+log = { workspace = true }
+move-model = { workspace = true }
+move-mutator = { workspace = true }
+move-package = { workspace = true }
+move-prover = { workspace = true }
+pretty_env_logger = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tabled = { workspace = true }
+tempfile = { workspace = true }
+termcolor = { workspace = true }

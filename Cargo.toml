@@ -2,9 +2,9 @@
 resolver = "2"
 
 members = [
+    "move-mutation-test",
     "move-mutator",
     "move-spec-test",
-    "move-mutation-test",
 ]
 
 # All workspace members should inherit these keys
@@ -12,11 +12,47 @@ members = [
 [workspace.package]
 authors = ["Eiger <hello@eiger.co>"]
 edition = "2021"
-homepage = "https://aptoslabs.com"
+homepage = "https://www.eiger.co/"
 license = "Apache-2.0"
 publish = false
-repository = "https://github.com/aptos-labs/aptos-core"
+repository = "https://github.com/eigerco/move-spec-testing"
 rust-version = "1.78.0"
+
+[workspace.dependencies]
+anyhow = "1.0"
+aptos = { git = "https://github.com/aptos-labs/aptos-core.git" }
+aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git" }
+aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git" }
+aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git" }
+aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git" }
+clap = { version = "4.5", features = ["derive"] }
+codespan = "0.11"
+codespan-reporting = "0.11"
+diffy = "0.3"
+either = "1.9"
+fixed = "= 1.25.1" # required by aptos deps
+itertools = "0.13"
+log = "0.4"
+move-cli = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-model = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-mutator = { path = "move-mutator" }
+move-package = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-prover = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git" }
+num-traits = "0.2"
+pretty_env_logger = "0.5"
+rand = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1"
+tabled = "0.16"
+tempfile = "3.12"
+termcolor = "1.1" # aptos deps require 1.1 here
+toml = "0.8"
 
 # These below are necessary for some aptos deps
 [patch.crates-io]

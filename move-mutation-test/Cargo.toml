@@ -1,10 +1,8 @@
 [package]
 name = "move-mutation-test"
 version = "0.1.0"
-authors = ["Eiger <hello@eiger.co>"]
-
 description = "Move mutation unit testing tool"
-
+authors.workspace = true
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
@@ -16,26 +14,25 @@ name = "move-mutation-test"
 path = "src/main.rs"
 
 [dependencies]
-anyhow = "1.0"
-aptos = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git" }
-clap = { version = "4.3", features = ["derive"] }
-log = "0.4"
-move-cli = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-model = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-mutator = { path = "../move-mutator" }
-move-package = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git" }
-pretty_env_logger = "0.5"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1"
-tabled = "0.15"
-tempfile = "3.10"
-termcolor = "1.1"
-
+anyhow = { workspace = true }
+aptos = { workspace = true }
+aptos-framework = { workspace = true }
+aptos-gas-schedule = { workspace = true }
+aptos-types = { workspace = true }
+aptos-vm = { workspace = true }
+clap = { workspace = true }
+log = { workspace = true }
+move-cli = { workspace = true }
+move-command-line-common = { workspace = true }
+move-compiler-v2 = { workspace = true }
+move-model = { workspace = true }
+move-mutator = { workspace = true }
+move-package = { workspace = true }
+move-unit-test = { workspace = true }
+move-vm-runtime = { workspace = true }
+pretty_env_logger = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tabled = { workspace = true }
+tempfile = { workspace = true }
+termcolor = { workspace = true }
