@@ -82,11 +82,17 @@ pub fn run_spec_test(
 
     fs::create_dir_all(&outdir_original)?;
 
+    // We can skip fetching the latest deps for generating mutants and proving those mutants
+    // since the original prover verification already fetched the latest dependencies.
+    let mut quick_config = config.clone();
+    quick_config.skip_fetch_latest_git_deps = true;
+
     let outdir_mutant = if let Some(mutant_path) = &options.use_generated_mutants {
         mutant_path.clone()
     } else {
         benchmarks.mutator.start();
-        let outdir_mutant = run_mutator(options, config, &package_path, &outdir)?;
+
+        let outdir_mutant = run_mutator(options, &quick_config, &package_path, &outdir)?;
         benchmarks.mutator.stop();
         outdir_mutant
     };
@@ -144,7 +150,12 @@ pub fn run_spec_test(
         move_mutator::compiler::rewrite_manifest_for_mutant(&package_path, &outdir_prove)?;
 
         benchmark.start();
-        let result = prove(config, &outdir_prove, &prover_conf, &mut error_writer);
+        let result = prove(
+            &quick_config,
+            &outdir_prove,
+            &prover_conf,
+            &mut error_writer,
+        );
         benchmark.stop();
 
         if let Err(e) = result {
