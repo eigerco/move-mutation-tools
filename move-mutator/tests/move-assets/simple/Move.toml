@@ -2,9 +2,10 @@
 name = "simple"
 version = "0.0.0"
 
-[dependencies]
-MoveStdlib = { git = "https://github.com/move-language/move.git", subdir = "language/move-stdlib", rev = "main" }
+[dependencies.AptosStdlib]
+git = 'https://github.com/aptos-labs/aptos-core.git'
+rev = 'main'
+subdir = 'aptos-move/framework/aptos-stdlib'
 
 [addresses]
-std =  "0x1"
 TestAccount = "0xCAFE"
