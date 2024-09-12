@@ -4,7 +4,6 @@
 
 use crate::cli::TestBuildConfig;
 use anyhow::Error;
-use aptos::common::types::OptimizationLevel;
 use aptos_framework::extended_checks;
 use aptos_gas_schedule::{MiscGasParameters, NativeGasParameters, LATEST_GAS_FEATURE_VERSION};
 use aptos_types::on_chain_config::{
@@ -13,9 +12,7 @@ use aptos_types::on_chain_config::{
 use aptos_vm::natives;
 use move_cli::base::test::UnitTestResult;
 use move_command_line_common::address::NumericalAddress;
-use move_compiler_v2::Experiment;
-use move_model::metadata::LanguageVersion;
-use move_package::{BuildConfig, CompilerConfig};
+use move_package::BuildConfig;
 use move_unit_test::UnitTestingConfig;
 use move_vm_runtime::native_functions::NativeFunctionTable;
 use std::path::Path;
@@ -35,27 +32,17 @@ use termcolor::WriteColor;
 pub(crate) fn run_tests<W: WriteColor + Send>(
     cfg: &TestBuildConfig,
     package_path: &Path,
+    skip_fetch_latest_git_deps: bool,
     mut error_writer: &mut W,
 ) -> anyhow::Result<()> {
-    let known_attributes = extended_checks::get_all_attribute_names();
     let config = BuildConfig {
         dev_mode: cfg.move_pkg.dev,
         additional_named_addresses: cfg.move_pkg.named_addresses(),
         test_mode: true,
         full_model_generation: cfg.move_pkg.check_test_code,
         install_dir: cfg.move_pkg.output_dir.clone(),
-        skip_fetch_latest_git_deps: false,
-        compiler_config: CompilerConfig {
-            known_attributes: known_attributes.clone(),
-            skip_attribute_checks: cfg.move_pkg.skip_attribute_checks,
-            bytecode_version: get_bytecode_version(
-                cfg.move_pkg.bytecode_version,
-                cfg.move_pkg.language_version,
-            ),
-            compiler_version: cfg.move_pkg.compiler_version,
-            language_version: cfg.move_pkg.language_version,
-            experiments: experiments_from_opt_level(&cfg.move_pkg.optimize),
-        },
+        skip_fetch_latest_git_deps,
+        compiler_config: cfg.compiler_config(),
         ..Default::default()
     };
 
@@ -119,26 +106,4 @@ fn aptos_debug_natives(
         TimedFeaturesBuilder::enable_all().build(),
         Features::default(),
     )
-}
-
-/// Get bytecode version.
-fn get_bytecode_version(
-    bytecode_version_in: Option<u32>,
-    language_version: Option<LanguageVersion>,
-) -> Option<u32> {
-    bytecode_version_in.or_else(|| language_version.map(|lv| lv.infer_bytecode_version(None)))
-}
-
-/// Get a list of stringified [`Experiment`] from the optimization level.
-fn experiments_from_opt_level(optlevel: &Option<OptimizationLevel>) -> Vec<String> {
-    match optlevel {
-        None | Some(OptimizationLevel::Default) => {
-            vec![format!("{}=on", Experiment::OPTIMIZE.to_string())]
-        },
-        Some(OptimizationLevel::None) => vec![format!("{}=off", Experiment::OPTIMIZE.to_string())],
-        Some(OptimizationLevel::Extra) => vec![
-            format!("{}=on", Experiment::OPTIMIZE_EXTRA.to_string()),
-            format!("{}=on", Experiment::OPTIMIZE.to_string()),
-        ],
-    }
 }
