@@ -70,7 +70,15 @@ pub fn run_mutation_test(
 
     // Run original tests to ensure the original tests are working:
 
-    let result = run_tests(test_config, &package_path, &mut error_writer);
+    // We need to check for the latest git deps only for the first time we run the test.
+    // All subsequent runs with this tool will then have the latest deps fetched.
+    let skip_fetch_deps = false;
+    let result = run_tests(
+        test_config,
+        &package_path,
+        skip_fetch_deps,
+        &mut error_writer,
+    );
 
     if let Err(e) = result {
         let msg =
@@ -91,7 +99,14 @@ pub fn run_mutation_test(
         mutant_path.clone()
     } else {
         benchmarks.mutator.start();
-        let mutator_config = BuildConfig::default();
+        let mutator_config = BuildConfig {
+            dev_mode: test_config.move_pkg.dev,
+            additional_named_addresses: test_config.move_pkg.named_addresses(),
+            // No need to fetch latest deps again.
+            skip_fetch_latest_git_deps: true,
+            compiler_config: test_config.compiler_config(),
+            ..Default::default()
+        };
         let outdir_mutant = run_mutator(options, &mutator_config, &package_path, &outdir)?;
         benchmarks.mutator.stop();
         outdir_mutant
@@ -152,7 +167,9 @@ pub fn run_mutation_test(
 
         benchmark.start();
 
-        let result = run_tests(test_config, &outdir, &mut error_writer);
+        // No need to fetch latest deps again.
+        let skip_fetch_deps = true;
+        let result = run_tests(test_config, &outdir, skip_fetch_deps, &mut error_writer);
         benchmark.stop();
 
         if let Err(e) = result {

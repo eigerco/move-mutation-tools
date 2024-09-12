@@ -4,9 +4,13 @@
 
 #![allow(clippy::too_long_first_doc_paragraph)]
 
-use aptos::common::types::MovePackageDir;
+use aptos::common::types::{MovePackageDir, OptimizationLevel};
+use aptos_framework::extended_checks;
 use clap::Parser;
+use move_compiler_v2::Experiment;
+use move_model::metadata::LanguageVersion;
 use move_mutator::cli::ModuleFilter;
+use move_package::CompilerConfig;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -97,6 +101,45 @@ pub struct TestBuildConfig {
     ///// Collect coverage information for later use with the various `aptos move coverage` subcommands
     //#[clap(long = "coverage")]
     //pub compute_coverage: bool,
+}
+
+impl TestBuildConfig {
+    pub fn compiler_config(&self) -> CompilerConfig {
+        let known_attributes = extended_checks::get_all_attribute_names().clone();
+        CompilerConfig {
+            known_attributes,
+            skip_attribute_checks: self.move_pkg.skip_attribute_checks,
+            bytecode_version: get_bytecode_version(
+                self.move_pkg.bytecode_version,
+                self.move_pkg.language_version,
+            ),
+            compiler_version: self.move_pkg.compiler_version,
+            language_version: self.move_pkg.language_version,
+            experiments: experiments_from_opt_level(&self.move_pkg.optimize),
+        }
+    }
+}
+
+/// Get bytecode version.
+fn get_bytecode_version(
+    bytecode_version_in: Option<u32>,
+    language_version: Option<LanguageVersion>,
+) -> Option<u32> {
+    bytecode_version_in.or_else(|| language_version.map(|lv| lv.infer_bytecode_version(None)))
+}
+
+/// Get a list of stringified [`Experiment`] from the optimization level.
+fn experiments_from_opt_level(optlevel: &Option<OptimizationLevel>) -> Vec<String> {
+    match optlevel {
+        None | Some(OptimizationLevel::Default) => {
+            vec![format!("{}=on", Experiment::OPTIMIZE.to_string())]
+        },
+        Some(OptimizationLevel::None) => vec![format!("{}=off", Experiment::OPTIMIZE.to_string())],
+        Some(OptimizationLevel::Extra) => vec![
+            format!("{}=on", Experiment::OPTIMIZE_EXTRA.to_string()),
+            format!("{}=on", Experiment::OPTIMIZE.to_string()),
+        ],
+    }
 }
 
 #[cfg(test)]
