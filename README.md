@@ -24,9 +24,9 @@ If the mutants are not killed, it might indicate the quality of the test suite c
 
 To build the tools, run:
 ```bash
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git move-mutator
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git move-spec-test
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git move-mutation-test
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutator
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-spec-test
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutation-test
 ```
 
 That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
