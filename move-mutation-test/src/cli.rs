@@ -9,7 +9,7 @@ use aptos_framework::extended_checks;
 use clap::Parser;
 use move_compiler_v2::Experiment;
 use move_model::metadata::LanguageVersion;
-use move_mutator::cli::ModuleFilter;
+use move_mutator::cli::{FunctionFilter, ModuleFilter};
 use move_package::CompilerConfig;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
@@ -20,7 +20,11 @@ use std::path::PathBuf;
 pub struct CLIOptions {
     /// Work only over specified modules.
     #[clap(long, value_parser, default_value = "all")]
-    pub include_modules: ModuleFilter,
+    pub mutate_modules: ModuleFilter,
+
+    /// Work only over specified functions.
+    #[clap(short = 'f', long, value_parser, default_value = "all")]
+    pub mutate_functions: FunctionFilter,
 
     /// Optional configuration file for mutator tool.
     #[clap(long, value_parser)]
@@ -39,8 +43,8 @@ pub struct CLIOptions {
 #[must_use]
 pub fn create_mutator_options(options: &CLIOptions) -> move_mutator::cli::CLIOptions {
     move_mutator::cli::CLIOptions {
-        // TODO: add an option to mutate functions (in general, not tied to any module)
-        mutate_modules: options.include_modules.clone(),
+        mutate_functions: options.mutate_functions.clone(),
+        mutate_modules: options.mutate_modules.clone(),
         configuration_file: options.mutator_conf.clone(),
         // To run tests, compilation must succeed
         verify_mutants: true,
@@ -60,15 +64,8 @@ pub fn check_mutator_output_path(options: &move_mutator::cli::CLIOptions) -> Opt
         .and_then(|c| c.project.out_mutant_dir)
 }
 
-/// Runs Move unit tests for a package
-///
-/// This will run Move unit tests against a package with debug mode
-/// turned on.  Note, that move code warnings currently block tests from running.
-#[derive(Parser)]
-pub struct TestPackage {}
-
-// Info: this set struct is based on TestPackage in `aptos-core/crates/aptos/src/move_tool/mod.rs`.
 /// The configuration options for running the tests.
+// Info: this set struct is based on TestPackage in `aptos-core/crates/aptos/src/move_tool/mod.rs`.
 #[derive(Parser, Debug)]
 pub struct TestBuildConfig {
     /// Options for compiling a move package dir.
@@ -150,7 +147,8 @@ mod tests {
     #[test]
     fn cli_options_starts_empty() {
         let options = CLIOptions::default();
-        assert_eq!(ModuleFilter::All, options.include_modules);
+        assert_eq!(ModuleFilter::All, options.mutate_modules);
+        assert_eq!(FunctionFilter::All, options.mutate_functions);
         assert!(options.mutator_conf.is_none());
         assert!(options.output.is_none());
     }
@@ -158,13 +156,17 @@ mod tests {
     #[test]
     fn create_mutator_options_copies_fields() {
         let options = crate::cli::CLIOptions {
-            include_modules: ModuleFilter::Selected(vec!["test1".to_string(), "test2".to_string()]),
+            mutate_modules: ModuleFilter::Selected(vec!["mod1".to_string(), "mod2".to_string()]),
+            mutate_functions: FunctionFilter::Selected(vec![
+                "func1".to_string(),
+                "func2".to_string(),
+            ]),
             mutator_conf: Some(PathBuf::from("path/to/mutator/conf")),
             ..Default::default()
         };
         let mutator_options = create_mutator_options(&options);
 
-        assert_eq!(mutator_options.mutate_modules, options.include_modules);
+        assert_eq!(mutator_options.mutate_modules, options.mutate_modules);
         assert_eq!(mutator_options.configuration_file, options.mutator_conf);
     }
 

@@ -5,7 +5,7 @@
 #![allow(clippy::too_long_first_doc_paragraph)]
 
 use clap::Parser;
-use move_mutator::cli::ModuleFilter;
+use move_mutator::cli::{FunctionFilter, ModuleFilter};
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
@@ -16,24 +16,35 @@ pub struct CLIOptions {
     /// The paths to the Move sources.
     #[clap(long, short, value_parser)]
     pub move_sources: Vec<PathBuf>,
+
     /// Work only over specified modules.
     #[clap(long, short, value_parser, default_value = "all")]
-    pub include_modules: ModuleFilter,
+    pub mutate_modules: ModuleFilter,
+
+    /// Work only over specified functions.
+    #[clap(short = 'f', long, value_parser, default_value = "all")]
+    pub mutate_functions: FunctionFilter,
+
     /// Optional configuration file for mutator tool.
     #[clap(long, value_parser)]
     pub mutator_conf: Option<PathBuf>,
+
     /// Optional configuration file for prover tool.
     #[clap(long, value_parser)]
     pub prover_conf: Option<PathBuf>,
+
     /// Save report to a JSON file.
     #[clap(short, long, value_parser)]
     pub output: Option<PathBuf>,
+
     /// Use previously generated mutants.
     #[clap(long, short, value_parser)]
     pub use_generated_mutants: Option<PathBuf>,
+
     /// Indicates if mutants should be verified and made sure mutants can compile.
     #[clap(long, default_value = "false")]
     pub verify_mutants: bool,
+
     /// Extra arguments to pass to the prover.
     #[clap(long, value_parser)]
     pub extra_prover_args: Option<Vec<String>>,
@@ -44,7 +55,8 @@ pub struct CLIOptions {
 pub fn create_mutator_options(options: &CLIOptions) -> move_mutator::cli::CLIOptions {
     move_mutator::cli::CLIOptions {
         move_sources: options.move_sources.clone(),
-        mutate_modules: options.include_modules.clone(),
+        mutate_modules: options.mutate_modules.clone(),
+        mutate_functions: options.mutate_functions.clone(),
         configuration_file: options.mutator_conf.clone(),
         verify_mutants: options.verify_mutants,
         ..Default::default()
@@ -91,7 +103,8 @@ mod tests {
     fn cli_options_starts_empty() {
         let options = CLIOptions::default();
         assert!(options.move_sources.is_empty());
-        assert_eq!(ModuleFilter::All, options.include_modules);
+        assert_eq!(ModuleFilter::All, options.mutate_modules);
+        assert_eq!(FunctionFilter::All, options.mutate_functions);
         assert!(options.mutator_conf.is_none());
         assert!(options.prover_conf.is_none());
         assert!(options.output.is_none());
@@ -102,14 +115,17 @@ mod tests {
     fn create_mutator_options_copies_fields() {
         let mut options = CLIOptions::default();
         options.move_sources.push(PathBuf::from("path/to/file"));
-        options.include_modules =
-            ModuleFilter::Selected(vec!["test1".to_string(), "test2".to_string()]);
+        options.mutate_modules =
+            ModuleFilter::Selected(vec!["mod1".to_string(), "mod2".to_string()]);
+        options.mutate_functions =
+            FunctionFilter::Selected(vec!["func1".to_string(), "func2".to_string()]);
         options.mutator_conf = Some(PathBuf::from("path/to/mutator/conf"));
 
         let mutator_options = create_mutator_options(&options);
 
         assert_eq!(mutator_options.move_sources, options.move_sources);
-        assert_eq!(mutator_options.mutate_modules, options.include_modules);
+        assert_eq!(mutator_options.mutate_modules, options.mutate_modules);
+        assert_eq!(mutator_options.mutate_functions, options.mutate_functions);
         assert_eq!(mutator_options.configuration_file, options.mutator_conf);
     }
 
