@@ -2,7 +2,7 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::configuration::FunctionFilter;
+pub use crate::configuration::FunctionFilter;
 use clap::Parser;
 use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, str::FromStr};
