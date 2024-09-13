@@ -31,6 +31,7 @@ move-package = { workspace = true }
 move-unit-test = { workspace = true }
 move-vm-runtime = { workspace = true }
 pretty_env_logger = { workspace = true }
+rayon = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 tabled = { workspace = true }
