@@ -148,4 +148,24 @@ Options:
   -h, --help                                           Print help (see more with '--help')
 ```
 
+### Examples
+
+_In below examples, the `RUST_LOG` flag is used to provide a more informative output._
+
+To use the tool on only the `Operators` module for the project `simple`, run:
+```bash
+RUST_LOG=info ./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-modules Operators
+```
+------------------------------------------------------------------------------------------------------------
+To use the tool only on functions called `sum` for the project `simple`, run:
+```bash
+RUST_LOG=info ./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-functions sum
+```
+In the output for the above command, the tool will mutate both the `Operators::sum` and `Sum::sum` functions.
+
+If the user wants to mutate only the `sum` function in the `Sum` module, the user can use this command:
+```bash
+RUST_LOG=info ./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-functions sum --mutate-modules Sum
+```
+
 [aptos-core]: https://github.com/aptos-labs/aptos-core/

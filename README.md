@@ -27,6 +27,7 @@ To build the tools, run:
 $ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutator
 $ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-spec-test
 $ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutation-test
+$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutation-test
 ```
 
 That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
