@@ -271,3 +271,65 @@ fn check_mutator_cli_filters_functions_properly() {
         assert!((target_function_1 == mutated_func) ^ (target_function_2 == mutated_func));
     }
 }
+
+// This test runs a mutator multiple times and checks number of binary swap operator mutants for
+// each run on specific function.
+#[test]
+fn check_mutator_swap_operator_works_correctly_for_corner_cases() {
+    let config = BuildConfig {
+        // Let's make it faster.
+        skip_fetch_latest_git_deps: true,
+        ..Default::default()
+    };
+
+    // Function names and number of swap mutation operations
+    let functions_and_exected_swap_op_count = [
+        ("swap_op_should_mutate_once_v1", 1),
+        ("swap_op_should_mutate_once_v2", 1),
+        ("swap_op_should_mutate_once_v3", 1),
+        ("swap_op_should_mutate_seven_times", 7),
+        ("swap_op_should_mutate_three_times", 3),
+        ("swap_op_should_not_mutate", 0),
+    ];
+
+    for (fn_name, expected_swap_op_count) in functions_and_exected_swap_op_count {
+        let outdir = tempdir().unwrap().into_path();
+
+        let options = CLIOptions {
+            move_sources: vec![],
+            mutate_modules: ModuleFilter::All,
+            mutate_functions: FunctionFilter::Selected(vec![fn_name.into()]),
+            out_mutant_dir: Some(outdir.clone()),
+            verify_mutants: false,
+            no_overwrite: false,
+            downsample_filter: None,
+            downsampling_ratio_percentage: None,
+            configuration_file: None,
+        };
+        let package_path = Path::new("tests/move-assets/check_swap_operator");
+
+        let result = move_mutator::run_move_mutator(options.clone(), &config, package_path);
+        assert!(result.is_ok());
+
+        let report_path = outdir.join("report.json");
+        let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
+
+        // Ensure that all mutations belong to a single function.
+        let mut total_swap_op_count = 0;
+        for mutant in report.get_mutants() {
+            assert!(mutant.get_function_name() == fn_name);
+
+            total_swap_op_count += mutant
+                .get_mutations()
+                .iter()
+                // Note: we could expose operator names publicly.
+                .filter(|m| m.get_operator_name() == "binary_operator_swap")
+                .count();
+        }
+
+        assert_eq!(
+            total_swap_op_count, expected_swap_op_count,
+            "failed for function {fn_name}"
+        );
+    }
+}

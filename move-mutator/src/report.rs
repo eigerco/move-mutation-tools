@@ -252,6 +252,12 @@ impl MutationReport {
     pub fn get_diff(&self) -> &str {
         &self.diff
     }
+
+    /// Return mutations.
+    #[must_use]
+    pub fn get_mutations(&self) -> &Vec<Mutation> {
+        &self.mutations
+    }
 }
 
 #[cfg(test)]
