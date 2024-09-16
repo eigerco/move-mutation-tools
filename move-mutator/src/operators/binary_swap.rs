@@ -8,7 +8,10 @@ use crate::{
     report::{Mutation, Range},
 };
 use codespan::FileId;
-use move_model::{ast::Operation, model::Loc};
+use move_model::{
+    ast::{ExpData, Operation},
+    model::Loc,
+};
 use std::fmt;
 
 pub const OPERATOR_NAME: &str = "binary_operator_swap";
@@ -33,22 +36,47 @@ impl BinarySwap {
 
 impl MutationOperator for BinarySwap {
     fn apply(&self, source: &str) -> Vec<MutantInfo> {
-        // There is no point in swapping the operator for these cases as it would result in the same expression.
-        if self.operation == Operation::Add
-            || self.operation == Operation::Mul
-            || self.operation == Operation::Eq
-            || self.operation == Operation::Neq
-        {
+        // Check if we've exactly two expressions.
+        let exps_len = self.exps.len();
+        if exps_len != 2 {
+            warn!("BinarySwapOperator: Expected exactly two expressions, got {exps_len}");
             return vec![];
         }
 
-        // Check if we've exactly two expressions.
-        if self.exps.len() != 2 {
-            warn!(
-                "BinarySwapOperator: Expected exactly two expressions, got {}",
-                self.exps.len()
-            );
-            return vec![];
+        // There is no point in swapping the operator for some cases, as it would result in the same expression.
+        'check_corner_case: {
+            match self.operation {
+                Operation::Add
+                | Operation::Mul
+                | Operation::Eq
+                | Operation::Neq
+                | Operation::BitOr
+                | Operation::BitAnd
+                | Operation::Or
+                | Operation::And
+                | Operation::Xor => {
+                    for ExpLoc { exp, loc: _ } in self.exps.iter() {
+                        let mut calls_function = |e: &ExpData| {
+                            matches!(
+                                e,
+                                ExpData::Call(_, Operation::MoveFunction(_, _), _)
+                                    | ExpData::Call(_, Operation::Closure(_, _), _)
+                                    | ExpData::Lambda(_, _, _)
+                                    | ExpData::Invoke(_, _, _)
+                            )
+                        };
+                        if exp.any(&mut calls_function) {
+                            // If any expression around the operator is a closure or a function,
+                            // let's perform the swap as the order might matter in this case.
+                            break 'check_corner_case;
+                        }
+                    }
+
+                    // For the above operations do not perform swap operations.
+                    return vec![];
+                },
+                _ => (),
+            }
         }
 
         // We need to extract operator position, but we must use the positions of expressions to avoid
@@ -76,7 +104,11 @@ impl MutationOperator for BinarySwap {
 
         let mut mutated_source = source.to_string();
         let mut op = right_str.to_owned();
+        // Add one whitespace after the left operator
+        op.push(' ');
         op.push_str(binop_str);
+        // Add one whitespace after the right operator
+        op.push(' ');
         op.push_str(left_str);
 
         mutated_source.replace_range(start..end, op.as_str());

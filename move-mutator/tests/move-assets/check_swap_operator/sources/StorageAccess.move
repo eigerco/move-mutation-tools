@@ -42,7 +42,7 @@ module 0x42::m2 {
     }
 }
 
-// Info 1: All functions below use binary operators `+`, `*`, `&`, `|`, `==`, `!=`, `^`
+// Info 1: All functions below use binary operators `+`, `*`, `&`, `&&`, `|`, `||`, `==`, `!=`, `^`
 // for which the order doesn't matter.
 //
 // Info 2: Deliberately use funny identation for the sake of the extra test.
