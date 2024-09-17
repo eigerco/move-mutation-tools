@@ -111,7 +111,6 @@ module TestAccount::Operators {
         x & y
     }
 
-    // Info: we won't kill a mutant that swaps places (false-positive)
     #[test]
     fun and_valid_usage_test() {
         assert!(and(0, 0) == 0, 0);
@@ -132,7 +131,6 @@ module TestAccount::Operators {
         x | y
     }
 
-    // Info: we won't kill a mutant that swaps places (false-positive)
     #[test]
     fun or_valid_usage_test() {
         assert!(or(0, 0) == 0, 0);
@@ -154,7 +152,6 @@ module TestAccount::Operators {
         x ^ y
     }
 
-    // Info: we won't kill a mutant that swaps places (false-positive)
     #[test]
     fun xor_valid_usage_test() {
         assert!(xor(0, 0) == 0, 0);
@@ -213,7 +210,6 @@ module TestAccount::Operators {
         x || y
     }
 
-    // Info: we won't kill a mutant that swaps places (false-positive)
     #[test]
     fun logical_or_valid_usage_test() {
         assert!(logical_or(true, true) == true, 0);
@@ -226,7 +222,6 @@ module TestAccount::Operators {
         x && y
     }
 
-    // Info: we won't kill a mutant that swaps places (false-positive)
     #[test]
     fun logical_and_valid_usage_test() {
         assert!(logical_and(true, true) == true, 0);
