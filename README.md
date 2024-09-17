@@ -28,7 +28,7 @@ If the mutants are not killed, it might indicate the quality of the test suite c
 <summary>Prerequisites</summary>
 
 
- _Move Prover_ depends on a tool called language called [boogie](https://github.com/boogie-org/boogie), which in turn requires a `.net 6` runtime and an SMT solver, the default being [Z3](https://github.com/Z3Prover/z3).
+ _Move Prover_ depends on a tool called [boogie](https://github.com/boogie-org/boogie), which requires a `.net 6` runtime and an SMT solver, the default being [Z3](https://github.com/Z3Prover/z3).
 
  Specific versions of these need to be installed, and the paths to the boogie and `z3` executables set in two environment variables:
  ```
@@ -38,7 +38,7 @@ If the mutants are not killed, it might indicate the quality of the test suite c
 
 One way of getting this set up correctly is to [use the dev_setup.sh](https://aptos.dev/en/network/nodes/building-from-source) script from the aptos project.
 
-Alternatively, you can manually install them on a debian-like linux system using the following set of commands:
+Alternatively, you can manually install them on a Debian-like Linux system using the following set of commands:
 ```bash
 sudo apt-get install dotnet6
 dotnet tool install --global boogie --version 3.2.4
