@@ -104,10 +104,10 @@ impl MutationOperator for BinarySwap {
 
         let mut mutated_source = source.to_string();
         let mut op = right_str.to_owned();
-        // Add one whitespace after the left operator
+        // Add one whitespace after the left operator.
         op.push(' ');
         op.push_str(binop_str);
-        // Add one whitespace after the right operator
+        // Add one whitespace after the right operator.
         op.push(' ');
         op.push_str(left_str);
 
