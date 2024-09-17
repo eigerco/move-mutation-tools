@@ -20,6 +20,35 @@ How it works:
 
 If the mutants are not killed, it might indicate the quality of the test suite could be improved, or in some rare cases, it might indicate an error in the original source code.
 
+## Prerequisites
+
+ _Move Prover_ depends on a tool called language called [boogie](https://github.com/boogie-org/boogie), which in turn requires a .net 6 runtime and an SMT solver, the default being [Z3](https://github.com/Z3Prover/z3).
+
+ Specific versions of these need to be installed, and the paths to the boogie and z3 executables set in two environment variables:
+ 
+ ```
+ BOOGIE_EXE=/path/to/boogie
+ Z3_EXE=/path/to/z3
+ ```
+
+One way of getting this set up correctly is to [use the dev_setup.sh](https://aptos.dev/en/network/nodes/building-from-source) script from the aptos project.
+
+Alternatively you can manually install them on a debian-like linux system using the following set of commands:
+
+``` bash
+sudo apt-get install dotnet6 
+dotnet tool install --global boogie --version 3.2.4
+wget https://github.com/Z3Prover/z3/releases/download/z3-4.11.2/z3-4.11.2-x64-glibc-2.31.zip
+unzip z3-4.11.2-x64-glibc-2.31.zip
+cp z3-4.11.2-x64-glibc-2.31/bin/z3 ~/.local/bin
+
+
+# You might want to put these in your .bashrc or similar
+export Z3_EXE=~/.local/bin/z3
+export BOOGIE_EXE=~/.dotnet/tools/boogie
+
+```
+
 ## Install
 
 To build the tools, run:
