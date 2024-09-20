@@ -29,6 +29,7 @@ move-compiler-v2 = { workspace = true }
 move-model = { workspace = true }
 move-package = { workspace = true }
 move-symbol-pool = { workspace = true }
+num = { workspace = true }
 num-traits = { workspace = true }
 pretty_env_logger = { workspace = true }
 rand = { workspace = true }

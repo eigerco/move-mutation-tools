@@ -8097,6 +8097,7 @@ dependencies = [
  "move-model",
  "move-package",
  "move-symbol-pool",
+ "num",
  "num-traits",
  "pretty_env_logger",
  "rand 0.8.5",
