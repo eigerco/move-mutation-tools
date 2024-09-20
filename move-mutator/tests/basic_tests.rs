@@ -333,3 +333,66 @@ fn check_mutator_swap_operator_works_correctly_for_corner_cases() {
         );
     }
 }
+
+// This test runs a mutator multiple times and checks number of binary swap operator mutants for
+// each run on specific function.
+#[test]
+fn check_mutator_binary_replacement_operator_works_correctly_for_corner_cases_v1() {
+    let config = BuildConfig {
+        // Let's make it faster.
+        skip_fetch_latest_git_deps: true,
+        ..Default::default()
+    };
+
+    // Function names and number of swap mutation operations
+    let functions_cur_op_forbidden_ops = [
+        // (<function_name>, <original_operator>, <forbidden_mutations>)
+        ("is_x_eq_to_zero", "==", vec!["<="]),
+        ("is_zero_eq_to_x", "==", vec![">="]),
+        ("is_x_neq_to_zero", "!=", vec![">"]),
+        ("is_zero_neq_to_x", "!=", vec!["<"]),
+        ("is_x_gt_zero", ">", vec!["!="]),
+        ("is_zero_lt_x", "<", vec!["!="]),
+    ];
+
+    for (fn_name, orig_op, forbidden_ops) in functions_cur_op_forbidden_ops {
+        let outdir = tempdir().unwrap().into_path();
+
+        let options = CLIOptions {
+            move_sources: vec![],
+            mutate_modules: ModuleFilter::Selected(vec!["BinaryReplacement".to_owned()]),
+            mutate_functions: FunctionFilter::Selected(vec![fn_name.into()]),
+            out_mutant_dir: Some(outdir.clone()),
+            verify_mutants: false,
+            no_overwrite: false,
+            downsample_filter: None,
+            downsampling_ratio_percentage: None,
+            configuration_file: None,
+        };
+        let package_path = Path::new("tests/move-assets/simple");
+
+        let result = move_mutator::run_move_mutator(options.clone(), &config, package_path);
+        assert!(result.is_ok());
+
+        let report_path = outdir.join("report.json");
+        let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
+
+        // Ensure that nobody has deleted our Move test.
+        assert!(!report.get_mutants().is_empty());
+
+        for mutant in report.get_mutants() {
+            // Ensure that all mutations belong to a single function.
+            assert!(mutant.get_function_name() == fn_name);
+
+            let has_forbidden_op = mutant
+                .get_mutations()
+                .iter()
+                .filter(|m| {
+                    m.get_operator_name() == "binary_operator_replacement"
+                        && m.get_original_value() == orig_op
+                })
+                .find(|m| forbidden_ops.contains(&m.get_new_value()));
+            assert!(has_forbidden_op.is_none());
+        }
+    }
+}
