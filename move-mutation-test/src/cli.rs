@@ -2,8 +2,6 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-#![allow(clippy::too_long_first_doc_paragraph)]
-
 use aptos::common::types::{MovePackageDir, OptimizationLevel};
 use aptos_framework::extended_checks;
 use clap::Parser;
@@ -22,7 +20,7 @@ pub struct CLIOptions {
     #[clap(long, value_parser, default_value = "all")]
     pub mutate_modules: ModuleFilter,
 
-    /// Work only over specified functions.
+    /// Work only over specified functions (these are not qualifed functions).
     #[clap(short = 'f', long, value_parser, default_value = "all")]
     pub mutate_functions: FunctionFilter,
 
@@ -53,6 +51,7 @@ pub fn create_mutator_options(options: &CLIOptions) -> move_mutator::cli::CLIOpt
 }
 
 /// This function checks if the mutator output path is provided in the configuration file.
+///
 /// We don't need to check if the mutator output path is provided in the options as they were created
 /// from the mutation-test options which does not allow setting it.
 #[must_use]
@@ -85,13 +84,6 @@ pub struct TestBuildConfig {
     /// A boolean value to skip warnings.
     #[clap(long)]
     pub ignore_compile_warnings: bool,
-    // TODO: Unused in aptos-core:
-    ///// The maximum number of instructions that can be executed by a test
-    /////
-    ///// If set, the number of instructions executed by one test will be bounded
-    //#[clap(long = "instructions", default_value_t = 100000)]
-    //pub instruction_execution_bound: u64,
-
     // TODO: There is no sense in enabling coverage - we'll have another option in the future
     // 'use-coverage-data' or something like that - that is going to be passed to the mutator
     // tool
