@@ -29,6 +29,8 @@ use termcolor::WriteColor;
 /// # Returns
 ///
 /// * `anyhow::Result<()>` - The result of the test suite for the package.
+// This function is based upon the `execute` method for the `TestPacakge` struct in
+// aptos-core/crates/aptos/src/move_tool/mod.rs file.
 pub(crate) fn run_tests<W: WriteColor + Send>(
     cfg: &TestBuildConfig,
     package_path: &Path,

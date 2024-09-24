@@ -2,8 +2,6 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-#![allow(clippy::too_long_first_doc_paragraph)]
-
 mod benchmark;
 pub mod cli;
 mod mutation_test;
@@ -95,7 +93,7 @@ pub fn run_mutation_test(
     let outdir = tempfile::tempdir()?.into_path();
     let outdir_original = outdir.join("base");
 
-    fs::create_dir_all(&outdir_original)?;
+    fs::create_dir_all(outdir_original)?;
 
     let outdir_mutant = if let Some(mutant_path) = &options.use_generated_mutants {
         mutant_path.clone()

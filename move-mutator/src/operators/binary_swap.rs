@@ -25,12 +25,51 @@ pub struct BinarySwap {
 }
 
 impl BinarySwap {
+    /// Creates a new instance of the binary swap mutation operator.
+    #[must_use]
     pub fn new(operation: Operation, loc: Loc, exps: Vec<ExpLoc>) -> Self {
         Self {
             operation,
             loc,
             exps,
         }
+    }
+
+    // Check whether the binary operation is commutative.
+    fn is_commutative(&self) -> bool {
+        match self.operation {
+            Operation::Add
+            | Operation::Mul
+            | Operation::Eq
+            | Operation::Neq
+            | Operation::BitOr
+            | Operation::BitAnd
+            | Operation::Or
+            | Operation::And
+            | Operation::Xor => {
+                for ExpLoc { exp, loc: _ } in self.exps.iter() {
+                    let mut calls_function = |e: &ExpData| {
+                        matches!(
+                            e,
+                            ExpData::Call(_, Operation::MoveFunction(_, _), _)
+                                | ExpData::Call(_, Operation::Closure(_, _), _)
+                                | ExpData::Lambda(_, _, _)
+                                | ExpData::Invoke(_, _, _)
+                        )
+                    };
+
+                    if exp.any(&mut calls_function) {
+                        // If any expression around the operator is a closure or a function,
+                        // it's not possible to garnatuee that the opration is commutative,
+                        // since the operand order might matter in that case.
+                        return false;
+                    }
+                }
+            },
+            _ => (),
+        }
+
+        true
     }
 }
 
@@ -44,39 +83,10 @@ impl MutationOperator for BinarySwap {
         }
 
         // There is no point in swapping the operator for some cases, as it would result in the same expression.
-        'check_corner_case: {
-            match self.operation {
-                Operation::Add
-                | Operation::Mul
-                | Operation::Eq
-                | Operation::Neq
-                | Operation::BitOr
-                | Operation::BitAnd
-                | Operation::Or
-                | Operation::And
-                | Operation::Xor => {
-                    for ExpLoc { exp, loc: _ } in self.exps.iter() {
-                        let mut calls_function = |e: &ExpData| {
-                            matches!(
-                                e,
-                                ExpData::Call(_, Operation::MoveFunction(_, _), _)
-                                    | ExpData::Call(_, Operation::Closure(_, _), _)
-                                    | ExpData::Lambda(_, _, _)
-                                    | ExpData::Invoke(_, _, _)
-                            )
-                        };
-                        if exp.any(&mut calls_function) {
-                            // If any expression around the operator is a closure or a function,
-                            // let's perform the swap as the order might matter in this case.
-                            break 'check_corner_case;
-                        }
-                    }
-
-                    // For the above operations do not perform swap operations.
-                    return vec![];
-                },
-                _ => (),
-            }
+        // For any commutative binary operator (i.e., a op b == b op a), when the operands are
+        // pure, the binary swap mutation results in equivalent code.
+        if self.is_commutative() {
+            return vec![];
         }
 
         // We need to extract operator position, but we must use the positions of expressions to avoid

@@ -21,7 +21,7 @@ pub struct CLIOptions {
     #[clap(long, short, value_parser, default_value = "all")]
     pub mutate_modules: ModuleFilter,
 
-    /// Work only over specified functions.
+    /// Work only over specified functions (these are not qualifed functions).
     #[clap(short = 'f', long, value_parser, default_value = "all")]
     pub mutate_functions: FunctionFilter,
 
