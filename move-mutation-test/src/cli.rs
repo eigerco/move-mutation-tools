@@ -2,10 +2,9 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos::common::types::{MovePackageDir, OptimizationLevel};
+use aptos::{common::types::MovePackageDir, move_tool::experiments_from_opt_level};
 use aptos_framework::extended_checks;
 use clap::Parser;
-use move_compiler_v2::Experiment;
 use move_model::metadata::LanguageVersion;
 use move_mutator::cli::{FunctionFilter, ModuleFilter};
 use move_package::CompilerConfig;
@@ -115,20 +114,6 @@ fn get_bytecode_version(
     language_version: Option<LanguageVersion>,
 ) -> Option<u32> {
     bytecode_version_in.or_else(|| language_version.map(|lv| lv.infer_bytecode_version(None)))
-}
-
-/// Get a list of stringified [`Experiment`] from the optimization level.
-fn experiments_from_opt_level(optlevel: &Option<OptimizationLevel>) -> Vec<String> {
-    match optlevel {
-        None | Some(OptimizationLevel::Default) => {
-            vec![format!("{}=on", Experiment::OPTIMIZE.to_string())]
-        },
-        Some(OptimizationLevel::None) => vec![format!("{}=off", Experiment::OPTIMIZE.to_string())],
-        Some(OptimizationLevel::Extra) => vec![
-            format!("{}=on", Experiment::OPTIMIZE_EXTRA.to_string()),
-            format!("{}=on", Experiment::OPTIMIZE.to_string()),
-        ],
-    }
 }
 
 #[cfg(test)]

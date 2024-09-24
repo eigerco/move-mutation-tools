@@ -20,11 +20,11 @@ rust-version = "1.78.0"
 
 [workspace.dependencies]
 anyhow = "1.0"
-aptos = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git" }
-aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git" }
+aptos = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
 clap = { version = "4.5", features = ["derive"] }
 codespan = "0.11"
 codespan-reporting = "0.11"
@@ -33,17 +33,17 @@ either = "1.9"
 fixed = "= 1.25.1" # required by aptos deps
 itertools = "0.13"
 log = "0.4"
-move-cli = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-model = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-model = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
 move-mutator = { path = "move-mutator" }
-move-package = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-prover = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git" }
-move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git" }
+move-package = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-prover = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
 num-traits = "0.2"
 pretty_env_logger = "0.5"
 rand = "0.8"
