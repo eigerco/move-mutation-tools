@@ -60,7 +60,7 @@ impl BinarySwap {
 
                     if exp.any(&mut calls_function) {
                         // If any expression around the operator is a closure or a function,
-                        // it's not possible to garnatuee that the opration is commutative,
+                        // it's not possible to guarantee that the operation is commutative,
                         // since the operand order might matter in that case.
                         return false;
                     }
