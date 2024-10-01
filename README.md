@@ -57,9 +57,9 @@ export BOOGIE_EXE=~/.dotnet/tools/boogie
 
 To build the tools, run:
 ```bash
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutator
-$ cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-spec-test
-$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-spec-testing.git --branch develop-m1 --locked move-mutation-test
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-mutator
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-spec-test
+$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-mutation-test
 ```
 
 That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
@@ -215,8 +215,6 @@ To check possible options, run:
 ```bash
 $ move-mutator --help
 ```
-
-
 
 ## License
 
