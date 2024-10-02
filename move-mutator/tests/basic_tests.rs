@@ -35,6 +35,7 @@ fn check_mutator_works_correctly() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -67,6 +68,7 @@ fn check_mutator_verify_mutants_correctly() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -98,6 +100,7 @@ fn check_mutator_fails_on_non_existing_path() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -121,6 +124,7 @@ fn check_mutator_fails_on_non_existing_output_path() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -146,6 +150,7 @@ fn check_mutator_works_with_simple_single_files() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -177,6 +182,7 @@ fn check_mutator_properly_fails_with_single_files_that_require_dep_or_addr_resol
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -206,6 +212,7 @@ fn check_mutator_fails_verify_file_without_package() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -246,6 +253,7 @@ fn check_mutator_cli_filters_functions_properly() {
         downsample_filter: None,
         downsampling_ratio_percentage: None,
         configuration_file: None,
+        apply_coverage: false,
     };
 
     let config = BuildConfig::default();
@@ -305,6 +313,7 @@ fn check_mutator_swap_operator_works_correctly_for_corner_cases() {
             downsample_filter: None,
             downsampling_ratio_percentage: None,
             configuration_file: None,
+            apply_coverage: false,
         };
         let package_path = Path::new("tests/move-assets/check_swap_operator");
 
@@ -368,6 +377,7 @@ fn check_mutator_binary_replacement_operator_works_correctly_for_corner_cases_v1
             downsample_filter: None,
             downsampling_ratio_percentage: None,
             configuration_file: None,
+            apply_coverage: false,
         };
         let package_path = Path::new("tests/move-assets/simple");
 
