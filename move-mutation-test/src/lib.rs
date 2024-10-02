@@ -106,7 +106,13 @@ pub fn run_mutation_test(
             compiler_config: test_config.compiler_config(),
             ..Default::default()
         };
-        let outdir_mutant = run_mutator(options, &mutator_config, &package_path, &outdir)?;
+        let outdir_mutant = run_mutator(
+            options,
+            test_config.apply_coverage,
+            &mutator_config,
+            &package_path,
+            &outdir,
+        )?;
         benchmarks.mutator.stop();
         outdir_mutant
     };
@@ -115,6 +121,9 @@ pub fn run_mutation_test(
         move_mutator::report::Report::load_from_json_file(&outdir_mutant.join("report.json"))?;
 
     // Run tests on mutants:
+
+    // Do not calculate the coverage on mutants.
+    let test_config = test_config.disable_coverage();
 
     benchmarks.mutation_test.start();
     let (mutation_test_benchmarks, mini_reports): (Vec<Benchmark>, Vec<MiniReport>) = report
@@ -164,7 +173,7 @@ pub fn run_mutation_test(
             let skip_fetch_deps = true;
             // No need to print anything to the screen, due to many threads, it might be messy and slow.
             let mut error_writer = std::io::sink();
-            let result = run_tests(test_config, &outdir, skip_fetch_deps, &mut error_writer);
+            let result = run_tests(&test_config, &outdir, skip_fetch_deps, &mut error_writer);
             benchmark.stop();
 
             let mutant_status = if let Err(e) = result {
@@ -224,12 +233,13 @@ pub fn run_mutation_test(
 /// This function runs the Move Mutator tool.
 fn run_mutator(
     options: &cli::CLIOptions,
+    apply_coverage: bool,
     config: &BuildConfig,
     package_path: &Path,
     outdir: &Path,
 ) -> anyhow::Result<PathBuf> {
     debug!("Running the move mutator tool");
-    let mut mutator_conf = cli::create_mutator_options(options);
+    let mut mutator_conf = cli::create_mutator_options(options, apply_coverage);
 
     let outdir_mutant = if let Some(path) = cli::check_mutator_output_path(&mutator_conf) {
         path
