@@ -21,11 +21,13 @@ rust-version = "1.78.0"
 
 [workspace.dependencies]
 anyhow = "1.0"
-aptos = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+# temporary use my fork since we need this commit:
+# https://github.com/Rqnsom/aptos-core/commit/2dbeacf7fe0d8e37aa98effd32cda8d40daf0502
+aptos = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+aptos-framework = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+aptos-gas-schedule = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+aptos-types = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+aptos-vm = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
 clap = { version = "4.5", features = ["derive"] }
 codespan = "0.11"
 codespan-reporting = "0.11"
@@ -34,17 +36,18 @@ either = "1.9"
 fixed = "= 1.25.1" # required by aptos deps
 itertools = "0.13"
 log = "0.4"
-move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-model = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-cli = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-command-line-common = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-compiler = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-compiler-v2 = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-coverage = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-model = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
 move-mutator = { path = "move-mutator" }
-move-package = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-prover = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-package = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-prover = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-symbol-pool = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-unit-test = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
+move-vm-runtime = { git = "https://github.com/Rqnsom/aptos-core.git", branch = "main" }
 num = "0.4"
 mutator-common = { path = "mutator-common" }
 num-traits = "0.2"

@@ -48,6 +48,10 @@ pub struct CLIOptions {
     /// Optional configuration file. If provided, it will override the default configuration.
     #[clap(long, short, value_parser)]
     pub configuration_file: Option<PathBuf>,
+
+    /// Use the unit test coverage report to generate mutants for source code with unit test coverage.
+    #[clap(long = "coverage")]
+    pub apply_coverage: bool,
 }
 
 impl Default for CLIOptions {
@@ -62,6 +66,7 @@ impl Default for CLIOptions {
             out_mutant_dir: Some(PathBuf::from(DEFAULT_OUTPUT_DIR)),
             verify_mutants: false,
             no_overwrite: false,
+            apply_coverage: false,
             downsample_filter: None,
             downsampling_ratio_percentage: None,
             configuration_file: None,
