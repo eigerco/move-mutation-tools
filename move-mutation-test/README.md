@@ -40,7 +40,7 @@ cargo test -p move-mutation-test
 
 To start the mutation test, run the following command from the repo directory:
 ```bash
-./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt
+./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple -o report.txt
 ```
 The above command will store the report in a file `report.txt`.
 A shortened sample output for the above command will look as follows:
@@ -105,17 +105,17 @@ Please refer to the [env_logger](https://docs.rs/env_logger/latest/env_logger/) 
 
 You can try to run the tool using other examples from the `move-mutator` tests like:
 ```bash
-./target/release/move-mutation-test -p move-mutator/tests/move-assets/breakcontinue
+./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/breakcontinue
 ```
 
 ## Command-line options
 
 To check possible options, run:
 ```bash
-./target/release/move-mutation-test --help
-The configuration options for running the tests
+./target/release/move-mutation-test run --help
+Runs the mutation test tool
 
-Usage: move-mutation-test [OPTIONS]
+Usage: move-mutation-test run [OPTIONS]
 
 Options:
       --include-modules <INCLUDE_MODULES>              Work only over specified modules [default: all]
@@ -156,18 +156,18 @@ _In below examples, the `RUST_LOG` flag is used to provide a more informative ou
 
 To use the tool on only the `Operators` module for the project `simple`, run:
 ```bash
-RUST_LOG=info ./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-modules Operators
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-modules Operators
 ```
 ------------------------------------------------------------------------------------------------------------
 To use the tool only on functions called `sum` for the project `simple`, run:
 ```bash
-RUST_LOG=info ./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-functions sum
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-functions sum
 ```
 In the output for the above command, the tool will mutate both the `Operators::sum` and `Sum::sum` functions.
 
 If the user wants to mutate only the `sum` function in the `Sum` module, the user can use this command:
 ```bash
-RUST_LOG=info ./target/release/move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-functions sum --mutate-modules Sum
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple -o report.txt --move-2 --mutate-functions sum --mutate-modules Sum
 ```
 
 [aptos-core]: https://github.com/aptos-labs/aptos-core/
