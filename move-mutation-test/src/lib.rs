@@ -5,7 +5,6 @@
 mod benchmark;
 pub mod cli;
 mod mutation_test;
-mod report;
 
 extern crate pretty_env_logger;
 #[macro_use]
@@ -14,11 +13,11 @@ extern crate log;
 use crate::{
     benchmark::{Benchmark, Benchmarks},
     mutation_test::run_tests,
-    report::{MiniReport, MutantStatus},
 };
 use anyhow::anyhow;
 use cli::TestBuildConfig;
 use move_package::{source_package::layout::SourcePackageLayout, BuildConfig};
+use mutator_common::report::{MiniReport, MutantStatus, Report};
 use rayon::prelude::*;
 use std::{
     fs,
@@ -194,7 +193,7 @@ pub fn run_mutation_test(
     benchmarks.mutation_test_results = mutation_test_benchmarks;
 
     // Prepare a report.
-    let mut test_report = report::Report::new();
+    let mut test_report = Report::new();
     for MiniReport {
         original_file,
         qname,
