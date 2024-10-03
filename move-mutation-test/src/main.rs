@@ -30,10 +30,12 @@ enum Commands {
         #[clap(flatten)]
         test_build_config: TestBuildConfig,
     },
+
+    /// Display the report in a more readable format.
     DisplayReport {
         /// Report location. The default file is "report.txt" under the same directory.
-        #[clap(short = 'p', long)]
-        path_to_report: Option<PathBuf>,
+        #[clap(short = 'p', long, default_value = "report.txt")]
+        path_to_report: PathBuf,
     },
 }
 

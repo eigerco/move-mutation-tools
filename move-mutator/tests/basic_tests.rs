@@ -38,7 +38,11 @@ fn check_mutator_works_correctly() {
         apply_coverage: false,
     };
 
-    let config = BuildConfig::default();
+    let config = BuildConfig {
+        // Let's make it faster.
+        skip_fetch_latest_git_deps: true,
+        ..Default::default()
+    };
 
     for package_path in PACKAGE_PATHS {
         let package_path = Path::new(package_path);
