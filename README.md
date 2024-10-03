@@ -151,7 +151,7 @@ $ move-spec-test --help
 
 To start mutation test, run the following command from the repo directory:
 ```bash
-$ move-mutation-test --package-dir move-mutator/tests/move-assets/simple -o report.txt
+$ move-mutation-test run --package-dir move-mutator/tests/move-assets/simple -o report.txt
 ```
 A shortened sample output for the above command will look as follows:
 ```text
