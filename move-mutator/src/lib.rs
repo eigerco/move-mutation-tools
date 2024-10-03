@@ -59,8 +59,6 @@ pub fn run_move_mutator(
     info!(
         "Executed move-mutator with the following options: {options:?} \n config: {config:?} \n package path: {package_path:?}"
     );
-    // TODO: add some sanity checks for provided arguments - e.g. compute_coverage is useless when
-    // `move_sources` is used
 
     // Load configuration from file or create a new one.
     let mut mutator_configuration = match options.configuration_file {
