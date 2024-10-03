@@ -1,3 +1,4 @@
+//! A module for generating concise, valuable reports.
 // Copyright © Eiger
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
@@ -9,10 +10,45 @@ use std::{
 };
 use tabled::{builder::Builder, settings::Style};
 
-/// This struct represents a report of the specification testing.
+/// A file difference that identifies mutants.
+pub type FileDiff = String;
+
+/// The final status of the mutant after running the tests on it.
+#[derive(Debug)]
+pub enum MutantStatus {
+    /// Killed mutant.
+    Killed,
+    /// Alive mutant containing the file difference.
+    Alive(FileDiff),
+}
+
+/// This struct represents a report single mutation test.
+#[derive(Debug)]
+pub struct MiniReport {
+    /// The original file name.
+    pub original_file: PathBuf,
+    /// Qualified name for the function using the 'module::function' syntax.
+    pub qname: String,
+    /// Mutant status after testing it.
+    pub mutant_status: MutantStatus,
+}
+
+impl MiniReport {
+    /// Create a new [`MiniReport`].
+    pub fn new(original_file: PathBuf, qname: String, mutant_status: MutantStatus) -> Self {
+        Self {
+            original_file,
+            qname,
+            mutant_status,
+        }
+    }
+}
+
+/// This struct represents a report of the mutation and spec testing.
+///
 /// It contains the list of entries, where each entry is a file and the number of mutants tested
 /// and killed in that file (in form of a `ReportEntry` structure).
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, Default)]
 pub struct Report {
     /// The list of entries in the report.
     files: BTreeMap<PathBuf, Vec<MutantStats>>,
