@@ -7,7 +7,6 @@
 mod benchmark;
 pub mod cli;
 mod prover;
-mod report;
 
 extern crate pretty_env_logger;
 #[macro_use]
@@ -19,6 +18,7 @@ use crate::{
 };
 use anyhow::anyhow;
 use move_package::{source_package::layout::SourcePackageLayout, BuildConfig};
+use mutator_common::report::Report;
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -103,7 +103,7 @@ pub fn run_spec_test(
     // Proving part.
     move_mutator::compiler::copy_dir_all(&package_path, &outdir_original)?;
 
-    let mut spec_report = report::Report::new();
+    let mut spec_report = Report::new();
 
     let mut proving_benchmarks = vec![Benchmark::new(); report.get_mutants().len()];
     benchmarks.prover.start();
