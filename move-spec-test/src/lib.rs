@@ -103,7 +103,7 @@ pub fn run_spec_test(
     // Proving part.
     move_mutator::compiler::copy_dir_all(&package_path, &outdir_original)?;
 
-    let mut spec_report = Report::new();
+    let mut spec_report = Report::new(package_path.to_owned());
 
     let mut proving_benchmarks = vec![Benchmark::new(); report.get_mutants().len()];
     benchmarks.prover.start();
