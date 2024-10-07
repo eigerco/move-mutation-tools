@@ -9,6 +9,7 @@ use move_mutation_test::{
     cli::{CLIOptions, TestBuildConfig},
     run_mutation_test,
 };
+use mutator_common::display_report::{display_report_on_screen, ModuleFilter};
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -36,6 +37,10 @@ enum Commands {
         /// Report location. The default file is "report.txt" under the same directory.
         #[clap(short = 'p', long, default_value = "report.txt")]
         path_to_report: PathBuf,
+
+        /// Include specified modules in the report.
+        #[clap(short = 'm', long, value_parser, default_value = "all")]
+        modules: ModuleFilter,
     },
 }
 
@@ -47,8 +52,9 @@ fn main() -> anyhow::Result<()> {
             cli_options,
             test_build_config,
         } => run_mutation_test(cli_options, test_build_config),
-        Commands::DisplayReport { path_to_report: _ } => {
-            unimplemented!("to be in the next PR soon")
-        },
+        Commands::DisplayReport {
+            path_to_report,
+            modules,
+        } => display_report_on_screen(path_to_report.as_path(), modules),
     }
 }

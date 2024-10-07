@@ -72,6 +72,8 @@ pub fn run_mutation_test(
     // We need to check for the latest git deps only for the first time we run the test.
     // All subsequent runs with this tool will then have the latest deps fetched.
     let skip_fetch_deps = false;
+    // TODO: use this one instead once it is available in the aptos-core.
+    //let skip_fetch_deps = test_config.move_pkg.skip_fetch_latest_git_deps; // false by default
     let result = run_tests(
         test_config,
         &package_path,
@@ -181,8 +183,10 @@ pub fn run_mutation_test(
                 MutantStatus::Killed
             } else {
                 trace!("Mutant {} hasn't been killed!", mutant_file.display());
-                MutantStatus::Alive(elem.get_diff().to_owned())
+                MutantStatus::Alive
             };
+
+            let diff = elem.get_diff().to_owned();
 
             // Qualified name for the function.
             let mut qname = elem.get_module_name().to_owned();
@@ -191,7 +195,7 @@ pub fn run_mutation_test(
 
             (
                 benchmark,
-                MiniReport::new(original_file.to_path_buf(), qname, mutant_status),
+                MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff),
             )
         })
         .collect::<Vec<(_, _)>>()
@@ -202,18 +206,20 @@ pub fn run_mutation_test(
     benchmarks.mutation_test_results = mutation_test_benchmarks;
 
     // Prepare a report.
-    let mut test_report = Report::new();
+    let mut test_report = Report::new(package_path.to_owned());
     for MiniReport {
         original_file,
         qname,
         mutant_status,
+        diff,
     } in mini_reports
     {
         test_report.increment_mutants_tested(&original_file, &qname);
-        if let MutantStatus::Alive(file_diff) = mutant_status {
-            test_report.add_mutants_alive_diff(&original_file, &qname, &file_diff);
+        if let MutantStatus::Alive = mutant_status {
+            test_report.add_mutants_alive_diff(&original_file, &qname, &diff);
         } else {
             test_report.increment_mutants_killed(&original_file, &qname);
+            test_report.add_mutants_killed_diff(&original_file, &qname, &diff);
         }
     }
 
