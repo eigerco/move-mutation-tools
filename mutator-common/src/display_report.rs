@@ -7,12 +7,21 @@ use super::report::Report;
 use crate::report::MutantStats;
 use anyhow::{Context, Result};
 use diffy::Line;
-use prettytable::{color, format, Attr, Cell, Row, Table};
+use prettytable::{
+    color,
+    format::{self, Alignment, LinePosition, LineSeparator},
+    Attr, Cell, Row, Table,
+};
 use std::{
     collections::{BTreeMap, HashSet},
     path::{Path, PathBuf},
     str::FromStr,
 };
+
+const COLOR_HAPPY: Option<Attr> = Some(Attr::ForegroundColor(color::GREEN));
+const COLOR_WARN: Option<Attr> = Some(Attr::ForegroundColor(color::BRIGHT_YELLOW));
+const COLOR_CRITICAL: Option<Attr> = Some(Attr::ForegroundColor(color::RED));
+const COLOR_NONE: Option<Attr> = None;
 
 /// Filter for modules to include in the report.
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -103,6 +112,15 @@ pub fn display_report_on_screen(path_to_report: &Path, modules: &ModuleFilter) -
     let report = Report::load_from_json_file(path_to_report)?;
     let files_to_print = modules.get_all_files_containing_the_modules(&report);
 
+    if files_to_print.is_empty() {
+        println!("No matching files found.");
+        return Ok(());
+    };
+
+    println!("The legend is shown below in the table format");
+    display_nice_legend_info();
+    println!(); // One empty line before the actual result.
+
     for file in files_to_print {
         let file_stats = calculate_file_stats(&file, &report)?;
 
@@ -110,52 +128,75 @@ pub fn display_report_on_screen(path_to_report: &Path, modules: &ModuleFilter) -
         let abs_file_path = report.get_package_dir().to_path_buf().join(&file);
         let source_code = std::fs::read_to_string(&abs_file_path)?;
 
-        print_nice_report(&file, source_code, file_stats)?;
+        display_nice_file_report(&file, source_code, file_stats)?;
     }
 
     Ok(())
 }
 
-fn print_nice_report(file: &Path, source_code: String, stats: FileStats) -> Result<()> {
+fn get_formatted_table() -> Table {
     let mut table = Table::new();
     let format = format::FormatBuilder::new()
-        .column_separator('|')
-        .separators(
-            &[format::LinePosition::Top, format::LinePosition::Bottom],
-            format::LineSeparator::new('-', '+', '+', '+'),
-        )
+        .column_separator('│')
+        .separator(LinePosition::Title, LineSeparator::new('=', '┼', '─', '─'))
+        .separator(LinePosition::Top, LineSeparator::new('=', '┬', '─', '─'))
+        .indent(0)
         .padding(1, 1)
         .build();
     table.set_format(format);
-    table.set_format(*format::consts::FORMAT_NO_LINESEP_WITH_TITLE);
-    table.set_format(*format::consts::FORMAT_NO_BORDER_LINE_SEPARATOR);
+    table
+}
 
-    let title = Cell::new_align(
-        file.to_str().expect("invalid path"),
-        format::Alignment::CENTER,
-    )
-    .with_hspan(2)
-    .with_style(Attr::Bold);
-    table.set_titles(Row::new(vec![title]));
+fn display_nice_legend_info() {
+    let mut table = get_formatted_table();
+
+    let title = Cell::new_align("Source code file path", Alignment::LEFT).with_style(Attr::Bold);
+    let helper_table_cell = Cell::new("mutants killed / mutants in total");
+    table.set_titles(Row::new(vec![helper_table_cell, title]));
+
+    let mut add_row = |left_text, right_text, color: Option<Attr>| {
+        let mut left_cell = Cell::new_align(left_text, Alignment::RIGHT);
+        let mut right_cell = Cell::new(right_text);
+        if let Some(color) = color {
+            left_cell.style(color);
+            right_cell.style(color);
+        }
+        table.add_row(Row::new(vec![left_cell, right_cell]));
+    };
+
+    add_row("<examples below>", "<Line>", COLOR_NONE);
+    add_row("", "", COLOR_NONE);
+    add_row("", "Line without any mutants", COLOR_NONE);
+    add_row("6/8", "Some mutants killed on this line", COLOR_WARN);
+    add_row("", "Another line without any mutants", COLOR_NONE);
+    add_row("10/10", "All mutants killed on this line", COLOR_HAPPY);
+    add_row("0/4", "No mutants killed on this line", COLOR_CRITICAL);
+    add_row("", "One final line without mutants", COLOR_NONE);
+
+    table.printstd();
+}
+
+fn display_nice_file_report(file: &Path, source_code: String, stats: FileStats) -> Result<()> {
+    let mut table = get_formatted_table();
+
+    let title = Cell::new_align(file.to_str().expect("invalid path"), Alignment::LEFT)
+        .with_style(Attr::Bold);
+    let helper_table_cell = Cell::new("");
+    table.set_titles(Row::new(vec![helper_table_cell, title]));
 
     // Line numbers are indexed from 1, not from 0.
     for (line_no, line) in (1..).zip(source_code.lines()) {
         let (mut stat_cell, line_color) = if let Some(m) = stats.mutated_lines.get(&line_no) {
-            let style_color = Attr::ForegroundColor(match m.killed_mutants {
-                0 => color::GREEN,
-                n if n == m.total_mutants => color::RED,
-                _ => color::BRIGHT_YELLOW,
-            });
+            let style_color = match m.killed_mutants {
+                0 => COLOR_CRITICAL,
+                killed if killed == m.total_mutants => COLOR_HAPPY,
+                _ => COLOR_WARN,
+            };
 
-            (
-                Cell::new_align(
-                    &format!("{}/{}", m.killed_mutants, m.total_mutants),
-                    format::Alignment::RIGHT,
-                ),
-                Some(style_color),
-            )
+            let text = format!("{}/{}", m.killed_mutants, m.total_mutants);
+            (Cell::new_align(&text, Alignment::RIGHT), style_color)
         } else {
-            (Cell::new(""), None)
+            (Cell::new(""), COLOR_NONE)
         };
 
         let mut line_cell = Cell::new(line);
