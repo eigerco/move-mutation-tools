@@ -161,6 +161,7 @@ pub fn run_spec_test(
         if let Err(e) = result {
             trace!("Mutant killed! Prover failed with error: {e}");
             spec_report.increment_mutants_killed(original_file, qname.as_str());
+            spec_report.add_mutants_killed_diff(original_file, &qname, elem.get_diff());
         } else {
             trace!("Mutant hasn't been killed!");
             spec_report.add_mutants_alive_diff(original_file, qname.as_str(), elem.get_diff());
