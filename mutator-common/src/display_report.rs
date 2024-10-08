@@ -181,7 +181,7 @@ fn display_nice_file_report(file: &Path, source_code: String, stats: FileStats) 
 
     let title = Cell::new_align(file.to_str().expect("invalid path"), Alignment::LEFT)
         .with_style(Attr::Bold);
-    let helper_table_cell = Cell::new("");
+    let helper_table_cell = Cell::new("K/T");
     table.set_titles(Row::new(vec![helper_table_cell, title]));
 
     // Line numbers are indexed from 1, not from 0.
