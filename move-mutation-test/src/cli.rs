@@ -94,6 +94,7 @@ pub struct TestBuildConfig {
 }
 
 impl TestBuildConfig {
+    /// Create a [`CompilerConfig`] from the [`TestBuildConfig`].
     pub fn compiler_config(&self) -> CompilerConfig {
         let known_attributes = extended_checks::get_all_attribute_names().clone();
         CompilerConfig {
@@ -109,6 +110,7 @@ impl TestBuildConfig {
         }
     }
 
+    /// Returns [`TestBuildConfig`] with the coverage option disabled.
     pub fn disable_coverage(&self) -> Self {
         let mut cfg = self.clone();
         cfg.apply_coverage = false;
