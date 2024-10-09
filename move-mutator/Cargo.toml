@@ -21,6 +21,7 @@ codespan = { workspace = true }
 codespan-reporting = { workspace = true }
 diffy = { workspace = true }
 either = { workspace = true }
+fixed = { workspace = true }
 itertools = { workspace = true }
 log = { workspace = true }
 move-command-line-common = { workspace = true }

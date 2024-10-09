@@ -31,7 +31,7 @@ codespan = "0.11"
 codespan-reporting = "0.11"
 diffy = "0.3"
 either = "1.9"
-#fixed = "= 1.25.1" # required by aptos deps
+fixed = "= 1.25.1" # required by aptos deps
 itertools = "0.13"
 log = "0.4"
 move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }

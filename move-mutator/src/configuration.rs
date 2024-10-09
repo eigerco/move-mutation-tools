@@ -26,8 +26,8 @@ pub struct Configuration {
     pub mutation: Option<MutationConfig>,
     /// Configuration for the individual files. (optional).
     pub individual: Vec<FileConfiguration>,
-    #[serde(skip)]
     /// Coverage report where the optional unit test coverage data is stored.
+    #[serde(skip)]
     pub(crate) coverage: Coverage,
 }
 
@@ -40,7 +40,7 @@ impl Configuration {
             project_path,
             mutation: None,
             individual: vec![],
-            // Coverage is unset by default.
+            // Coverage is disabled by default.
             coverage: Coverage::default(),
         }
     }
