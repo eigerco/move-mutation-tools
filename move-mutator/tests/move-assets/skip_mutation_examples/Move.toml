@@ -1,0 +1,11 @@
+[package]
+name = "skip_mutation_examples"
+version = "0.0.0"
+
+[dependencies.AptosStdlib]
+git = 'https://github.com/aptos-labs/aptos-core.git'
+rev = 'main'
+subdir = 'aptos-move/framework/aptos-stdlib'
+
+[addresses]
+TestAccount = "0xCAFE"

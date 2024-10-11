@@ -410,3 +410,45 @@ fn check_mutator_binary_replacement_operator_works_correctly_for_corner_cases_v1
         }
     }
 }
+
+#[test]
+fn check_mutator_uses_skip_mutation_attribute_properly() {
+    let config = BuildConfig {
+        // Let's make it faster.
+        skip_fetch_latest_git_deps: true,
+        ..Default::default()
+    };
+
+    let expected_module = "BasicOps";
+    let expected_fn = "sum";
+    let skipped_module = "SkipSum";
+    let skipped_fn = ["skip_sub", "skip_sum"];
+    let package_path = Path::new("tests/move-assets/skip_mutation_examples");
+
+    let outdir = tempdir().unwrap().into_path();
+
+    let options = CLIOptions {
+        out_mutant_dir: Some(outdir.clone()),
+        ..Default::default()
+    };
+
+    let result = move_mutator::run_move_mutator(options.clone(), &config, package_path);
+    assert!(result.is_ok());
+
+    let report_path = outdir.join("report.json");
+    let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
+
+    // Ensure that nobody has deleted our Move test.
+    assert!(!report.get_mutants().is_empty());
+
+    for mutant in report.get_mutants() {
+        let module_name = mutant.get_module_name();
+        let fn_name = mutant.get_function_name();
+
+        // A few redundant checks, but it depicts the idea of the test.
+        assert!(fn_name == expected_fn);
+        assert!(!skipped_fn.contains(&fn_name));
+        assert!(module_name == expected_module);
+        assert!(module_name != skipped_module);
+    }
+}
