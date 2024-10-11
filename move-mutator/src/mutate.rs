@@ -13,8 +13,9 @@ use crate::{
     },
 };
 use move_model::{
-    ast::{Exp, ExpData, Operation},
+    ast::{Attribute, Exp, ExpData, Operation},
     model::{FunctionEnv, GlobalEnv, ModuleEnv},
+    symbol::SymbolPool,
 };
 use move_package::source_package::layout::SourcePackageLayout;
 use std::path::Path;
@@ -90,6 +91,13 @@ fn traverse_module_with_check(
 fn traverse_module(module: &ModuleEnv<'_>, conf: &Configuration) -> anyhow::Result<Vec<Mutant>> {
     let module_name = module.get_name().display(module.env);
 
+    let attrs = module.get_attributes();
+    let sym_pool = module.symbol_pool();
+    if let Some(attr) = contains_attribute(attrs, sym_pool, &["mutation::skip"]) {
+        trace!("Skipping module {module_name} attributed with the {attr} attribute");
+        return Ok(vec![]);
+    }
+
     trace!("Traversing module {}", &module_name);
     let mut mutants = module
         .get_functions()
@@ -103,32 +111,25 @@ fn traverse_module(module: &ModuleEnv<'_>, conf: &Configuration) -> anyhow::Resu
         .for_each(|m| m.set_module_name(module_name.to_string()));
 
     trace!(
-        "Found {} possible mutations in module {}",
-        mutants.len(),
-        module_name
+        "Found {} possible mutations in module {module_name}",
+        mutants.len()
     );
     Ok(mutants)
 }
 
 /// Traverses a single function and returns a list of mutants.
 /// Checks the body of the function by traversing its definition.
-#[allow(clippy::unnecessary_wraps)]
 fn traverse_function(
     function: &FunctionEnv<'_>,
     conf: &Configuration,
 ) -> anyhow::Result<Vec<Mutant>> {
+    let function_name = &function.get_name_str();
+
     let attrs = function.get_attributes();
-    for attr in attrs {
-        // Omit all functions with test attribute.
-        if attr
-            .name()
-            .display(function.module_env.symbol_pool())
-            .to_string()
-            .contains("test")
-        {
-            trace!("Skipping test function {}", &function.get_name_str());
-            return Ok(vec![]);
-        }
+    let sym_pool = function.module_env.symbol_pool();
+    if let Some(attr) = contains_attribute(attrs, sym_pool, &["test", "mutation::skip"]) {
+        trace!("Skipping function {function_name} attributed with the {attr} attribute");
+        return Ok(vec![]);
     }
 
     let mut included_funcs = vec![];
@@ -146,13 +147,12 @@ fn traverse_function(
     }
 
     // Mutate only the specified functions, if any. Otherwise, mutate all functions.
-    let function_name = &function.get_name_str();
     if !included_funcs.is_empty() && !included_funcs.contains(&function_name) {
-        trace!("Skipping function {}", &function_name);
+        trace!("Skipping function {function_name}");
         return Ok(vec![]);
     }
 
-    trace!("Traversing function {}", &function_name);
+    trace!("Traversing function {function_name}");
     let mut result = Vec::<Mutant>::new();
     let mut is_inside_spec = false;
     if let Some(exp) = function.get_def() {
@@ -280,7 +280,7 @@ fn parse_expression_and_find_mutants(function: &FunctionEnv<'_>, exp: &ExpData) 
             ))))];
             mutants
         },
-        ExpData::LoopCont(node_id, _) => vec![Mutant::new(MutationOp::new(Box::new(
+        ExpData::LoopCont(node_id, _, _) => vec![Mutant::new(MutationOp::new(Box::new(
             BreakContinue::new(function.module_env.env.get_node_loc(*node_id)),
         )))],
 
@@ -299,4 +299,20 @@ fn parse_expression_and_find_mutants(function: &FunctionEnv<'_>, exp: &ExpData) 
         | ExpData::Match(_, _, _)
         | ExpData::Invalid(_) => vec![],
     }
+}
+
+/// Returns the first contained attribute if any.
+fn contains_attribute<'a>(
+    attributes: &[Attribute],
+    symbol_pool: &SymbolPool,
+    target: &[&'a str],
+) -> Option<&'a str> {
+    let attrs = attributes
+        .iter()
+        .map(|attr| attr.name().display(symbol_pool).to_string())
+        .collect::<Vec<_>>();
+    target
+        .iter()
+        .find(|&target_attr| attrs.iter().any(|attr| attr.as_str() == *target_attr))
+        .copied()
 }
