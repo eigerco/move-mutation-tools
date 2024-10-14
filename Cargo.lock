@@ -8269,6 +8269,7 @@ dependencies = [
  "move-prover",
  "mutator-common",
  "pretty_env_logger",
+ "rayon",
  "serde",
  "tempfile",
  "termcolor",
