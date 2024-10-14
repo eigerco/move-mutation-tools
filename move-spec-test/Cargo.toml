@@ -24,6 +24,7 @@ move-package = { workspace = true }
 move-prover = { workspace = true }
 mutator-common = { workspace = true }
 pretty_env_logger = { workspace = true }
+rayon = { workspace = true }
 serde = { workspace = true }
 tempfile = { workspace = true }
 termcolor = { workspace = true }
