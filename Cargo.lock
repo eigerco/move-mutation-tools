@@ -11,7 +11,7 @@ checksum = "fe438c63458706e03479442743baae6c88256498e6431708f6dfc520a26515d3"
 [[package]]
 name = "abstract-domain-derive"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -241,7 +241,7 @@ checksum = "86fdf8605db99b54d3cd748a44c6d04df638eb5dafb219b135d0149bd0db01f6"
 [[package]]
 name = "aptos"
 version = "4.2.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api-types",
@@ -338,7 +338,7 @@ dependencies = [
 [[package]]
 name = "aptos-abstract-gas-usage"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-gas-algebra",
@@ -351,7 +351,7 @@ dependencies = [
 [[package]]
 name = "aptos-accumulator"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
@@ -361,7 +361,7 @@ dependencies = [
 [[package]]
 name = "aptos-admin-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -369,11 +369,13 @@ dependencies = [
  "aptos-crypto",
  "aptos-infallible",
  "aptos-logger",
+ "aptos-mempool",
  "aptos-runtimes",
  "aptos-storage-interface",
  "aptos-system-utils 0.1.0 (git+https://github.com/aptos-labs/aptos-core.git?branch=main)",
  "aptos-types",
  "bcs 0.1.4",
+ "futures-channel",
  "http 0.2.12",
  "hyper 0.14.30",
  "sha256",
@@ -384,7 +386,7 @@ dependencies = [
 [[package]]
 name = "aptos-aggregator"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-types",
  "bcs 0.1.4",
@@ -397,7 +399,7 @@ dependencies = [
 [[package]]
 name = "aptos-api"
 version = "0.2.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api-types",
@@ -437,7 +439,7 @@ dependencies = [
 [[package]]
 name = "aptos-api-types"
 version = "0.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -467,7 +469,7 @@ dependencies = [
 [[package]]
 name = "aptos-backup-cli"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-backup-service",
@@ -517,7 +519,7 @@ dependencies = [
 [[package]]
 name = "aptos-backup-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-db",
@@ -539,7 +541,7 @@ dependencies = [
 [[package]]
 name = "aptos-bcs-utils"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "hex",
@@ -548,7 +550,7 @@ dependencies = [
 [[package]]
 name = "aptos-bitvec"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "serde",
  "serde_bytes",
@@ -557,7 +559,7 @@ dependencies = [
 [[package]]
 name = "aptos-block-executor"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-aggregator",
@@ -592,7 +594,7 @@ dependencies = [
 [[package]]
 name = "aptos-block-partitioner"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-logger",
@@ -613,7 +615,7 @@ dependencies = [
 [[package]]
 name = "aptos-bounded-executor"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "futures",
  "rustversion",
@@ -623,7 +625,7 @@ dependencies = [
 [[package]]
 name = "aptos-build-info"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "shadow-rs",
 ]
@@ -631,7 +633,7 @@ dependencies = [
 [[package]]
 name = "aptos-cached-packages"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-framework",
@@ -645,7 +647,7 @@ dependencies = [
 [[package]]
 name = "aptos-channels"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-infallible",
@@ -656,7 +658,7 @@ dependencies = [
 [[package]]
 name = "aptos-cli-common"
 version = "1.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anstyle",
  "clap 4.5.20",
@@ -666,12 +668,12 @@ dependencies = [
 [[package]]
 name = "aptos-collections"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 
 [[package]]
 name = "aptos-compression"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-logger",
  "aptos-metrics-core",
@@ -683,7 +685,7 @@ dependencies = [
 [[package]]
 name = "aptos-config"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
@@ -713,7 +715,7 @@ dependencies = [
 [[package]]
 name = "aptos-consensus"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bitvec",
@@ -791,7 +793,7 @@ dependencies = [
 [[package]]
 name = "aptos-consensus-notifications"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-runtimes",
@@ -806,7 +808,7 @@ dependencies = [
 [[package]]
 name = "aptos-consensus-types"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bitvec",
@@ -834,7 +836,7 @@ dependencies = [
 [[package]]
 name = "aptos-crash-handler"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-logger",
  "backtrace",
@@ -846,11 +848,12 @@ dependencies = [
 [[package]]
 name = "aptos-crypto"
 version = "0.0.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aes-gcm",
  "anyhow",
  "aptos-crypto-derive",
+ "arbitrary",
  "ark-bn254",
  "ark-ec",
  "ark-ff",
@@ -899,7 +902,7 @@ dependencies = [
 [[package]]
 name = "aptos-crypto-derive"
 version = "0.0.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -909,7 +912,7 @@ dependencies = [
 [[package]]
 name = "aptos-data-client"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-config",
  "aptos-crypto",
@@ -940,7 +943,7 @@ dependencies = [
 [[package]]
 name = "aptos-data-streaming-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-channels",
  "aptos-config",
@@ -966,7 +969,7 @@ dependencies = [
 [[package]]
 name = "aptos-db"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-accumulator",
@@ -1014,7 +1017,7 @@ dependencies = [
 [[package]]
 name = "aptos-db-indexer"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -1036,7 +1039,7 @@ dependencies = [
 [[package]]
 name = "aptos-db-indexer-schemas"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
@@ -1053,7 +1056,7 @@ dependencies = [
 [[package]]
 name = "aptos-dkg"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
@@ -1085,7 +1088,7 @@ dependencies = [
 [[package]]
 name = "aptos-dkg-runtime"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bounded-executor",
@@ -1124,7 +1127,7 @@ dependencies = [
 [[package]]
 name = "aptos-drop-helper"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-infallible",
  "aptos-metrics-core",
@@ -1135,7 +1138,7 @@ dependencies = [
 [[package]]
 name = "aptos-enum-conversion-derive"
 version = "0.0.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -1144,7 +1147,7 @@ dependencies = [
 [[package]]
 name = "aptos-event-notifications"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-channels",
@@ -1160,7 +1163,7 @@ dependencies = [
 [[package]]
 name = "aptos-executor"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-consensus-types",
@@ -1193,7 +1196,7 @@ dependencies = [
 [[package]]
 name = "aptos-executor-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-block-partitioner",
  "aptos-config",
@@ -1223,7 +1226,7 @@ dependencies = [
 [[package]]
 name = "aptos-executor-test-helpers"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-cached-packages",
@@ -1245,11 +1248,10 @@ dependencies = [
 [[package]]
 name = "aptos-executor-types"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
- "aptos-drop-helper",
  "aptos-scratchpad",
  "aptos-secure-net",
  "aptos-storage-interface",
@@ -1265,7 +1267,7 @@ dependencies = [
 [[package]]
 name = "aptos-experimental-runtimes"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-runtimes",
  "core_affinity",
@@ -1278,7 +1280,7 @@ dependencies = [
 [[package]]
 name = "aptos-fallible"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "thiserror",
 ]
@@ -1286,7 +1288,7 @@ dependencies = [
 [[package]]
 name = "aptos-faucet-core"
 version = "2.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -1319,7 +1321,7 @@ dependencies = [
 [[package]]
 name = "aptos-faucet-metrics-server"
 version = "2.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-logger",
@@ -1333,7 +1335,7 @@ dependencies = [
 [[package]]
 name = "aptos-framework"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-aggregator",
@@ -1402,7 +1404,7 @@ dependencies = [
 [[package]]
 name = "aptos-gas-algebra"
 version = "0.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "either",
  "move-core-types",
@@ -1411,7 +1413,7 @@ dependencies = [
 [[package]]
 name = "aptos-gas-meter"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-gas-algebra",
  "aptos-gas-schedule",
@@ -1426,7 +1428,7 @@ dependencies = [
 [[package]]
 name = "aptos-gas-profiling"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-gas-algebra",
@@ -1446,7 +1448,7 @@ dependencies = [
 [[package]]
 name = "aptos-gas-schedule"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-gas-algebra",
  "aptos-global-constants",
@@ -1459,7 +1461,7 @@ dependencies = [
 [[package]]
 name = "aptos-genesis"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-cached-packages",
@@ -1484,7 +1486,7 @@ dependencies = [
 [[package]]
 name = "aptos-github-client"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-proxy",
  "serde",
@@ -1496,17 +1498,17 @@ dependencies = [
 [[package]]
 name = "aptos-global-constants"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 
 [[package]]
 name = "aptos-id-generator"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 
 [[package]]
 name = "aptos-indexer-grpc-fullnode"
 version = "1.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api",
@@ -1544,7 +1546,7 @@ dependencies = [
 [[package]]
 name = "aptos-indexer-grpc-server-framework"
 version = "1.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-metrics-core",
@@ -1566,7 +1568,7 @@ dependencies = [
 [[package]]
 name = "aptos-indexer-grpc-table-info"
 version = "1.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api",
@@ -1596,7 +1598,7 @@ dependencies = [
 [[package]]
 name = "aptos-indexer-grpc-utils"
 version = "1.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-metrics-core",
@@ -1681,12 +1683,12 @@ dependencies = [
 [[package]]
 name = "aptos-infallible"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 
 [[package]]
 name = "aptos-inspection-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-build-info",
@@ -1712,7 +1714,7 @@ dependencies = [
 [[package]]
 name = "aptos-jellyfish-merkle"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
@@ -1740,7 +1742,7 @@ dependencies = [
 [[package]]
 name = "aptos-jwk-consensus"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bitvec",
@@ -1777,7 +1779,7 @@ dependencies = [
 [[package]]
 name = "aptos-jwk-utils"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-types",
@@ -1792,7 +1794,7 @@ dependencies = [
 [[package]]
 name = "aptos-keygen"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-types",
@@ -1802,7 +1804,7 @@ dependencies = [
 [[package]]
 name = "aptos-language-e2e-tests"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-abstract-gas-usage",
@@ -1846,7 +1848,7 @@ dependencies = [
 [[package]]
 name = "aptos-ledger"
 version = "0.2.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-types",
@@ -1859,7 +1861,7 @@ dependencies = [
 [[package]]
 name = "aptos-log-derive"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1869,7 +1871,7 @@ dependencies = [
 [[package]]
 name = "aptos-logger"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-infallible",
  "aptos-log-derive",
@@ -1893,7 +1895,7 @@ dependencies = [
 [[package]]
 name = "aptos-memory-usage-tracker"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-gas-algebra",
  "aptos-gas-meter",
@@ -1906,7 +1908,7 @@ dependencies = [
 [[package]]
 name = "aptos-mempool"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bounded-executor",
@@ -1946,7 +1948,7 @@ dependencies = [
 [[package]]
 name = "aptos-mempool-notifications"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-types",
  "async-trait",
@@ -1959,7 +1961,7 @@ dependencies = [
 [[package]]
 name = "aptos-memsocket"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-infallible",
  "bytes",
@@ -1970,7 +1972,7 @@ dependencies = [
 [[package]]
 name = "aptos-metrics-core"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "prometheus",
@@ -1979,7 +1981,7 @@ dependencies = [
 [[package]]
 name = "aptos-move-debugger"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-block-executor",
@@ -2005,7 +2007,7 @@ dependencies = [
 [[package]]
 name = "aptos-move-stdlib"
 version = "0.1.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-gas-schedule",
  "aptos-native-interface",
@@ -2044,7 +2046,7 @@ dependencies = [
 [[package]]
 name = "aptos-mvhashmap"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-aggregator",
@@ -2063,7 +2065,7 @@ dependencies = [
 [[package]]
 name = "aptos-native-interface"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-gas-algebra",
  "aptos-gas-schedule",
@@ -2080,7 +2082,7 @@ dependencies = [
 [[package]]
 name = "aptos-netcore"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-memsocket",
  "aptos-proxy",
@@ -2097,7 +2099,7 @@ dependencies = [
 [[package]]
 name = "aptos-network"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bitvec",
@@ -2142,7 +2144,7 @@ dependencies = [
 [[package]]
 name = "aptos-network-benchmark"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-config",
  "aptos-logger",
@@ -2162,7 +2164,7 @@ dependencies = [
 [[package]]
 name = "aptos-network-builder"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-channels",
  "aptos-config",
@@ -2185,7 +2187,7 @@ dependencies = [
 [[package]]
 name = "aptos-network-checker"
 version = "0.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -2202,7 +2204,7 @@ dependencies = [
 [[package]]
 name = "aptos-network-discovery"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-channels",
@@ -2227,7 +2229,7 @@ dependencies = [
 [[package]]
 name = "aptos-node"
 version = "0.0.0-main"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-admin-service",
@@ -2299,7 +2301,7 @@ dependencies = [
 [[package]]
 name = "aptos-node-identity"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-types",
@@ -2310,7 +2312,7 @@ dependencies = [
 [[package]]
 name = "aptos-node-resource-metrics"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-build-info",
  "aptos-infallible",
@@ -2326,7 +2328,7 @@ dependencies = [
 [[package]]
 name = "aptos-num-variants"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2336,7 +2338,7 @@ dependencies = [
 [[package]]
 name = "aptos-openapi"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "percent-encoding",
  "poem",
@@ -2348,7 +2350,7 @@ dependencies = [
 [[package]]
 name = "aptos-package-builder"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-framework",
@@ -2361,7 +2363,7 @@ dependencies = [
 [[package]]
 name = "aptos-peer-monitoring-service-client"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-channels",
  "aptos-config",
@@ -2386,7 +2388,7 @@ dependencies = [
 [[package]]
 name = "aptos-peer-monitoring-service-server"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-bounded-executor",
  "aptos-build-info",
@@ -2412,7 +2414,7 @@ dependencies = [
 [[package]]
 name = "aptos-peer-monitoring-service-types"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-config",
  "aptos-types",
@@ -2424,7 +2426,7 @@ dependencies = [
 [[package]]
 name = "aptos-profiler"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -2450,7 +2452,7 @@ dependencies = [
 [[package]]
 name = "aptos-proptest-helpers"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "crossbeam",
  "proptest",
@@ -2460,7 +2462,7 @@ dependencies = [
 [[package]]
 name = "aptos-protos"
 version = "1.3.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "futures-core",
  "pbjson",
@@ -2484,7 +2486,7 @@ dependencies = [
 [[package]]
 name = "aptos-proxy"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "ipnet",
 ]
@@ -2492,7 +2494,7 @@ dependencies = [
 [[package]]
 name = "aptos-push-metrics"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-logger",
  "aptos-metrics-core",
@@ -2503,7 +2505,7 @@ dependencies = [
 [[package]]
 name = "aptos-reliable-broadcast"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bounded-executor",
@@ -2525,7 +2527,7 @@ dependencies = [
 [[package]]
 name = "aptos-resource-viewer"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-types",
@@ -2539,7 +2541,7 @@ dependencies = [
 [[package]]
 name = "aptos-rest-client"
 version = "0.0.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api-types",
@@ -2562,7 +2564,7 @@ dependencies = [
 [[package]]
 name = "aptos-rocksdb-options"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-config",
  "rocksdb",
@@ -2571,7 +2573,7 @@ dependencies = [
 [[package]]
 name = "aptos-runtimes"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "rayon",
  "tokio",
@@ -2580,7 +2582,7 @@ dependencies = [
 [[package]]
 name = "aptos-safety-rules"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-config",
  "aptos-consensus-types",
@@ -2604,7 +2606,7 @@ dependencies = [
 [[package]]
 name = "aptos-schemadb"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-infallible",
@@ -2621,7 +2623,7 @@ dependencies = [
 [[package]]
 name = "aptos-scratchpad"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-drop-helper",
@@ -2640,7 +2642,7 @@ dependencies = [
 [[package]]
 name = "aptos-sdk"
 version = "0.0.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-cached-packages",
@@ -2655,6 +2657,7 @@ dependencies = [
  "hex",
  "move-core-types",
  "rand_core 0.5.1",
+ "serde",
  "serde_json",
  "tiny-bip39",
 ]
@@ -2662,7 +2665,7 @@ dependencies = [
 [[package]]
 name = "aptos-sdk-builder"
 version = "0.2.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-types",
@@ -2680,7 +2683,7 @@ dependencies = [
 [[package]]
 name = "aptos-secure-net"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-logger",
  "aptos-metrics-core",
@@ -2698,7 +2701,7 @@ dependencies = [
 [[package]]
 name = "aptos-secure-storage"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-infallible",
@@ -2719,7 +2722,7 @@ dependencies = [
 [[package]]
 name = "aptos-short-hex-str"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "mirai-annotations",
  "serde",
@@ -2730,7 +2733,7 @@ dependencies = [
 [[package]]
 name = "aptos-speculative-state-helper"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-infallible",
@@ -2741,7 +2744,7 @@ dependencies = [
 [[package]]
 name = "aptos-state-sync-driver"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -2774,7 +2777,7 @@ dependencies = [
 [[package]]
 name = "aptos-storage-interface"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-crypto",
@@ -2801,7 +2804,7 @@ dependencies = [
 [[package]]
 name = "aptos-storage-service-client"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-config",
  "aptos-network",
@@ -2812,7 +2815,7 @@ dependencies = [
 [[package]]
 name = "aptos-storage-service-notifications"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-channels",
  "async-trait",
@@ -2824,7 +2827,7 @@ dependencies = [
 [[package]]
 name = "aptos-storage-service-server"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-channels",
@@ -2853,7 +2856,7 @@ dependencies = [
 [[package]]
 name = "aptos-storage-service-types"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-compression",
  "aptos-config",
@@ -2869,7 +2872,7 @@ dependencies = [
 [[package]]
 name = "aptos-system-utils"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-profiler 0.1.0 (git+https://github.com/aptos-labs/aptos-core.git?branch=main)",
@@ -2909,7 +2912,7 @@ dependencies = [
 [[package]]
 name = "aptos-table-natives"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-gas-schedule",
  "aptos-native-interface",
@@ -2927,7 +2930,7 @@ dependencies = [
 [[package]]
 name = "aptos-telemetry"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api",
@@ -2966,7 +2969,7 @@ dependencies = [
 [[package]]
 name = "aptos-telemetry-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-config",
@@ -3006,7 +3009,7 @@ dependencies = [
 [[package]]
 name = "aptos-temppath"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "hex",
  "rand 0.7.3",
@@ -3015,7 +3018,7 @@ dependencies = [
 [[package]]
 name = "aptos-time-service"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-infallible",
  "enum_dispatch",
@@ -3028,7 +3031,7 @@ dependencies = [
 [[package]]
 name = "aptos-types"
 version = "0.0.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-bitvec",
@@ -3037,6 +3040,7 @@ dependencies = [
  "aptos-dkg",
  "aptos-experimental-runtimes",
  "aptos-infallible",
+ "arbitrary",
  "ark-bn254",
  "ark-ec",
  "ark-ff",
@@ -3091,12 +3095,12 @@ dependencies = [
 [[package]]
 name = "aptos-utils"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 
 [[package]]
 name = "aptos-validator-interface"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-api-types",
@@ -3117,7 +3121,7 @@ dependencies = [
 [[package]]
 name = "aptos-validator-transaction-pool"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-channels",
  "aptos-crypto",
@@ -3130,7 +3134,7 @@ dependencies = [
 [[package]]
 name = "aptos-vault-client"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "base64 0.13.1",
@@ -3146,7 +3150,7 @@ dependencies = [
 [[package]]
 name = "aptos-vm"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-aggregator",
@@ -3197,7 +3201,7 @@ dependencies = [
 [[package]]
 name = "aptos-vm-genesis"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-cached-packages",
  "aptos-crypto",
@@ -3219,7 +3223,7 @@ dependencies = [
 [[package]]
 name = "aptos-vm-logging"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "aptos-crypto",
  "aptos-logger",
@@ -3234,7 +3238,7 @@ dependencies = [
 [[package]]
 name = "aptos-vm-types"
 version = "0.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-aggregator",
@@ -3256,7 +3260,7 @@ dependencies = [
 [[package]]
 name = "aptos-vm-validator"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "aptos-logger",
@@ -4090,9 +4094,9 @@ checksum = "5ce89b21cab1437276d2650d57e971f9d548a2d9037cc231abdc0562b97498ce"
 
 [[package]]
 name = "bytemuck"
-version = "1.18.0"
+version = "1.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94bbb0ad554ad961ddc5da507a12a29b14e4ae5bda06b19f575a3e6079d2e2ae"
+checksum = "8334215b81e418a0a7bdb8ef0849474f40bb10c8b71f1c4ed315cff49f32494d"
 
 [[package]]
 name = "byteorder"
@@ -4198,9 +4202,9 @@ checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
 
 [[package]]
 name = "cc"
-version = "1.1.28"
+version = "1.1.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2e80e3b6a3ab07840e1cae9b0666a63970dc28e8ed5ffbcdacbfc760c281bfc1"
+checksum = "b16803a61b81d9eabb7eae2588776c4c1e584b738ede45fdbb4c972cec1e9945"
 dependencies = [
  "jobserver",
  "libc",
@@ -7169,9 +7173,9 @@ dependencies = [
 
 [[package]]
 name = "js-sys"
-version = "0.3.70"
+version = "0.3.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1868808506b929d7b0cfa8f75951347aa71bb21144b7791bae35d9bccfcfe37a"
+checksum = "6a88f1bda2bd75b0452a14784937d796722fdebfe50df998aeb3f0b7603019a9"
 dependencies = [
  "wasm-bindgen",
 ]
@@ -7688,7 +7692,7 @@ checksum = "1fafa6961cabd9c63bcd77a45d7e3b7f3b552b70417831fb0f56db717e72407e"
 [[package]]
 name = "move-abigen"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "bcs 0.1.4",
@@ -7705,7 +7709,7 @@ dependencies = [
 [[package]]
 name = "move-binary-format"
 version = "0.0.3"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -7720,12 +7724,12 @@ dependencies = [
 [[package]]
 name = "move-borrow-graph"
 version = "0.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 
 [[package]]
 name = "move-bytecode-source-map"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "bcs 0.1.4",
@@ -7740,7 +7744,7 @@ dependencies = [
 [[package]]
 name = "move-bytecode-spec"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "once_cell",
  "quote",
@@ -7750,7 +7754,7 @@ dependencies = [
 [[package]]
 name = "move-bytecode-utils"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "move-binary-format",
@@ -7762,7 +7766,7 @@ dependencies = [
 [[package]]
 name = "move-bytecode-verifier"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "fail",
  "move-binary-format",
@@ -7776,7 +7780,7 @@ dependencies = [
 [[package]]
 name = "move-bytecode-viewer"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "clap 4.5.20",
@@ -7791,7 +7795,7 @@ dependencies = [
 [[package]]
 name = "move-cli"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "clap 4.5.20",
@@ -7821,7 +7825,7 @@ dependencies = [
 [[package]]
 name = "move-command-line-common"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "difference",
@@ -7838,7 +7842,7 @@ dependencies = [
 [[package]]
 name = "move-compiler"
 version = "0.0.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "bcs 0.1.4",
@@ -7864,7 +7868,7 @@ dependencies = [
 [[package]]
 name = "move-compiler-v2"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "abstract-domain-derive",
  "anyhow",
@@ -7898,7 +7902,7 @@ dependencies = [
 [[package]]
 name = "move-core-types"
 version = "0.0.4"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "arbitrary",
@@ -7923,7 +7927,7 @@ dependencies = [
 [[package]]
 name = "move-coverage"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "bcs 0.1.4",
@@ -7942,7 +7946,7 @@ dependencies = [
 [[package]]
 name = "move-disassembler"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "clap 4.5.20",
@@ -7959,7 +7963,7 @@ dependencies = [
 [[package]]
 name = "move-docgen"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "clap 4.5.20",
@@ -7978,7 +7982,7 @@ dependencies = [
 [[package]]
 name = "move-errmapgen"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "move-command-line-common",
@@ -7990,7 +7994,7 @@ dependencies = [
 [[package]]
 name = "move-ir-compiler"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "bcs 0.1.4",
@@ -8006,7 +8010,7 @@ dependencies = [
 [[package]]
 name = "move-ir-to-bytecode"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "codespan-reporting",
@@ -8024,7 +8028,7 @@ dependencies = [
 [[package]]
 name = "move-ir-to-bytecode-syntax"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "hex",
@@ -8037,7 +8041,7 @@ dependencies = [
 [[package]]
 name = "move-ir-types"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "hex",
  "move-command-line-common",
@@ -8050,7 +8054,7 @@ dependencies = [
 [[package]]
 name = "move-model"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "codespan",
@@ -8135,7 +8139,7 @@ dependencies = [
 [[package]]
 name = "move-package"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "clap 4.5.20",
@@ -8169,7 +8173,7 @@ dependencies = [
 [[package]]
 name = "move-prover"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "atty",
@@ -8196,7 +8200,7 @@ dependencies = [
 [[package]]
 name = "move-prover-boogie-backend"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -8225,7 +8229,7 @@ dependencies = [
 [[package]]
 name = "move-prover-bytecode-pipeline"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "abstract-domain-derive",
  "anyhow",
@@ -8242,7 +8246,7 @@ dependencies = [
 [[package]]
 name = "move-resource-viewer"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "hex",
@@ -8273,7 +8277,7 @@ dependencies = [
 [[package]]
 name = "move-stackless-bytecode"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "abstract-domain-derive",
  "anyhow",
@@ -8294,7 +8298,7 @@ dependencies = [
 [[package]]
 name = "move-stdlib"
 version = "0.1.1"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "hex",
@@ -8317,7 +8321,7 @@ dependencies = [
 [[package]]
 name = "move-symbol-pool"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "once_cell",
  "serde",
@@ -8326,7 +8330,7 @@ dependencies = [
 [[package]]
 name = "move-table-extension"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "better_any",
  "bytes",
@@ -8341,7 +8345,7 @@ dependencies = [
 [[package]]
 name = "move-unit-test"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "better_any",
@@ -8370,7 +8374,7 @@ dependencies = [
 [[package]]
 name = "move-vm-runtime"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "better_any",
  "bytes",
@@ -8393,7 +8397,7 @@ dependencies = [
 [[package]]
 name = "move-vm-test-utils"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "anyhow",
  "bytes",
@@ -8409,7 +8413,7 @@ dependencies = [
 [[package]]
 name = "move-vm-types"
 version = "0.1.0"
-source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#f8eef74f9f712fcc0e809265ec2b77013a683184"
+source = "git+https://github.com/aptos-labs/aptos-core.git?branch=main#ee1791adc5f6e068d75533094d9f459839eb2c87"
 dependencies = [
  "bcs 0.1.4",
  "bytes",
@@ -12887,9 +12891,9 @@ checksum = "b8dad83b4f25e74f184f64c43b150b91efe7647395b42289f38e50566d82855b"
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a82edfc16a6c469f5f44dc7b571814045d60404b55a0ee849f9bcfa2e63dd9b5"
+checksum = "128d1e363af62632b8eb57219c8fd7877144af57558fb2ef0368d0087bddeb2e"
 dependencies = [
  "cfg-if",
  "once_cell",
@@ -12898,9 +12902,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-backend"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9de396da306523044d3302746f1208fa71d7532227f15e347e2d93e4145dd77b"
+checksum = "cb6dd4d3ca0ddffd1dd1c9c04f94b868c37ff5fac97c30b97cff2d74fce3a358"
 dependencies = [
  "bumpalo",
  "log",
@@ -12913,9 +12917,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-futures"
-version = "0.4.43"
+version = "0.4.45"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61e9300f63a621e96ed275155c108eb6f843b6a26d053f122ab69724559dc8ed"
+checksum = "cc7ec4f8827a71586374db3e87abdb5a2bb3a15afed140221307c3ec06b1f63b"
 dependencies = [
  "cfg-if",
  "js-sys",
@@ -12925,9 +12929,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "585c4c91a46b072c92e908d99cb1dcdf95c5218eeb6f3bf1efa991ee7a68cccf"
+checksum = "e79384be7f8f5a9dd5d7167216f022090cf1f9ec128e6e6a482a2cb5c5422c56"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -12935,9 +12939,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afc340c74d9005395cf9dd098506f7f44e38f2b4a21c6aaacf9a105ea5e1e836"
+checksum = "26c6ab57572f7a24a4985830b120de1594465e5d500f24afe89e16b4e833ef68"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -12948,9 +12952,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c62a0a307cb4a311d3a07867860911ca130c3494e8c2719593806c08bc5d0484"
+checksum = "65fc09f10666a9f147042251e0dda9c18f166ff7de300607007e96bdebc1068d"
 
 [[package]]
 name = "wasm-streams"
@@ -12982,9 +12986,9 @@ dependencies = [
 
 [[package]]
 name = "web-sys"
-version = "0.3.70"
+version = "0.3.72"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "26fdeaafd9bd129f65e7c031593c24d62186301e0c72c8978fa1678be7d532c0"
+checksum = "f6488b90108c040df0fe62fa815cbdee25124641df01814dd7282749234c6112"
 dependencies = [
  "js-sys",
  "wasm-bindgen",
