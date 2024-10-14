@@ -51,10 +51,10 @@ module TestAccount::SkipSum {
 
     #[test]
     fun skip_sum_valid_usage_test() {
-        assert!(sum(0, 0) == 0, 0);
-        assert!(sum(1, 0) == 1, 0);
-        assert!(sum(0, 1) == 1, 0);
-        assert!(sum(5, 5) == 10, 0);
-        assert!(sum(50, 10) == 60, 0);
+        assert!(skip_sum(0, 0) == 0, 0);
+        assert!(skip_sum(1, 0) == 1, 0);
+        assert!(skip_sum(0, 1) == 1, 0);
+        assert!(skip_sum(5, 5) == 10, 0);
+        assert!(skip_sum(50, 10) == 60, 0);
     }
 }
