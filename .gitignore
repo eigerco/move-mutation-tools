@@ -59,6 +59,7 @@ build/
 # ignore compiler artifacts
 *.dot
 *.bytecode
+*.bpl
 
 # move-mutator and move-spec-test output files
 report.json
