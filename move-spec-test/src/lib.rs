@@ -16,7 +16,8 @@ use crate::{
 };
 use anyhow::anyhow;
 use move_package::{source_package::layout::SourcePackageLayout, BuildConfig};
-use mutator_common::report::Report;
+use mutator_common::report::{MiniReport, MutantStatus, Report};
+use rayon::prelude::*;
 use std::{
     fs,
     path::{Path, PathBuf},
@@ -54,7 +55,8 @@ pub fn run_spec_test(
     // Check if package is correctly structured.
     let package_path = SourcePackageLayout::try_find_root(&package_path.canonicalize()?)?;
 
-    info!("Running specification tester with the following options: {options:?} and package path: {package_path:?}");
+    info!("Found package path: {package_path:?}");
+    info!("Running specification tester with the following options: {options:?}");
 
     // Always create and use benchmarks.
     // Benchmarks call only time getting functions, so it's safe to use them in any case and
@@ -101,81 +103,103 @@ pub fn run_spec_test(
     // Proving part.
     move_mutator::compiler::copy_dir_all(&package_path, &outdir_original)?;
 
-    let mut spec_report = Report::new(package_path.to_owned());
-
-    let mut proving_benchmarks = vec![Benchmark::new(); report.get_mutants().len()];
     benchmarks.prover.start();
-    for (index, (elem, benchmark)) in report
+    let (proving_benchmarks, mini_reports): (Vec<Benchmark>, Vec<MiniReport>) = report
         .get_mutants()
-        .iter()
-        .zip(proving_benchmarks.iter_mut())
-        .enumerate()
-    {
-        info!(
-            "Proving mutant {index} out of {}",
-            report.get_mutants().len()
-        );
+        .par_iter()
+        .map(|elem| {
+            let mut benchmark = Benchmark::new();
 
-        let mutant_file = elem.mutant_path();
-        // Strip prefix to get the path relative to the package directory (or take that path if it's already relative).
-        let original_file = elem
-            .original_file_path()
-            .strip_prefix(&package_path)
-            .unwrap_or(elem.original_file_path());
-        let outdir_prove = outdir.join("prove");
+            let mutant_file = elem.mutant_path();
+            let rayon_thread_id =
+                rayon::current_thread_index().expect("failed to fetch rayon thread id");
+            info!(
+                "job_{rayon_thread_id}: Running prover for mutant {}",
+                mutant_file.display()
+            );
 
-        let mut qname = elem.get_module_name().to_owned();
-        qname.push_str("::");
-        qname.push_str(elem.get_function_name());
+            // Strip prefix to get the path relative to the package directory (or take that path if it's already relative).
+            let original_file = elem
+                .original_file_path()
+                .strip_prefix(&package_path)
+                .unwrap_or(elem.original_file_path());
+            let job_work_dir = format!("prover_{rayon_thread_id}");
+            let outdir = outdir.join(job_work_dir);
 
-        spec_report.increment_mutants_tested(original_file, qname.as_str());
+            let _ = fs::remove_dir_all(&outdir);
+            move_mutator::compiler::copy_dir_all(&package_path, &outdir)
+                .expect("copying directory failed");
 
-        let _ = fs::remove_dir_all(&outdir_prove);
-        move_mutator::compiler::copy_dir_all(&package_path, &outdir_prove)?;
+            trace!(
+                "Copying mutant file {mutant_file:?} to the package directory {:?}",
+                outdir.join(original_file)
+            );
 
-        trace!(
-            "Copying mutant file {:?} to the package directory {:?}",
-            mutant_file,
-            outdir_prove.join(original_file)
-        );
+            // Should never fail, since files will always exists.
+            let _ = fs::copy(mutant_file, outdir.join(original_file));
 
-        if let Err(res) = fs::copy(mutant_file, outdir_prove.join(original_file)) {
-            return Err(anyhow!(
-                "Can't copy mutant file to the package directory: {res:?}"
-            ));
-        }
+            if let Err(e) =
+                move_mutator::compiler::rewrite_manifest_for_mutant(&package_path, &outdir)
+            {
+                panic!("rewriting manifest for mutant failed: {e}");
+            }
 
-        move_mutator::compiler::rewrite_manifest_for_mutant(&package_path, &outdir_prove)?;
+            benchmark.start();
+            let mut error_writer = std::io::sink();
+            let result = prove(&quick_config, &outdir, &prover_conf, &mut error_writer);
+            benchmark.stop();
 
-        benchmark.start();
-        let result = prove(
-            &quick_config,
-            &outdir_prove,
-            &prover_conf,
-            &mut error_writer,
-        );
-        benchmark.stop();
+            let mutant_status = if let Err(e) = result {
+                trace!("Mutant killed! Prover failed with error: {e}");
+                MutantStatus::Killed
+            } else {
+                trace!("Mutant {} hasn't been killed!", mutant_file.display());
+                MutantStatus::Alive
+            };
 
-        if let Err(e) = result {
-            trace!("Mutant killed! Prover failed with error: {e}");
-            spec_report.increment_mutants_killed(original_file, qname.as_str());
-            spec_report.add_mutants_killed_diff(original_file, &qname, elem.get_diff());
-        } else {
-            trace!("Mutant hasn't been killed!");
-            spec_report.add_mutants_alive_diff(original_file, qname.as_str(), elem.get_diff());
-        }
-    }
+            let diff = elem.get_diff().to_owned();
+
+            let mut qname = elem.get_module_name().to_owned();
+            qname.push_str("::");
+            qname.push_str(elem.get_function_name());
+
+            (
+                benchmark,
+                MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff),
+            )
+        })
+        .collect::<Vec<(_, _)>>()
+        .into_iter()
+        .unzip();
 
     benchmarks.prover.stop();
     benchmarks.prover_results = proving_benchmarks;
 
-    if let Some(outfile) = &options.output {
-        spec_report.save_to_json_file(outfile)?;
+    // Prepare a report.
+    let mut test_report = Report::new(package_path.to_owned());
+    for MiniReport {
+        original_file,
+        qname,
+        mutant_status,
+        diff,
+    } in mini_reports
+    {
+        test_report.increment_mutants_tested(&original_file, &qname);
+        if let MutantStatus::Alive = mutant_status {
+            test_report.add_mutants_alive_diff(&original_file, &qname, &diff);
+        } else {
+            test_report.increment_mutants_killed(&original_file, &qname);
+            test_report.add_mutants_killed_diff(&original_file, &qname, &diff);
+        }
     }
 
-    println!("\nTotal mutants tested: {}", spec_report.mutants_tested());
-    println!("Total mutants killed: {}\n", spec_report.mutants_killed());
-    spec_report.print_table();
+    if let Some(outfile) = &options.output {
+        test_report.save_to_json_file(outfile)?;
+    }
+
+    println!("\nTotal mutants tested: {}", test_report.mutants_tested());
+    println!("Total mutants killed: {}\n", test_report.mutants_killed());
+    test_report.print_table();
 
     benchmarks.spec_test.stop();
     benchmarks.display();
