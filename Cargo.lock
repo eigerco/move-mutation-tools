@@ -8129,6 +8129,7 @@ dependencies = [
  "num-traits",
  "pretty_env_logger",
  "rand 0.8.5",
+ "rayon",
  "serde",
  "serde_json",
  "tempfile",
