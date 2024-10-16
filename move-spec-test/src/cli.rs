@@ -18,7 +18,7 @@ pub struct CLIOptions {
     pub move_sources: Vec<PathBuf>,
 
     /// Work only over specified modules.
-    #[clap(long, short, value_parser, default_value = "all")]
+    #[clap(long, value_parser, default_value = "all")]
     pub mutate_modules: ModuleFilter,
 
     /// Work only over specified functions (these are not qualifed functions).
