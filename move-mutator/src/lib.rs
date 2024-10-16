@@ -22,10 +22,11 @@ pub mod report;
 use crate::{
     compiler::{generate_ast, verify_mutant},
     configuration::Configuration,
-    report::Report,
+    report::{MutationReport, Report},
 };
 use move_package::BuildConfig;
 use rand::{seq::SliceRandom, thread_rng};
+use rayon::prelude::*;
 use std::{fs, path::Path};
 
 /// Runs the Move mutator tool.
@@ -76,107 +77,138 @@ pub fn run_move_mutator(
 
     info!("Generated AST");
 
+    // For the next compilation steps, we don't need to fetch git deps again.
+    let mut config = config.clone();
+    config.skip_fetch_latest_git_deps = true;
+
     if mutator_configuration.project.apply_coverage {
         // This implies additional compilation inside.
         mutator_configuration
             .coverage
-            .compute_coverage(config, &package_path)?;
+            .compute_coverage(&config, &package_path)?;
     }
 
     let mutants = mutate::mutate(&env, &mutator_configuration)?;
     let output_dir = output::setup_output_dir(&mutator_configuration)?;
-    let mut report: Report = Report::new();
 
-    for mutant in &mutants {
-        let file_id = &mutant.get_file_id();
-        let source = env.get_file_source(*file_id);
-        let filename = env.get_file(*file_id);
-        let path = Path::new(filename);
+    // Generate mutants and extract all info needed for rayon threads below.
+    let mut transformed_mutants: Vec<_> = mutants
+        .into_iter()
+        .flat_map(|mutant| {
+            let file_id = mutant.get_file_id();
+            let original_source = env.get_file_source(file_id);
+            let filename = env.get_file(file_id);
+            let path = Path::new(filename)
+                .canonicalize()
+                .expect("canonicalizing failed");
+            let fn_name = mutant.get_function_name().unwrap_or_default();
+            let mod_name = mutant.get_module_name().unwrap_or("script".to_owned());
 
-        trace!("Processing file: {path:?}");
+            mutant
+                .apply(original_source)
+                .into_iter()
+                .map(|mutant_info| {
+                    (
+                        mutant_info,
+                        fn_name.clone(),
+                        mod_name.clone(),
+                        path.clone(),
+                        original_source,
+                    )
+                })
+                .collect::<Vec<_>>()
+        })
+        .collect();
 
-        let mut mutated_sources = mutant.apply(source);
-
-        // If the downsample ratio is set, we need to downsample the mutants.
+    // If the downsample ratio is set, we need to downsample the mutants.
+    if let Some(percentage) = mutator_configuration.project.downsampling_ratio_percentage {
         //TODO: currently we are downsampling the mutants after they are generated. This is not
         // ideal as we are generating all mutants and then removing some of them.
-        if let Some(percentage) = mutator_configuration.project.downsampling_ratio_percentage {
-            let no_of_mutants_to_keep = mutated_sources
-                .len()
-                .saturating_sub((mutated_sources.len() * percentage).div_ceil(100));
-            assert!(
-                no_of_mutants_to_keep <= mutated_sources.len(),
-                "Invalid downsampling ratio"
-            );
+        let total_mutants = transformed_mutants.len();
 
-            // Delete randomly elements from the vector.
-            let mut rng = thread_rng();
-            let chosen_elements: Vec<_> = mutated_sources
-                .choose_multiple(&mut rng, no_of_mutants_to_keep)
-                .cloned()
-                .collect();
+        let no_of_mutants_to_keep =
+            total_mutants.saturating_sub((total_mutants * percentage).div_ceil(100));
+        assert!(
+            no_of_mutants_to_keep <= total_mutants,
+            "Invalid downsampling ratio"
+        );
 
-            mutated_sources = chosen_elements;
-        }
+        // Delete randomly elements from the vector.
+        let mut rng = thread_rng();
+        transformed_mutants = transformed_mutants
+            .choose_multiple(&mut rng, no_of_mutants_to_keep)
+            .cloned()
+            .collect();
+    }
 
-        for mutated in mutated_sources {
-            if let Some(mutation_conf) = &mutator_configuration.mutation {
-                if !mutation_conf.operators.is_empty()
-                    && !mutation_conf
-                        .operators
-                        .contains(&mutated.mutation.get_operator_name().to_owned())
-                {
-                    continue;
-                }
+    let mutation_reports: Vec<MutationReport> = transformed_mutants
+        .into_par_iter()
+        .filter(|(mutated_info, _fn, _module, _path, _orig_src)| {
+            let Some(conf) = &mutator_configuration.mutation else {
+                return true;
+            };
+            if conf.operators.is_empty() {
+                return true;
             }
+
+            conf.operators
+                .contains(&mutated_info.mutation.get_operator_name().to_owned())
+        })
+        .map(|(mutated_info, function, module, path, original_source)| {
+            // An informative description for the mutant.
+            let mutant = format!("{module}::{function}: {:?}", mutated_info.mutation);
+
+            let rayon_tid = rayon::current_thread_index().expect("fetching rayon thread id failed");
+            info!("job_{rayon_tid}: Checking mutant {mutant}");
 
             if mutator_configuration.project.verify_mutants {
-                let res = verify_mutant(config, &mutated.mutated_source, path);
+                let res = verify_mutant(&config, &mutated_info.mutated_source, &path);
 
                 // In case the mutant is not a valid Move file, skip the mutant (do not save it).
-                if res.is_err() {
-                    warn!("Mutant {mutant} is not valid and will not be generated. Error: {res:?}");
-                    continue;
+                if let Err(e) = res {
+                    info!("job_{rayon_tid}: Mutant {mutant} is invalid and will not be generated: {e:?}");
+                    return None;
                 }
             }
 
-            let Ok(mutant_path) = output::setup_mutant_path(&output_dir, path) else {
+            let Ok(mutant_path) = output::setup_mutant_path(&output_dir, &path) else {
                 // If we cannot set up the mutant path, we skip the mutant.
-                debug!("Cannot set up mutant path for {path:?}");
-                continue;
+                trace!("Cannot set up mutant path for {path:?}");
+                return None;
             };
 
-            fs::write(&mutant_path, &mutated.mutated_source)?;
+            // Should never fail.
+            fs::write(&mutant_path, &mutated_info.mutated_source)
+                .expect("failed to write mutant to a file");
 
-            info!("{} written to {}", mutant, mutant_path.display());
-
-            let mod_name = if let Some(name) = mutant.get_module_name() {
-                name
-            } else {
-                "script".to_owned() // if there is no module name, it is a script
-            };
-
+            info!(
+                "job_{rayon_tid}: {mutant} written to {}",
+                mutant_path.display()
+            );
             let mut entry = report::MutationReport::new(
                 mutant_path.as_path(),
-                path,
-                mod_name.as_str(),
-                mutant
-                    .get_function_name()
-                    .map_or_else(String::new, |f| f.to_string())
-                    .as_str(),
-                &mutated.mutated_source,
-                source,
+                &path,
+                &module,
+                &function,
+                &mutated_info.mutated_source,
+                original_source,
             );
 
-            entry.add_modification(mutated.mutation);
-            report.add_entry(entry);
-        }
+            entry.add_modification(mutated_info.mutation);
+            Some(entry)
+        })
+        .flatten()
+        .collect();
+
+    let mut report: Report = Report::new();
+    for entry in mutation_reports {
+        report.add_entry(entry);
     }
 
     trace!("Saving reports to: {output_dir:?}");
     report.save_to_json_file(output_dir.join(Path::new("report.json")).as_path())?;
     report.save_to_text_file(output_dir.join(Path::new("report.txt")).as_path())?;
 
-    trace!("Mutator tool is done here...");
+    info!("Mutator generation is completed");
     Ok(())
 }

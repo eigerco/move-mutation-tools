@@ -64,3 +64,4 @@ build/
 # move-mutator and move-spec-test output files
 report.json
 mutants_output
+report.txt
