@@ -49,6 +49,13 @@ impl MutationOperator for Binary {
         // extracting the operator of a different binary expression.
         let left = &self.exps[0].loc;
         let right = &self.exps[1].loc;
+
+        // This is a corner case for the for loop, where increments like `i + 1`
+        // happen at the bytecode level and are not visible at the source code level.
+        if left == right {
+            return vec![];
+        }
+
         let start = left.span().end().to_usize();
         // Adjust start to omit whitespaces before the operator
         let start = source[start..]
