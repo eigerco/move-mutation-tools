@@ -10,9 +10,6 @@ module TestAccount::Break {
         i
     }
 
-    // We won't be able to kill two mutants:
-    //  - while (i < n)
-    //  - if (n % i <= 0) break;
     #[test]
     fun smallest_factor_test() {
         // These two should fail - but let's keep imperfect code here
