@@ -12,8 +12,6 @@ module TestAccount::BreakContinue {
         sum
     }
 
-    // We won't be able to kill one mutant:
-    //  - if (n % i <= 0) break;
     #[test]
     fun sum_intermediate_test() {
         assert!(sum_intermediate(0) == 0, 0);
