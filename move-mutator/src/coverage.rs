@@ -174,6 +174,10 @@ fn merge_spans(file_hash: FileHash, cov: FunctionSourceCoverage) -> Vec<Span> {
 
 /// Remove all whitespaces between spans and merge spans again.
 fn merge_spans_after_removing_whitespaces(mut spans: Vec<Span>, source_code: &str) -> Vec<Span> {
+    if spans.is_empty() {
+        return vec![];
+    }
+
     let mut new_spans = Vec::with_capacity(spans.len());
     let mut curr = spans.remove(0);
 
