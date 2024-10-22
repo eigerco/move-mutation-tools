@@ -11,7 +11,7 @@ use move_cli::base::test::UnitTestResult;
 use move_command_line_common::address::NumericalAddress;
 use move_package::BuildConfig;
 use move_unit_test::UnitTestingConfig;
-use std::path::Path;
+use std::{fs, path::Path};
 use termcolor::WriteColor;
 
 /// The `run_tests` function is responsible for running the tests for the provided package.
@@ -25,7 +25,7 @@ use termcolor::WriteColor;
 /// # Returns
 ///
 /// * `anyhow::Result<()>` - The result of the test suite for the package.
-// This function is based upon the `execute` method for the `TestPacakge` struct in
+// This function is based upon the `execute` method for the `TestPackage` struct in
 // aptos-core/crates/aptos/src/move_tool/mod.rs file.
 pub(crate) fn run_tests<W: WriteColor + Send>(
     cfg: &TestBuildConfig,
@@ -77,6 +77,16 @@ pub(crate) fn run_tests<W: WriteColor + Send>(
         &mut error_writer,
     )
     .map_err(|err| Error::msg(format!("failed to run unit tests: {err:#}")))?;
+
+    // Disk space optimization:
+    if cfg.apply_coverage {
+        let trace_path = package_path.join(".trace");
+        info!("removing {}", trace_path.display());
+        // Our tool doesn't use the .trace file at all, only the .coverage_map.mvcov file, and
+        // since the tool copy package directory to temp directories for when running tests,
+        // so let's keep copied directory as small as possible.
+        fs::remove_file(trace_path)?;
+    }
 
     match result {
         UnitTestResult::Success => Ok(()),
