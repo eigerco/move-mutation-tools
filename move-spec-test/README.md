@@ -50,7 +50,7 @@ the Move Specification Test tool should work as well.
 
 To check if Move Specification Test tool works, run the following command:
 ```bash
-./target/release/move-spec-test -p move-mutator/tests/move-assets/same_names
+./target/release/move-spec-test run -p move-mutator/tests/move-assets/same_names
 ```
 
 There should be output generated similar to the following (there may also be
@@ -77,38 +77,48 @@ out as much information as the variable allows. There is possibility to enable
 logging only for the specific modules. Please refer to the [env_logger](https://docs.rs/env_logger/latest/env_logger/)
 documentation for more details.
 
-To generate a report in a JSON format, use the `-o` option:
+To generate a report, use the `-o` option:
 ```bash
-./target/release/move-spec-test -p move-mutator/tests/move-assets/poor_spec -o report.json
+./target/release/move-spec-test run -p move-mutator/tests/move-assets/poor_spec -o report.txt
 ```
 
-The sample report generated for the above test will look as follows:
-```json
-{
-  "files": {
-    "sources/Sum.move": [
-      {
-        "module_func": "Sum::sum",
-        "tested": 4,
-        "killed": 0,
-        "mutants_alive_diffs": [
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Sum {\n     fun sum(x: u128, y: u128): u128 {\n-        let sum_r = x + y;\n+        let sum_r = x - y;\n\n         spec {\n                 // Senseless specification - mutator will change + operator to -*/ but spec won't notice it.\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Sum {\n     fun sum(x: u128, y: u128): u128 {\n-        let sum_r = x + y;\n+        let sum_r = x * y;\n\n         spec {\n                 // Senseless specification - mutator will change + operator to -*/ but spec won't notice it.\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Sum {\n     fun sum(x: u128, y: u128): u128 {\n-        let sum_r = x + y;\n+        let sum_r = x / y;\n\n         spec {\n                 // Senseless specification - mutator will change + operator to -*/ but spec won't notice it.\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Sum {\n     fun sum(x: u128, y: u128): u128 {\n-        let sum_r = x + y;\n+        let sum_r = x % y;\n\n         spec {\n                 // Senseless specification - mutator will change + operator to -*/ but spec won't notice it.\n"
-        ],
-        "mutants_killed_diff": []
-      }
-    ]
-  },
-  "package_dir": "/home/user/move-spec-testing/move-mutator/tests/move-assets/simple"
-}
+The sample `report.txt` generated for the above command contains useful info that can be paired with the `display-report` option:
+```bash
+$ ./target/release/move-spec-test display-report -p report.txt
+The legend is shown below in the table format
+===================================┬==================================
+ mutants killed / mutants in total │ Source code file path
+===================================┼==================================
+                  <examples below> │ <Line>
+                                   │
+                                   │ Line without any mutants
+                               6/8 │ Some mutants killed on this line
+                                   │ Another line without any mutants
+                             10/10 │ All mutants killed on this line
+                               0/4 │ No mutants killed on this line
+                                   │ One final line without mutants
+
+=====┬==============================================================================================================
+ K/T │ sources/Sum.move
+=====┼==============================================================================================================
+     │ module TestAccount::Sum {
+     │     fun sum(x: u128, y: u128): u128 {
+ 0/4 │         let sum_r = x + y;
+     │
+     │         spec {
+     │                 // Senseless specification - mutator will change + operator to -*/ but spec won't notice it.
+     │                 assert sum_r >= 0;
+     │         };
+     │
+     │         sum_r
+     │     }
+     │ }
 ```
 
 You can try to run the tool using other examples from the `move-mutator`
 tests like:
 ```bash
-./target/release/move-spec-test -p move-mutator/tests/move-assets/simple
+./target/release/move-spec-test run -p move-mutator/tests/move-assets/simple
 ```
 
 You should see different results for different modules as it depends on the
