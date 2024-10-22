@@ -4,31 +4,65 @@
 
 #![forbid(unsafe_code)]
 
-use clap::Parser;
+use clap::{Parser, Subcommand};
 use move_mutator::cli::PackagePathCheck;
 use move_package::BuildConfig;
 use move_spec_test::{cli::CLIOptions, run_spec_test};
-use serde::{Deserialize, Serialize};
+use mutator_common::display_report::{display_report_on_screen, ModuleFilter};
 use std::path::PathBuf;
 
-#[derive(Default, Parser, Debug, Clone, Deserialize, Serialize)]
-#[serde(default, deny_unknown_fields)]
-pub struct Opts {
-    /// The path to the target Move package.
-    #[clap(long, short, value_parser)]
-    pub package_path: Option<PathBuf>,
-    /// Command line options for specification tester
-    #[clap(flatten)]
-    pub cli_options: CLIOptions,
-    /// The build configuration options.
-    #[clap(flatten)]
-    pub build_config: BuildConfig,
+#[derive(Parser)]
+#[command(version, about, long_about = None)]
+#[command(propagate_version = true)]
+struct Opts {
+    #[command(subcommand)]
+    command: Commands,
+}
+
+#[derive(Subcommand)]
+enum Commands {
+    /// Runs the specification test tool.
+    Run {
+        /// The path to the target Move package.
+        #[clap(long, short, value_parser)]
+        package_path: Option<PathBuf>,
+
+        /// Command line options for specification tester.
+        #[clap(flatten)]
+        cli_options: CLIOptions,
+
+        /// The build configuration options.
+        #[clap(flatten)]
+        build_config: BuildConfig,
+    },
+
+    /// Display the report in a more readable format.
+    DisplayReport {
+        /// Report location. The default file is "report.txt" under the same directory.
+        #[clap(short = 'p', long, default_value = "report.txt")]
+        path_to_report: PathBuf,
+
+        /// Include specified modules in the report.
+        #[clap(short = 'm', long, value_parser, default_value = "all")]
+        modules: ModuleFilter,
+    },
 }
 
 fn main() -> anyhow::Result<()> {
     let opts = Opts::parse();
 
-    let package_path = opts.cli_options.resolve(opts.package_path)?;
-
-    run_spec_test(&opts.cli_options, &opts.build_config, &package_path)
+    match opts.command {
+        Commands::Run {
+            package_path,
+            cli_options,
+            build_config,
+        } => {
+            let package_path = cli_options.resolve(package_path)?;
+            run_spec_test(&cli_options, &build_config, &package_path)
+        },
+        Commands::DisplayReport {
+            path_to_report,
+            modules,
+        } => display_report_on_screen(path_to_report.as_path(), &modules),
+    }
 }
