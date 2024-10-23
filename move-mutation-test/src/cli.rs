@@ -91,6 +91,13 @@ pub struct TestBuildConfig {
     /// Compute and then use unit test computed coverage to generate mutants only for covered code.
     #[clap(long = "coverage")]
     pub apply_coverage: bool,
+
+    /// The maximum gas limit for each test.
+    ///
+    /// Used mainly for disabling mutants with infinite loops.
+    /// The default value is large enough for all normal tests in most projects.
+    #[clap(long = "gas-limit", default_value_t = 1_000_000)]
+    pub gas_limit: u64,
 }
 
 impl TestBuildConfig {
