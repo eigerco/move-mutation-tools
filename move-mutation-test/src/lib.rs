@@ -12,9 +12,8 @@ extern crate log;
 
 use crate::{
     benchmark::{Benchmark, Benchmarks},
-    mutation_test::run_tests,
+    mutation_test::{run_tests_on_mutated_code, run_tests_on_original_code},
 };
-use anyhow::anyhow;
 use cli::TestBuildConfig;
 use move_package::{source_package::layout::SourcePackageLayout, BuildConfig};
 use mutator_common::report::{MiniReport, MutantStatus, Report};
@@ -51,9 +50,7 @@ pub fn run_mutation_test(
     // (e.g. move-mutator). If we use init() instead, we will get an abort.
     let _ = pretty_env_logger::try_init();
 
-    let mut error_writer = termcolor::StandardStream::stderr(termcolor::ColorChoice::Auto);
-
-    // Check if package is correctly structured.
+    // Check if the package is correctly structured.
     let package_path = SourcePackageLayout::try_find_root(
         &test_config.move_pkg.get_package_path()?.canonicalize()?,
     )?;
@@ -68,32 +65,13 @@ pub fn run_mutation_test(
     benchmarks.total_duration.start();
 
     // Run original tests to ensure the original tests are working:
-
-    // We need to check for the latest git deps only for the first time we run the test.
-    // All subsequent runs with this tool will then have the latest deps fetched.
-    let skip_fetch_deps = false;
-    // TODO: use this one instead once it is available in the aptos-core.
-    //let skip_fetch_deps = test_config.move_pkg.skip_fetch_latest_git_deps; // false by default
-    let result = run_tests(
-        test_config,
-        &package_path,
-        skip_fetch_deps,
-        &mut error_writer,
-    );
-
-    if let Err(e) = result {
-        let msg =
-            format!("Test suit is failing for the original code! Unit test failed with error: {e}");
-        error!("{msg}");
-        return Err(anyhow!(msg));
-    }
+    run_tests_on_original_code(test_config, &package_path)?;
 
     // Create mutants:
 
     // Setup temporary directory structure.
     let outdir = tempfile::tempdir()?.into_path();
     let outdir_original = outdir.join("base");
-
     fs::create_dir_all(outdir_original)?;
 
     let outdir_mutant = if let Some(mutant_path) = &options.use_generated_mutants {
@@ -123,10 +101,6 @@ pub fn run_mutation_test(
         move_mutator::report::Report::load_from_json_file(&outdir_mutant.join("report.json"))?;
 
     // Run tests on mutants:
-
-    // Do not calculate the coverage on mutants.
-    let test_config = test_config.disable_coverage();
-
     benchmarks.mutation_test.start();
     let (mutation_test_benchmarks, mini_reports): (Vec<Benchmark>, Vec<MiniReport>) = report
         .get_mutants()
@@ -155,8 +129,8 @@ pub fn run_mutation_test(
                 .expect("copying directory failed");
 
             trace!(
-                "Copying mutant file {:?} to the package directory {:?}",
-                mutant_file,
+                "Copying mutant file {} to the package directory {:?}",
+                mutant_file.display(),
                 outdir.join(original_file)
             );
 
@@ -170,19 +144,14 @@ pub fn run_mutation_test(
             }
 
             benchmark.start();
-
-            // No need to fetch latest deps again.
-            let skip_fetch_deps = true;
-            // No need to print anything to the screen, due to many threads, it might be messy and slow.
-            let mut error_writer = std::io::sink();
-            let result = run_tests(&test_config, &outdir, skip_fetch_deps, &mut error_writer);
+            let result = run_tests_on_mutated_code(test_config, &outdir);
             benchmark.stop();
 
             let mutant_status = if let Err(e) = result {
                 trace!("Mutant killed! Unit test failed with error: {e}");
                 MutantStatus::Killed
             } else {
-                trace!("Mutant {} hasn't been killed!", mutant_file.display());
+                info!("Mutant {} hasn't been killed!", mutant_file.display());
                 MutantStatus::Alive
             };
 
