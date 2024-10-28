@@ -179,11 +179,19 @@ fn merge_spans_after_removing_whitespaces(mut spans: Vec<Span>, source_code: &st
         return vec![];
     }
 
+    let file_len = source_code.len();
     let mut new_spans = Vec::with_capacity(spans.len());
     let mut curr = spans.remove(0);
 
     'span_loop: for span in spans {
         let mut curr_end_index = curr.end().to_usize();
+
+        if curr_end_index > file_len {
+            // TODO: Write an issue in aptos-core for this since this happens in aptos-stdlib.
+            warn!("coverage report contains out of bound index {curr:?} (file length: {file_len})");
+            // Ignore such a span and continue.
+            continue;
+        }
 
         let src_chars = source_code[curr_end_index..].chars();
         for next_char in src_chars {
