@@ -163,7 +163,7 @@ pub fn run_spec_test(
     benchmarks.prover_results = proving_benchmarks;
 
     // Prepare a report.
-    let mut test_report = Report::new(package_path.to_owned());
+    let mut test_report = Report::new(original_package_path.canonicalize()?);
     for MiniReport {
         original_file,
         qname,

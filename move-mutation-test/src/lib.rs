@@ -55,8 +55,8 @@ pub fn run_mutation_test(
     let _ = pretty_env_logger::try_init();
 
     // Setup output dir and clone package path there.
-    let original_package_path = test_config.move_pkg.get_package_path()?;
-    let (outdir, package_path) = setup_outdir_and_package_path(original_package_path)?;
+    let original_package_path = test_config.move_pkg.get_package_path()?.canonicalize()?;
+    let (outdir, package_path) = setup_outdir_and_package_path(&original_package_path)?;
 
     info!("Running tool the following options: {options:?} and test config: {test_config:?}");
 
@@ -163,7 +163,7 @@ pub fn run_mutation_test(
     benchmarks.mutation_test_results = mutation_test_benchmarks;
 
     // Prepare a report.
-    let mut test_report = Report::new(package_path.to_owned());
+    let mut test_report = Report::new(original_package_path);
     for MiniReport {
         original_file,
         qname,
