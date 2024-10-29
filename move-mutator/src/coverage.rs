@@ -15,14 +15,12 @@ use std::{
     path::{Path, PathBuf},
 };
 
-/// Associated function string.
-type AssociatedFuncStr = String;
-
 /// Contains all uncovered spans in the project.
 #[derive(Debug, Default)]
 pub(crate) struct Coverage {
     /// List of all uncovered spans for all functions for all modules.
-    all_uncovered_spans: BTreeMap<AssociatedFuncStr, UncoveredSpans>,
+    // The key is a qualified function name (e.g. "vector::append").
+    all_uncovered_spans: BTreeMap<String, UncoveredSpans>,
 }
 
 impl Coverage {

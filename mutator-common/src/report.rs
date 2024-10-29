@@ -235,7 +235,6 @@ impl MutantStats {
 
     /// Get the name of the module where the mutation resides.
     pub fn get_module_name(&self) -> String {
-        // Unfallable.
         self.module_func
             .split("::")
             .next()
