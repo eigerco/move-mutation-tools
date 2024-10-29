@@ -97,6 +97,8 @@ impl MutationOperator for Binary {
             .filter(|v| match cur_op {
                 // All below mutants would lead to the same code logic and would become
                 // false-positive results.
+                // NOTE: This is a solution that works only for unsigned integers. We should
+                // consider a sign-agnostic solution in the future.
 
                 // x == 0 should never mutate to x <= 0
                 "==" if is_right_exp_zero && *v == "<=" => false,

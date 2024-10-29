@@ -152,8 +152,7 @@ mod tests {
             ..Default::default()
         };
 
-        let no_apply_coverage = false;
-        let mutator_options = create_mutator_options(&options, no_apply_coverage);
+        let mutator_options = create_mutator_options(&options, false);
 
         assert_eq!(mutator_options.mutate_modules, options.mutate_modules);
         assert_eq!(mutator_options.configuration_file, options.mutator_conf);

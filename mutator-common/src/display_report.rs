@@ -13,7 +13,7 @@ use prettytable::{
     Attr, Cell, Row, Table,
 };
 use std::{
-    collections::{BTreeMap, HashSet},
+    collections::{BTreeMap, BTreeSet},
     path::{Path, PathBuf},
     str::FromStr,
 };
@@ -45,11 +45,11 @@ impl FromStr for ModuleFilter {
 }
 
 impl ModuleFilter {
-    fn get_all_files_containing_the_modules(&self, report: &Report) -> HashSet<PathBuf> {
+    fn get_all_files_containing_the_modules(&self, report: &Report) -> BTreeSet<PathBuf> {
         match *self {
             Self::All => report.entries().keys().cloned().collect(),
             Self::Selected(ref modules) => {
-                let mut files_to_print = HashSet::<PathBuf>::new();
+                let mut files_to_print = BTreeSet::<PathBuf>::new();
 
                 for module in modules {
                     for (file, mutants) in report.entries() {
