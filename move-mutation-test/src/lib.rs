@@ -99,65 +99,78 @@ pub fn run_mutation_test(
     // Run tests on mutants:
     benchmarks.mutation_test.start();
     let cp_opts = CopyOptions::new().content_only(true);
-    let (mutation_test_benchmarks, mini_reports): (Vec<Benchmark>, Vec<MiniReport>) = report
-        .get_mutants()
-        .par_iter()
-        .map(|elem| {
-            let mut benchmark = Benchmark::new();
 
-            let mutant_file = elem.mutant_path();
-            let rayon_thread_id =
-                rayon::current_thread_index().expect("failed to fetch rayon thread id");
-            info!(
-                "job_{rayon_thread_id}: Running tests for mutant {}",
-                mutant_file.display()
-            );
+    let mutants = report.get_mutants();
+    info!("Running the tool on {} mutants", mutants.len());
 
-            // Strip prefix to get the path relative to the package directory.
-            let original_file =
-                strip_path_prefix(elem.original_file_path()).expect("invalid package path");
+    let mut mutation_test_benchmarks = Vec::<Benchmark>::with_capacity(mutants.len());
+    let mut mini_reports = Vec::<MiniReport>::with_capacity(mutants.len());
+    //  Split mutants into chunks before applying rayon threads, as trying to process them all in
+    //  one go can lead to memory starvation if the number of mutants is too huge to handle.
+    mutants.chunks(64).for_each(|mutant_set| {
+        let (mut benchmarks, mut reports) = mutant_set
+            .into_par_iter()
+            .map(|elem| {
+                let mut benchmark = Benchmark::new();
 
-            let job_outdir = outdir.join(format!("mutation_test_{rayon_thread_id}"));
-            let _ = fs::remove_dir_all(&job_outdir);
+                let mutant_file = elem.mutant_path();
+                let rayon_tid =
+                    rayon::current_thread_index().expect("failed to fetch rayon thread id");
+                info!(
+                    "job_{rayon_tid}: Running tests for mutant {}",
+                    mutant_file.display()
+                );
 
-            fs_extra::dir::copy(&package_path, &job_outdir, &cp_opts)
-                .expect("copying directory failed");
+                // Strip prefix to get the path relative to the package directory.
+                let original_file =
+                    strip_path_prefix(elem.original_file_path()).expect("invalid package path");
 
-            trace!(
-                "Copying mutant file {} to the package directory {:?}",
-                mutant_file.display(),
-                job_outdir.join(&original_file)
-            );
-            // Should never fail, since files will always exists.
-            fs::copy(mutant_file, job_outdir.join(&original_file)).expect("copying file failed");
+                let job_outdir = outdir.join(format!("mutation_test_{rayon_tid}"));
+                let _ = fs::remove_dir_all(&job_outdir);
 
-            benchmark.start();
-            let result = run_tests_on_mutated_code(test_config, &job_outdir);
-            benchmark.stop();
+                fs_extra::dir::copy(&package_path, &job_outdir, &cp_opts)
+                    .expect("copying directory failed");
 
-            let mutant_status = if let Err(e) = result {
-                trace!("Mutant killed! Unit test failed with error: {e}");
-                MutantStatus::Killed
-            } else {
-                info!("Mutant {} hasn't been killed!", mutant_file.display());
-                MutantStatus::Alive
-            };
+                trace!(
+                    "Copying mutant file {} to the package directory {:?}",
+                    mutant_file.display(),
+                    job_outdir.join(&original_file)
+                );
+                // Should never fail, since files will always exists.
+                fs::copy(mutant_file, job_outdir.join(&original_file))
+                    .expect("copying file failed");
 
-            let diff = elem.get_diff().to_owned();
+                benchmark.start();
+                let result = run_tests_on_mutated_code(test_config, &job_outdir);
+                benchmark.stop();
 
-            // Qualified name for the function.
-            let mut qname = elem.get_module_name().to_owned();
-            qname.push_str("::");
-            qname.push_str(elem.get_function_name());
+                let mutant_status = if let Err(e) = result {
+                    trace!("Mutant killed! Unit test failed with error: {e}");
+                    MutantStatus::Killed
+                } else {
+                    info!("Mutant {} hasn't been killed!", mutant_file.display());
+                    MutantStatus::Alive
+                };
 
-            (
-                benchmark,
-                MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff),
-            )
-        })
-        .collect::<Vec<(_, _)>>()
-        .into_iter()
-        .unzip();
+                let diff = elem.get_diff().to_owned();
+
+                // Qualified name for the function.
+                let mut qname = elem.get_module_name().to_owned();
+                qname.push_str("::");
+                qname.push_str(elem.get_function_name());
+
+                (
+                    benchmark,
+                    MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff),
+                )
+            })
+            .collect::<Vec<(_, _)>>()
+            .into_iter()
+            .unzip();
+
+        mutation_test_benchmarks.append(&mut benchmarks);
+        mini_reports.append(&mut reports);
+    });
 
     benchmarks.mutation_test.stop();
     benchmarks.mutation_test_results = mutation_test_benchmarks;
