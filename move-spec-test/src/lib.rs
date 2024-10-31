@@ -2,7 +2,6 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-mod benchmark;
 pub mod cli;
 mod prover;
 
@@ -10,14 +9,12 @@ extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
 
-use crate::{
-    benchmark::{Benchmark, Benchmarks},
-    prover::prove,
-};
+use crate::prover::prove;
 use anyhow::anyhow;
 use fs_extra::dir::CopyOptions;
 use move_package::BuildConfig;
 use mutator_common::{
+    benchmark::{Benchmark, Benchmarks},
     report::{MiniReport, MutantStatus, Report},
     tmp_package_dir::{setup_outdir_and_package_path, strip_path_prefix},
 };
@@ -65,7 +62,7 @@ pub fn run_spec_test(
     // Benchmarks call only time getting functions, so it's safe to use them in any case and
     // they are not expensive to create (won't hit the performance).
     let mut benchmarks = Benchmarks::new();
-    benchmarks.spec_test.start();
+    benchmarks.total_tool_duration.start();
 
     let prover_conf = cli::generate_prover_options(options)?;
 
@@ -96,7 +93,7 @@ pub fn run_spec_test(
     let report =
         move_mutator::report::Report::load_from_json_file(&outdir_mutant.join("report.json"))?;
 
-    benchmarks.prover.start();
+    benchmarks.executing_tests_on_mutants.start();
     let cp_opts = CopyOptions::new().content_only(true);
     let (proving_benchmarks, mini_reports): (Vec<Benchmark>, Vec<MiniReport>) = report
         .get_mutants()
@@ -157,8 +154,8 @@ pub fn run_spec_test(
         .into_iter()
         .unzip();
 
-    benchmarks.prover.stop();
-    benchmarks.prover_results = proving_benchmarks;
+    benchmarks.executing_tests_on_mutants.stop();
+    benchmarks.mutant_results = proving_benchmarks;
 
     // Prepare a report.
     let mut test_report = Report::new(original_package_path.canonicalize()?);
@@ -186,7 +183,7 @@ pub fn run_spec_test(
     println!("Total mutants killed: {}\n", test_report.mutants_killed());
     test_report.print_table();
 
-    benchmarks.spec_test.stop();
+    benchmarks.total_tool_duration.stop();
     benchmarks.display();
 
     Ok(())
