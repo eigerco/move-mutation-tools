@@ -2,7 +2,6 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-mod benchmark;
 pub mod cli;
 mod mutation_test;
 
@@ -10,14 +9,12 @@ extern crate pretty_env_logger;
 #[macro_use]
 extern crate log;
 
-use crate::{
-    benchmark::{Benchmark, Benchmarks},
-    mutation_test::{run_tests_on_mutated_code, run_tests_on_original_code},
-};
+use crate::mutation_test::{run_tests_on_mutated_code, run_tests_on_original_code};
 use cli::TestBuildConfig;
 use fs_extra::dir::CopyOptions;
 use move_package::BuildConfig;
 use mutator_common::{
+    benchmark::{Benchmark, Benchmarks},
     report::{MiniReport, MutantStatus, Report},
     tmp_package_dir::{setup_outdir_and_package_path, strip_path_prefix},
 };
@@ -64,7 +61,7 @@ pub fn run_mutation_test(
     // Benchmarks call only time getting functions, so it's safe to use them in any case and
     // they are not expensive to create (won't hit the performance).
     let mut benchmarks = Benchmarks::new();
-    benchmarks.total_duration.start();
+    benchmarks.total_tool_duration.start();
 
     // Run original tests to ensure the original tests are working:
     run_tests_on_original_code(test_config, &package_path)?;
@@ -97,7 +94,7 @@ pub fn run_mutation_test(
         move_mutator::report::Report::load_from_json_file(&outdir_mutant.join("report.json"))?;
 
     // Run tests on mutants:
-    benchmarks.mutation_test.start();
+    benchmarks.executing_tests_on_mutants.start();
     let cp_opts = CopyOptions::new().content_only(true);
 
     let mutants = report.get_mutants();
@@ -172,8 +169,8 @@ pub fn run_mutation_test(
         mini_reports.append(&mut reports);
     });
 
-    benchmarks.mutation_test.stop();
-    benchmarks.mutation_test_results = mutation_test_benchmarks;
+    benchmarks.executing_tests_on_mutants.stop();
+    benchmarks.mutant_results = mutation_test_benchmarks;
 
     // Prepare a report.
     let mut test_report = Report::new(original_package_path);
@@ -200,7 +197,7 @@ pub fn run_mutation_test(
     println!("Total mutants killed: {}\n", test_report.mutants_killed());
     test_report.print_table();
 
-    benchmarks.total_duration.stop();
+    benchmarks.total_tool_duration.stop();
     benchmarks.display();
 
     Ok(())
