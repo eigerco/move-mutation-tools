@@ -25,9 +25,9 @@ pub(crate) fn prove<W: WriteColor>(
     prover_conf: &move_prover::cli::Options,
     mut error_writer: &mut W,
 ) -> anyhow::Result<()> {
-    let mut model = config
-        .clone()
-        .move_model_for_package(package_path, ModelConfig {
+    let mut model = config.clone().move_model_for_package(
+        package_path,
+        ModelConfig {
             all_files_as_targets: true,
             target_filter: None,
             compiler_version: config
@@ -38,7 +38,8 @@ pub(crate) fn prove<W: WriteColor>(
                 .compiler_config
                 .language_version
                 .unwrap_or(LanguageVersion::V1),
-        })?;
+        },
+    )?;
 
     let mut prover_conf = prover_conf.clone();
     prover_conf.output_path = package_path
