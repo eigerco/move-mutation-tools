@@ -2,8 +2,6 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-#![allow(clippy::too_long_first_doc_paragraph)]
-
 mod benchmark;
 pub mod cli;
 mod prover;
