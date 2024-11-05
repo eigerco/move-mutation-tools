@@ -1,0 +1,13 @@
+[test-groups]
+serial-integration = { max-threads = 1 }
+
+[[profile.default.overrides]]
+filter = 'test(test_run_mutation_test::)'
+test-group = 'serial-integration'
+slow-timeout = { period = "120s" }
+threads-required = "num-cpus"
+
+[profile.ci]
+# Do not cancel the test run on the first failure.
+fail-fast = false
+retries = 2
