@@ -190,15 +190,18 @@ pub fn run_mutation_test(
         }
     }
 
-    if let Some(outfile) = &options.output {
-        test_report.save_to_json_file(outfile)?;
-    }
     println!("\nTotal mutants tested: {}", test_report.mutants_tested());
     println!("Total mutants killed: {}\n", test_report.mutants_killed());
     test_report.print_table();
 
     benchmarks.total_tool_duration.stop();
     benchmarks.display();
+
+    if let Some(outfile) = &options.output {
+        let out = std::env::current_dir()?.join(outfile);
+        test_report.save_to_json_file(&out)?;
+        println!("Report saved to: {}", out.display());
+    }
 
     Ok(())
 }

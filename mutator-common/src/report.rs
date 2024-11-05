@@ -57,9 +57,9 @@ impl MiniReport {
 #[derive(Default, Debug, Serialize, Deserialize)]
 pub struct Report {
     /// The list of entries in the report.
-    files: BTreeMap<PathBuf, Vec<MutantStats>>,
+    pub files: BTreeMap<PathBuf, Vec<MutantStats>>,
     /// Package directory location.
-    package_dir: PathBuf,
+    pub package_dir: PathBuf,
 }
 
 impl Report {
@@ -134,10 +134,15 @@ impl Report {
         Ok(serde_json::to_writer_pretty(file, self)?)
     }
 
-    /// Load the report from a JSON file.
+    /// Load the report from a JSON file
     pub fn load_from_json_file(path: &Path) -> anyhow::Result<Self> {
         let report = fs::read_to_string(path)?;
-        serde_json::from_str::<Report>(&report)
+        Self::load_from_str(report)
+    }
+
+    /// Load the report from a string.
+    pub fn load_from_str<P: AsRef<str>>(report: P) -> anyhow::Result<Self> {
+        serde_json::from_str::<Report>(report.as_ref())
             .map_err(|e| anyhow::Error::msg(format!("failed to parse the report: {e}")))
     }
 
@@ -210,7 +215,7 @@ impl Report {
 
 /// This struct represents an entry in the report.
 /// It contains the number of mutants tested and killed.
-#[derive(Default, Debug, Serialize, Deserialize)]
+#[derive(Default, Debug, Serialize, Deserialize, PartialEq, PartialOrd, Clone)]
 pub struct MutantStats {
     /// Module::function where mutant resides.
     pub module_func: String,

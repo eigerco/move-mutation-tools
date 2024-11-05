@@ -1,4 +1,4 @@
-name: Basic check and lint
+name: Basic test run
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - move-mutator/**
       - move-spec-test/**
       - move-mutation-test/**
-      - .github/workflows/check-and-lint.yml
+      - .github/workflows/run-tests.yml
   pull_request:
     branches: [ main, develop-m3, develop-m4 ]
     paths:
@@ -18,7 +18,7 @@ on:
       - move-mutator/**
       - move-spec-test/**
       - move-mutation-test/**
-      - .github/workflows/check-and-lint.yml
+      - .github/workflows/run-tests.yml
 
 env:
   CARGO_TERM_COLOR: always
@@ -26,7 +26,7 @@ env:
 jobs:
   basic-lint-and-check:
     runs-on: self-hosted
-    name: Basic ci-check for fmt/clippy/check
+    name: Basic ci-check for tests
     steps:
       - uses: actions/checkout@v4
 
@@ -39,11 +39,12 @@ jobs:
           profile: default
           toolchain: stable
 
-      - name: Run check
-        run: cargo check --all-targets
+      - name: Install nextest
+        uses: taiki-e/install-action@nextest
 
-      - name: Run fmt
-        run: cargo fmt --all -- --check
+      - name: Run integration tests in the release mode (due to test duration)
+        run: cargo nextest run -r --profile ci test_run_mutation_test
 
-      - name: Run clippy
-        run: cargo clippy --all-targets -- -D warnings
+      - name: Run normal tests in the debug mode
+        run: cargo nextest run --profile ci -E 'not test(test_run_mutation_test)'
+
