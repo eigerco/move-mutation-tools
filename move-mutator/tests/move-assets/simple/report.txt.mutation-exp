@@ -7,17 +7,17 @@
         "killed": 11,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (true)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (false)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (!(x == 0))\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (x != 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (x < 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (x > 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (x >= 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (x == 18446744073709551615)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x == 0)\n+        if (x == 1)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -1,7 +1,7 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n         if (x == 0)\n-            return true;\n+            return false;\n\n         false\n     }\n",
-          "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         if (x == 0)\n             return true;\n\n-        false\n+        true\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n"
+          "--- original\n+++ modified\n@@ -1,8 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n-            // Inserting an odd comment here (this was a bug in a mutator before)\n-            0)\n+        if (true)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -1,8 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n-            // Inserting an odd comment here (this was a bug in a mutator before)\n-            0)\n+        if (false)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -1,8 +1,8 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n+        if (!(x ==\n             // Inserting an odd comment here (this was a bug in a mutator before)\n-            0)\n+            0))\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -1,7 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n-            // Inserting an odd comment here (this was a bug in a mutator before)\n+        if (x !=\n             0)\n             return true;\n\n",
+          "--- original\n+++ modified\n@@ -1,7 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n-            // Inserting an odd comment here (this was a bug in a mutator before)\n+        if (x <\n             0)\n             return true;\n\n",
+          "--- original\n+++ modified\n@@ -1,7 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n-            // Inserting an odd comment here (this was a bug in a mutator before)\n+        if (x >\n             0)\n             return true;\n\n",
+          "--- original\n+++ modified\n@@ -1,7 +1,6 @@\n module TestAccount::BinaryReplacement {\n     fun is_x_eq_to_zero(x: u64): bool {\n-        if (x ==\n-            // Inserting an odd comment here (this was a bug in a mutator before)\n+        if (x >=\n             0)\n             return true;\n\n",
+          "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun is_x_eq_to_zero(x: u64): bool {\n         if (x ==\n             // Inserting an odd comment here (this was a bug in a mutator before)\n-            0)\n+            18446744073709551615)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun is_x_eq_to_zero(x: u64): bool {\n         if (x ==\n             // Inserting an odd comment here (this was a bug in a mutator before)\n-            0)\n+            1)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         if (x ==\n             // Inserting an odd comment here (this was a bug in a mutator before)\n             0)\n-            return true;\n+            return false;\n\n         false\n     }\n",
+          "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n             0)\n             return true;\n\n-        false\n+        true\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n"
         ]
       },
       {
@@ -25,14 +25,14 @@
         "tested": 6,
         "killed": 5,
         "mutants_alive_diffs": [
-          "--- original\n+++ modified\n@@ -63,7 +63,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x > 1\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x > 1\n     }\n\n     #[test]\n"
         ],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -63,7 +63,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x == 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -63,7 +63,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x < 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -63,7 +63,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x <= 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -63,7 +63,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x >= 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -63,7 +63,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x > 18446744073709551615\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x == 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x < 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x <= 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x >= 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x > 18446744073709551615\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -41,12 +41,12 @@
         "killed": 6,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -43,7 +43,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x == 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -43,7 +43,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x < 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -43,7 +43,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x <= 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -43,7 +43,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x >= 0\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -43,7 +43,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x != 18446744073709551615\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -43,7 +43,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x != 1\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -45,7 +45,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x == 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -45,7 +45,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x < 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -45,7 +45,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x <= 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -45,7 +45,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x >= 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -45,7 +45,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x != 18446744073709551615\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -45,7 +45,7 @@\n     }\n\n     fun is_x_neq_to_zero(x: u64): bool {\n-        x != 0\n+        x != 1\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -55,17 +55,17 @@
         "killed": 11,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (true)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (false)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (!(0 == x))\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 != x)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 < x)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 > x)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 <= x)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (18446744073709551615 == x)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (1 == x)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -8,7 +8,7 @@\n\n     fun is_zero_eq_to_x(x: u64): bool {\n         if (0 == x)\n-            return true;\n+            return false;\n\n         false\n     }\n",
-          "--- original\n+++ modified\n@@ -10,7 +10,7 @@\n         if (0 == x)\n             return true;\n\n-        false\n+        true\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (true)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (false)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (!(0 == x))\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 != x)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 < x)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 > x)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (0 <= x)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (18446744073709551615 == x)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -9,7 +9,7 @@\n     }\n\n     fun is_zero_eq_to_x(x: u64): bool {\n-        if (0 == x)\n+        if (1 == x)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -10,7 +10,7 @@\n\n     fun is_zero_eq_to_x(x: u64): bool {\n         if (0 == x)\n-            return true;\n+            return false;\n\n         false\n     }\n",
+          "--- original\n+++ modified\n@@ -12,7 +12,7 @@\n         if (0 == x)\n             return true;\n\n-        false\n+        true\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -73,14 +73,14 @@
         "tested": 6,
         "killed": 5,
         "mutants_alive_diffs": [
-          "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        1 < x\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        1 < x\n     }\n\n     #[test]\n"
         ],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 == x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 > x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 <= x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 >= x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        18446744073709551615 < x\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 == x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 > x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 <= x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 >= x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        18446744073709551615 < x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -89,12 +89,12 @@
         "killed": 6,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -53,7 +53,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 == x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -53,7 +53,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 > x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -53,7 +53,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 <= x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -53,7 +53,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 >= x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -53,7 +53,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        18446744073709551615 != x\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -53,7 +53,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        1 != x\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -55,7 +55,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 == x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -55,7 +55,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 > x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -55,7 +55,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 <= x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -55,7 +55,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        0 >= x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -55,7 +55,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        18446744073709551615 != x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -55,7 +55,7 @@\n     }\n\n     fun is_zero_neq_to_x(x: u64): bool {\n-        0 != x\n+        1 != x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -102,28 +102,28 @@
         "tested": 20,
         "killed": 14,
         "mutants_alive_diffs": [
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (false)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 > x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (18446744073709551615 == x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (false)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x < 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x == 18446744073709551615)\n             return true;\n\n         false\n"
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (false)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 > x)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (18446744073709551615 == x)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (false)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x < 0)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x == 18446744073709551615)\n             return true;\n\n         false\n"
         ],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (true)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (!(0 == x))\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 != x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 < x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 <= x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (1 == x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -27,7 +27,7 @@\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n         if (0 == x)\n-            return true;\n+            return false;\n\n         // Another check which does the same is silly:\n         if (x == 0)\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (true)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (!(x == 0))\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x != 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x > 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x >= 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -30,7 +30,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x == 1)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -33,7 +33,7 @@\n         if (x == 0)\n             return true;\n\n-        false\n+        true\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (true)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (!(0 == x))\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 != x)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 < x)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 <= x)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (1 == x)\n             return true;\n\n         // Another check which does the same is silly:\n",
+          "--- original\n+++ modified\n@@ -29,7 +29,7 @@\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n         if (0 == x)\n-            return true;\n+            return false;\n\n         // Another check which does the same is silly:\n         if (x == 0)\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (true)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (!(x == 0))\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x != 0)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x > 0)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x >= 0)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x == 1)\n             return true;\n\n         false\n",
+          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n         if (x == 0)\n             return true;\n\n-        false\n+        true\n     }\n\n     #[test]\n"
         ]
       }
     ],

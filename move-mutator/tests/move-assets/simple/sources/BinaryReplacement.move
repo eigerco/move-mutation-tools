@@ -1,6 +1,8 @@
 module TestAccount::BinaryReplacement {
     fun is_x_eq_to_zero(x: u64): bool {
-        if (x == 0)
+        if (x ==
+            // Inserting an odd comment here (this was a bug in a mutator before)
+            0)
             return true;
 
         false
