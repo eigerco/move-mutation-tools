@@ -5,7 +5,7 @@
 use crate::{
     operator::{MutantInfo, MutationOperator},
     operators::ExpLoc,
-    report::{Mutation, Range},
+    report::{self, Mutation},
 };
 use codespan::FileId;
 use move_model::{
@@ -70,18 +70,19 @@ impl MutationOperator for Binary {
 
         // Group of exchangeable binary operators - we only want to replace the operator with a different one
         // within the same group.
-        let ops: Vec<&str> = match self.operation {
-            Operation::Add | Operation::Sub | Operation::Mul | Operation::Div | Operation::Mod => {
-                vec!["+", "-", "*", "/", "%"]
+        use Operation::*;
+        let ops: Vec<Operation> = match self.operation {
+            Add | Sub | Mul | Div | Mod => {
+                vec![Add, Sub, Mul, Div, Mod]
             },
-            Operation::BitOr | Operation::BitAnd | Operation::Xor => {
-                vec!["|", "&", "^"]
+            BitOr | BitAnd | Xor => {
+                vec![BitOr, BitAnd, Xor]
             },
-            Operation::Shl | Operation::Shr => {
-                vec!["<<", ">>"]
+            Shl | Shr => {
+                vec![Shl, Shr]
             },
-            Operation::Or | Operation::And => {
-                vec!["||", "&&"]
+            Or | And => {
+                vec![Or, And]
             },
             Operation::Eq
             | Operation::Neq
@@ -89,52 +90,51 @@ impl MutationOperator for Binary {
             | Operation::Gt
             | Operation::Le
             | Operation::Ge => {
-                vec!["==", "!=", "<", ">", "<=", ">="]
+                vec![Eq, Neq, Lt, Gt, Le, Ge]
             },
-            _ => {
-                vec![]
-            },
+            _ => vec![],
         };
 
         let is_left_exp_zero = contains_value_zero(self.exps[0].exp.as_ref());
         let is_right_exp_zero = contains_value_zero(self.exps[1].exp.as_ref());
 
         ops.into_iter()
-            .filter(|v| cur_op != *v)
-            .filter(|v| match cur_op {
+            .filter(|v| self.operation != *v)
+            .filter(|v| match self.operation {
                 // All below mutants would lead to the same code logic and would become
                 // false-positive results.
                 // NOTE: This is a solution that works only for unsigned integers. We should
                 // consider a sign-agnostic solution in the future.
 
                 // x == 0 should never mutate to x <= 0
-                "==" if is_right_exp_zero && *v == "<=" => false,
+                Eq if is_right_exp_zero && *v == Le => false,
                 // 0 == x should never mutate to 0 >= x
-                "==" if is_left_exp_zero && *v == ">=" => false,
+                Eq if is_left_exp_zero && *v == Ge => false,
                 // Do not check the reverse: x <= 0 or 0 >= 0 since such code indicates logic error.
 
                 // x != 0 should never mutate to x > 0
-                "!=" if is_right_exp_zero && *v == ">" => false,
+                Neq if is_right_exp_zero && *v == Gt => false,
                 // 0 != x should never mutate to 0 < x
-                "!=" if is_left_exp_zero && *v == "<" => false,
+                Neq if is_left_exp_zero && *v == Lt => false,
 
                 // x > 0 should never mutate to x != 0
-                ">" if is_right_exp_zero && *v == "!=" => false,
+                Gt if is_right_exp_zero && *v == Neq => false,
                 // 0 < x should never mutate to 0 != x
-                "<" if is_left_exp_zero && *v == "!=" => false,
+                Lt if is_left_exp_zero && *v == Neq => false,
 
                 _ => true,
             })
             .map(|op| {
                 let mut mutated_source = source.to_string();
-                mutated_source.replace_range(start..end, op);
+                let op_str = op.to_string_if_binop().expect("binop not found");
+                mutated_source.replace_range(start..end, op_str);
                 MutantInfo::new(
                     mutated_source,
                     Mutation::new(
-                        Range::new(start, end),
+                        report::Range::new(start, end),
                         OPERATOR_NAME.to_string(),
-                        cur_op.to_string(),
-                        op.to_string(),
+                        cur_op.to_owned(),
+                        op_str.to_owned(),
                     ),
                 )
             })
