@@ -72,7 +72,8 @@ pub fn generate_ast(
         prepare_compiler_for_files(config, source_files.as_slice())
     };
 
-    let env = run_checker(options.clone())?;
+    trace!("{options:?}");
+    let env = run_checker(options)?;
 
     if env.has_errors() {
         let mut error_writer = termcolor::StandardStream::stderr(termcolor::ColorChoice::Auto);
@@ -208,6 +209,9 @@ fn prepare_compiler_for_package(
             .collect(),
         skip_attribute_checks: config.compiler_config.skip_attribute_checks,
         known_attributes: known_attributes.clone(),
+        language_version: config.compiler_config.language_version,
+        compiler_version: config.compiler_config.compiler_version,
+        experiments: config.compiler_config.experiments.clone(),
         ..Default::default()
     };
 

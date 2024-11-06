@@ -3,7 +3,7 @@ module TestAccount::BasicOps {
         let sum_r = x + y;
 
         spec {
-                assert sum_r == x + y;
+            assert sum_r == x + y;
         };
 
         sum_r
@@ -23,7 +23,7 @@ module TestAccount::BasicOps {
         let sub_r = x - y;
 
         spec {
-                assert sub_r == x - y;
+            assert sub_r == x - y;
         };
 
         sub_r

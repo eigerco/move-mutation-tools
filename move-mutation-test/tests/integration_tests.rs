@@ -1,5 +1,6 @@
 use aptos::common::types::MovePackageDir;
 use log::info;
+use move_model::metadata::{CompilerVersion, LanguageVersion};
 use move_mutation_test::{
     cli::{CLIOptions, TestBuildConfig},
     run_mutation_test,
@@ -22,6 +23,11 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
 
     let mut move_pkg = MovePackageDir::new();
     move_pkg.package_dir = Some(PathBuf::from(package_path));
+    // Run the tests with move 2 compiler by default.
+    move_pkg.move_2 = true;
+    move_pkg.language_version = Some(LanguageVersion::V2_1);
+    move_pkg.compiler_version = Some(CompilerVersion::V2_1);
+
     let test_build_cfg = TestBuildConfig {
         move_pkg,
         dump_state: false,
