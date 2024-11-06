@@ -60,6 +60,9 @@ build/
 *.dot
 *.bytecode
 *.bpl
+*.smt
+*.bpl.log
+z3.trace
 
 # move-mutator and move-spec-test output files
 report.json

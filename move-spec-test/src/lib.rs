@@ -65,6 +65,7 @@ pub fn run_spec_test(
     benchmarks.total_tool_duration.start();
 
     let prover_conf = cli::generate_prover_options(options)?;
+    info!("Using prover configuration: {prover_conf:?}");
 
     let mut error_writer = termcolor::StandardStream::stderr(termcolor::ColorChoice::Auto);
 
@@ -97,22 +98,21 @@ pub fn run_spec_test(
     let cp_opts = CopyOptions::new().content_only(true);
     let (proving_benchmarks, mini_reports): (Vec<Benchmark>, Vec<MiniReport>) = report
         .get_mutants()
-        .par_iter()
+        .into_par_iter()
         .map(|elem| {
             let mut benchmark = Benchmark::new();
 
             let mutant_file = elem.mutant_path();
-            let rayon_thread_id =
-                rayon::current_thread_index().expect("failed to fetch rayon thread id");
+            let rayon_tid = rayon::current_thread_index().expect("failed to fetch rayon thread id");
             info!(
-                "job_{rayon_thread_id}: Running prover for mutant {}",
+                "job_{rayon_tid}: Running prover for mutant {}",
                 mutant_file.display()
             );
 
             // Strip prefix to get the path relative to the package directory.
             let original_file =
                 strip_path_prefix(elem.original_file_path()).expect("invalid package path");
-            let job_outdir = outdir.join(format!("prover_{rayon_thread_id}"));
+            let job_outdir = outdir.join(format!("prover_{rayon_tid}"));
 
             let _ = fs::remove_dir_all(&job_outdir);
             fs_extra::dir::copy(&package_path, &job_outdir, &cp_opts)
@@ -175,16 +175,18 @@ pub fn run_spec_test(
         }
     }
 
-    if let Some(outfile) = &options.output {
-        test_report.save_to_json_file(outfile)?;
-    }
-
     println!("\nTotal mutants tested: {}", test_report.mutants_tested());
     println!("Total mutants killed: {}\n", test_report.mutants_killed());
     test_report.print_table();
 
     benchmarks.total_tool_duration.stop();
     benchmarks.display();
+
+    if let Some(outfile) = &options.output {
+        let out = std::env::current_dir()?.join(outfile);
+        test_report.save_to_json_file(&out)?;
+        println!("Report saved to: {}", out.display());
+    }
 
     Ok(())
 }
