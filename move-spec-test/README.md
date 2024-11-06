@@ -29,9 +29,10 @@ Please build the whole repository first:
 cargo build --release
 ```
 
-Check if the tool is working properly by running its tests:
+Check if the tool is working properly by running its tests via the [`nextest`][nextest] tool:
 ```bash
-cargo test -p move-spec-test
+# Using the release build for tests due to test duration
+cargo nextest run -r -p move-spec-test
 ```
 
 The Move Specification Test tool demands the Move Prover to be installed and
@@ -84,7 +85,7 @@ To generate a report, use the `-o` option:
 
 The sample `report.txt` generated for the above command contains useful info that can be paired with the `display-report` option:
 ```bash
-$ ./target/release/move-spec-test display-report -p report.txt
+$ ./target/release/move-spec-test display-report coverage -p report.txt
 The legend is shown below in the table format
 ===================================┬==================================
  mutants killed / mutants in total │ Source code file path
@@ -149,3 +150,4 @@ mutation operators do not apply well to that kind of code.
 To check possible options, use the `--help` option with any command/subcommand.
 
 [aptos-core]: https://github.com/aptos-labs/aptos-core/
+[nextest]: https://github.com/nextest-rs/nextest
