@@ -19,9 +19,10 @@ Please build the whole repository first:
 cargo build -r
 ```
 
-Check if the tool is working properly by running its tests:
+Check if the tool is working properly by running its tests via the [`nextest`][nextest] tool:
 ```bash
-cargo test -p move-mutator
+# Using the release build for tests due to test duration
+cargo nextest run -r -p move-mutator
 ```
 
 ## Usage
@@ -90,3 +91,5 @@ There are several test projects under `move-mutator/tests/move-assets/`
 directory. They can be used to check the mutator tool as well.
 
 To check possible options, use the `--help` option.
+
+[nextest]: https://github.com/nextest-rs/nextest
