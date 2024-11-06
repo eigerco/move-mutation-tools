@@ -28,7 +28,8 @@ pub(crate) fn prove<W: WriteColor>(
     let mut model = config.clone().move_model_for_package(
         package_path,
         ModelConfig {
-            all_files_as_targets: true,
+            // Do not run prover on dependencies, but focus on the local project only.
+            all_files_as_targets: false,
             target_filter: None,
             compiler_version: config
                 .compiler_config
