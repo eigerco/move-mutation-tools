@@ -2,7 +2,7 @@
 serial-integration = { max-threads = 1 }
 
 [[profile.default.overrides]]
-filter = 'test(test_run_mutation_test::)'
+filter = 'test(test_run_mutation_test::) + test(test_run_spec_test::)'
 test-group = 'serial-integration'
 slow-timeout = { period = "120s" }
 threads-required = "num-cpus"

@@ -24,7 +24,7 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  basic-lint-and-check:
+  basic-test-run:
     runs-on: self-hosted
     name: Basic ci-check for tests
     steps:
@@ -42,9 +42,5 @@ jobs:
       - name: Install nextest
         uses: taiki-e/install-action@nextest
 
-      - name: Run integration tests in the release mode (due to test duration)
-        run: cargo nextest run -r --profile ci test_run_mutation_test
-
-      - name: Run normal tests in the debug mode
-        run: cargo nextest run --profile ci -E 'not test(test_run_mutation_test)'
-
+      - name: Run normal tests in the release mode due to test duration speed bump.
+        run: cargo nextest run -r --profile ci -E 'not test(test_run_spec_test)'

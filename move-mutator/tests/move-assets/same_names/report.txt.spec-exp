@@ -1,0 +1,49 @@
+{
+  "files": {
+    "sources/Negation.move": [
+      {
+        "module_func": "Negation_main::neg_log",
+        "tested": 1,
+        "killed": 1,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Negation_main {\n     fun neg_log(x: bool): bool {\n-        !x\n+         \n     }\n\n     spec neg_log {\n"
+        ]
+      }
+    ],
+    "sources/m1/Negation.move": [
+      {
+        "module_func": "Negation_m1::neg_log",
+        "tested": 1,
+        "killed": 1,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Negation_m1 {\n     fun neg_log(x: bool): bool {\n-        !x\n+         \n     }\n\n     spec neg_log {\n"
+        ]
+      }
+    ],
+    "sources/m1/m1_1/Negation.move": [
+      {
+        "module_func": "Negation_m1_1::neg_log",
+        "tested": 1,
+        "killed": 1,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Negation_m1_1 {\n     fun neg_log(x: bool): bool {\n-        !x\n+         \n     }\n\n     spec neg_log {\n"
+        ]
+      }
+    ],
+    "sources/m2/Negation.move": [
+      {
+        "module_func": "Negation_m2::neg_log",
+        "tested": 1,
+        "killed": 1,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Negation_m2 {\n     fun neg_log(x: bool): bool {\n-        !x\n+         \n     }\n\n     spec neg_log {\n"
+        ]
+      }
+    ]
+  },
+  "package_dir": "/Users/karlomardesic/Workspace/move-spec-testing/move-mutator/tests/move-assets/same_names"
+}
