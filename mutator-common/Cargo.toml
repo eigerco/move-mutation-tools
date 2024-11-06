@@ -12,6 +12,7 @@ rust-version.workspace = true
 
 [dependencies]
 anyhow = { workspace = true }
+clap = { workspace = true }
 diffy = { workspace = true }
 fs_extra = { workspace = true }
 log = { workspace = true }
