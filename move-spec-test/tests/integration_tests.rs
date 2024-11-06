@@ -1,10 +1,11 @@
 use log::info;
 use move_package::BuildConfig;
-use move_spec_test::cli::CLIOptions;
-use move_spec_test::run_spec_test;
+use move_spec_test::{cli::CLIOptions, run_spec_test};
 use mutator_common::report::Report;
-use std::fs;
-use std::path::{Path, PathBuf};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 // Arbitrarily chosen after manual testing.
 // Tweaking only changes the overall duration of the test a little.

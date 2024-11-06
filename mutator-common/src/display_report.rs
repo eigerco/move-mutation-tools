@@ -3,10 +3,10 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use super::report::Report;
-use crate::report::MutantStats;
+use super::report::{MutantStats, Report};
 use anyhow::{Context, Result};
-use diffy::Line;
+use clap::{Parser, Subcommand};
+use diffy::{Line, Patch, PatchFormatter};
 use prettytable::{
     color,
     format::{self, Alignment, LinePosition, LineSeparator},
@@ -22,6 +22,94 @@ const COLOR_HAPPY: Option<Attr> = Some(Attr::ForegroundColor(color::GREEN));
 const COLOR_WARN: Option<Attr> = Some(Attr::ForegroundColor(color::BRIGHT_YELLOW));
 const COLOR_CRITICAL: Option<Attr> = Some(Attr::ForegroundColor(color::RED));
 const COLOR_NONE: Option<Attr> = None;
+
+#[derive(Subcommand)]
+pub enum DisplayReportCmd {
+    /// Display report in the coverage format.
+    Coverage,
+
+    /// Display mutants.
+    Mutants {
+        /// Include specified functions in the output.
+        #[clap(long, value_parser, default_value = "all")]
+        functions: FunctionFilter,
+
+        /// Specify which mutants to print.
+        #[clap(long, default_value = "alive")]
+        mutants: MutantFilter,
+    },
+}
+
+/// Display the report in a more readable format.
+#[derive(Parser)]
+pub struct DisplayReportOptions {
+    /// Report location. The default file is "report.txt" under the same directory.
+    #[clap(global = true, short = 'p', long, default_value = "report.txt")]
+    pub path_to_report: PathBuf,
+
+    /// Include specified modules in the report.
+    #[clap(global = true, short = 'm', long, value_parser, default_value = "all")]
+    pub modules: ModuleFilter,
+
+    /// Display report subcommands.
+    #[clap(subcommand)]
+    pub cmds: DisplayReportCmd,
+}
+
+/// Filter for mutants to be included in the output.
+#[derive(Default, Debug, Clone, PartialEq)]
+pub enum MutantFilter {
+    #[default]
+    Alive,
+    Killed,
+    Both,
+}
+
+impl MutantFilter {
+    /// Check whether the filter allows killed mutants.
+    fn contains_killed(&self) -> bool {
+        *self == Self::Both || *self == Self::Killed
+    }
+
+    /// Check whether the filter allows alive mutants.
+    fn contains_alive(&self) -> bool {
+        *self == Self::Both || *self == Self::Alive
+    }
+}
+
+impl FromStr for MutantFilter {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "alive" => Ok(MutantFilter::Alive),
+            "killed" => Ok(MutantFilter::Killed),
+            "both" => Ok(MutantFilter::Both),
+            _ => Err("Invalid mutant option. Allowed only: ".to_owned()),
+        }
+    }
+}
+
+/// Filter for functions to include in the report.
+#[derive(Default, Debug, Clone, PartialEq)]
+pub enum FunctionFilter {
+    #[default]
+    All,
+    Selected(Vec<String>),
+}
+
+impl FromStr for FunctionFilter {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "all" => Ok(FunctionFilter::All),
+            _ => Ok(FunctionFilter::Selected(
+                s.split(&[';', '-', ',']).map(String::from).collect(),
+            )),
+        }
+    }
+}
 
 /// Filter for modules to include in the report.
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -108,8 +196,11 @@ impl FileStats {
 }
 
 /// Displays a friendly readable report for given modules.
-pub fn display_report_on_screen(path_to_report: &Path, modules: &ModuleFilter) -> Result<()> {
-    let report = Report::load_from_json_file(path_to_report)?;
+pub fn display_coverage_on_screen(
+    path_to_report: impl AsRef<Path>,
+    modules: &ModuleFilter,
+) -> Result<()> {
+    let report = Report::load_from_json_file(path_to_report.as_ref())?;
     let files_to_print = modules.get_all_files_containing_the_modules(&report);
 
     if files_to_print.is_empty() {
@@ -251,6 +342,69 @@ fn find_mutated_line_number(file_diff: &str) -> Result<usize> {
     Ok(current_line_no)
 }
 
+/// Displays mutants in a readable format.
+pub fn display_mutants_on_screen(
+    path_to_report: impl AsRef<Path>,
+    modules: &ModuleFilter,
+    functions: &FunctionFilter,
+    mutant_filter: &MutantFilter,
+) -> Result<()> {
+    let report = Report::load_from_json_file(path_to_report.as_ref())?;
+    let files_to_print = modules.get_all_files_containing_the_modules(&report);
+    let Report { mut files, .. } = report;
+
+    if files_to_print.is_empty() {
+        println!("No matching files found.");
+        return Ok(());
+    };
+
+    let mut all_mutant_stats = Vec::<MutantStats>::new();
+    for file in files_to_print {
+        if let Some(mut file_mutant_stats) = files.remove(&file) {
+            if let FunctionFilter::Selected(filtered_funcs) = functions {
+                file_mutant_stats.retain(|m| {
+                    let (_, func) = m
+                        .module_func
+                        .split_once("::")
+                        .expect("invalid function signature in the report file");
+                    filtered_funcs.contains(&func.to_owned())
+                });
+            }
+            all_mutant_stats.extend(file_mutant_stats);
+        }
+    }
+
+    if all_mutant_stats.is_empty() {
+        println!("No matching functions found.");
+        return Ok(());
+    };
+
+    let f = PatchFormatter::new().with_color();
+    for mutant in all_mutant_stats {
+        if mutant_filter.contains_alive() {
+            for diff in mutant.mutants_alive_diffs {
+                println!("----------------------------------------------------------------------------------------------------");
+                println!("{}: Alive mutant", mutant.module_func);
+                let patch = Patch::from_str(&diff).expect("invalid patch");
+                println!("{}", f.fmt_patch(&patch));
+            }
+        }
+
+        if mutant_filter.contains_killed() {
+            for diff in mutant.mutants_killed_diff {
+                println!("----------------------------------------------------------------------------------------------------");
+                println!("{}: Killed mutant", mutant.module_func);
+                let patch = Patch::from_str(&diff).expect("invalid patch");
+                println!("{}", f.fmt_patch(&patch));
+            }
+        }
+
+        println!(); // Add one empty line
+    }
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -277,7 +431,12 @@ mod tests {
         fs::File::create(path2).unwrap();
 
         let modules = ModuleFilter::All;
-        let ret = display_report_on_screen(&report_path, &modules);
+        let ret = display_coverage_on_screen(&report_path, &modules);
+        assert!(ret.is_ok());
+
+        let functions = FunctionFilter::All;
+        let mutant_filter = MutantFilter::Both;
+        let ret = display_mutants_on_screen(report_path, &modules, &functions, &mutant_filter);
         assert!(ret.is_ok());
     }
 
@@ -285,7 +444,12 @@ mod tests {
     fn report_file_not_found() {
         let path = PathBuf::from("/path/to/non/existing/file");
         let modules = ModuleFilter::All;
-        let ret = display_report_on_screen(&path, &modules);
+        let ret = display_coverage_on_screen(&path, &modules);
+        assert!(ret.is_err());
+
+        let functions = FunctionFilter::All;
+        let mutant_filter = MutantFilter::Both;
+        let ret = display_mutants_on_screen(path, &modules, &functions, &mutant_filter);
         assert!(ret.is_err());
     }
 }

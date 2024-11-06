@@ -8529,6 +8529,7 @@ name = "mutator-common"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "clap 4.5.20",
  "diffy",
  "fs_extra",
  "log",

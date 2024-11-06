@@ -9,8 +9,9 @@ use move_mutation_test::{
     cli::{CLIOptions, TestBuildConfig},
     run_mutation_test,
 };
-use mutator_common::display_report::{display_report_on_screen, ModuleFilter};
-use std::path::PathBuf;
+use mutator_common::display_report::{
+    display_coverage_on_screen, display_mutants_on_screen, DisplayReportCmd, DisplayReportOptions,
+};
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -27,21 +28,14 @@ enum Commands {
         /// Command line options for the mutation tester.
         #[clap(flatten)]
         cli_options: CLIOptions,
+
         /// The configuration options for running the tests.
         #[clap(flatten)]
         test_build_config: TestBuildConfig,
     },
 
     /// Display the report in a more readable format.
-    DisplayReport {
-        /// Report location. The default file is "report.txt" under the same directory.
-        #[clap(short = 'p', long, default_value = "report.txt")]
-        path_to_report: PathBuf,
-
-        /// Include specified modules in the report.
-        #[clap(short = 'm', long, value_parser, default_value = "all")]
-        modules: ModuleFilter,
-    },
+    DisplayReport(DisplayReportOptions),
 }
 
 fn main() -> anyhow::Result<()> {
@@ -52,9 +46,16 @@ fn main() -> anyhow::Result<()> {
             cli_options,
             test_build_config,
         } => run_mutation_test(cli_options, test_build_config),
-        Commands::DisplayReport {
-            path_to_report,
-            modules,
-        } => display_report_on_screen(path_to_report.as_path(), modules),
+        Commands::DisplayReport(display_report) => {
+            let path_to_report = &display_report.path_to_report;
+            let modules = &display_report.modules;
+
+            match &display_report.cmds {
+                DisplayReportCmd::Coverage => display_coverage_on_screen(path_to_report, modules),
+                DisplayReportCmd::Mutants { functions, mutants } => {
+                    display_mutants_on_screen(path_to_report, modules, functions, mutants)
+                },
+            }
+        },
     }
 }

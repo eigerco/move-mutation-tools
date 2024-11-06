@@ -1,11 +1,14 @@
 use aptos::common::types::MovePackageDir;
 use log::info;
-use move_mutation_test::cli::CLIOptions;
-use move_mutation_test::cli::TestBuildConfig;
-use move_mutation_test::run_mutation_test;
+use move_mutation_test::{
+    cli::{CLIOptions, TestBuildConfig},
+    run_mutation_test,
+};
 use mutator_common::report::Report;
-use std::fs;
-use std::path::{Path, PathBuf};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 // Arbitrarily chosen after manual testing.
 // Tweaking only changes the overall duration of the test a little.
