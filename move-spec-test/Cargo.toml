@@ -28,3 +28,11 @@ pretty_env_logger = { workspace = true }
 rayon = { workspace = true }
 serde = { workspace = true }
 termcolor = { workspace = true }
+
+[dev-dependencies]
+datatest-stable = { workspace = true }
+stacker = { workspace = true }
+
+[[test]]
+name = "integration_tests"
+harness = false

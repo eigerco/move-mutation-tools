@@ -8320,6 +8320,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "clap 4.5.20",
+ "datatest-stable",
  "fs_extra",
  "log",
  "move-model",
@@ -8330,6 +8331,7 @@ dependencies = [
  "pretty_env_logger",
  "rayon",
  "serde",
+ "stacker",
  "termcolor",
 ]
 

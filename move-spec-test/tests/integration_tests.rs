@@ -1,39 +1,31 @@
-use aptos::common::types::MovePackageDir;
 use log::info;
-use move_mutation_test::cli::CLIOptions;
-use move_mutation_test::cli::TestBuildConfig;
-use move_mutation_test::run_mutation_test;
+use move_package::BuildConfig;
+use move_spec_test::cli::CLIOptions;
+use move_spec_test::run_spec_test;
 use mutator_common::report::Report;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+// Arbitrarily chosen after manual testing.
+// Tweaking only changes the overall duration of the test a little.
 const RED_ZONE: usize = 128 * 1024; // 128 KiB
 const STACK_SIZE: usize = 32 * RED_ZONE; // 4 MiB
 
-fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stable::Result<()> {
+fn test_run_spec_test(path: &Path, expected_report: String) -> datatest_stable::Result<()> {
     let expected_report =
         Report::load_from_str(expected_report).expect("failed to load the report");
     let package_path = path.parent().expect("package path not found");
-
-    let mut move_pkg = MovePackageDir::new();
-    move_pkg.package_dir = Some(PathBuf::from(package_path));
-    let test_build_cfg = TestBuildConfig {
-        move_pkg,
-        dump_state: false,
-        filter: None,
-        ignore_compile_warnings: false,
-        apply_coverage: true,
-        gas_limit: 1_000,
-    };
 
     let report_file = PathBuf::from("report.txt");
     let cli_opts = CLIOptions {
         output: Some(report_file.clone()),
         ..Default::default()
     };
+    let build_cfg = BuildConfig::default();
 
     stacker::maybe_grow(RED_ZONE, STACK_SIZE, || {
-        run_mutation_test(&cli_opts, &test_build_cfg).expect("running the mutation test failed");
+        run_spec_test(&cli_opts, &build_cfg, package_path)
+            .expect("running the mutation test failed");
         info!(
             "remaining stack size is {}",
             stacker::remaining_stack().expect("failed to get the remaining stack size")
@@ -72,4 +64,4 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
 
 const MOVE_ASSETS: &str = "../move-mutator/tests/move-assets";
 
-datatest_stable::harness!(test_run_mutation_test, MOVE_ASSETS, r".*\.exp",);
+datatest_stable::harness!(test_run_spec_test, MOVE_ASSETS, r".*\.spec-exp",);
