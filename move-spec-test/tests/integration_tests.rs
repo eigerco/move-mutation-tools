@@ -1,5 +1,6 @@
 use log::info;
-use move_package::BuildConfig;
+use move_model::metadata::LanguageVersion;
+use move_package::{BuildConfig, CompilerConfig};
 use move_spec_test::{cli::CLIOptions, run_spec_test};
 use mutator_common::report::Report;
 use std::{
@@ -22,7 +23,15 @@ fn test_run_spec_test(path: &Path, expected_report: String) -> datatest_stable::
         output: Some(report_file.clone()),
         ..Default::default()
     };
-    let build_cfg = BuildConfig::default();
+
+    // By default, let's run the tests with move 2 features enabled.
+    let build_cfg = BuildConfig {
+        compiler_config: CompilerConfig {
+            language_version: Some(LanguageVersion::V2_1),
+            ..Default::default()
+        },
+        ..Default::default()
+    };
 
     stacker::maybe_grow(RED_ZONE, STACK_SIZE, || {
         run_spec_test(&cli_opts, &build_cfg, package_path)

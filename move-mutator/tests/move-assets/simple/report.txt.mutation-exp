@@ -99,15 +99,12 @@
       },
       {
         "module_func": "BinaryReplacement::is_zero_silly_code",
-        "tested": 20,
-        "killed": 14,
+        "tested": 11,
+        "killed": 8,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (false)\n             return true;\n\n         // Another check which does the same is silly:\n",
           "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 > x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (18446744073709551615 == x)\n             return true;\n\n         // Another check which does the same is silly:\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (false)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x < 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x == 18446744073709551615)\n             return true;\n\n         false\n"
+          "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (18446744073709551615 == x)\n             return true;\n\n         // Another check which does the same is silly:\n"
         ],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (true)\n             return true;\n\n         // Another check which does the same is silly:\n",
@@ -117,12 +114,6 @@
           "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (0 <= x)\n             return true;\n\n         // Another check which does the same is silly:\n",
           "--- original\n+++ modified\n@@ -28,7 +28,7 @@\n     // and that would be a clear indication of silly code that has\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n-        if (0 == x)\n+        if (1 == x)\n             return true;\n\n         // Another check which does the same is silly:\n",
           "--- original\n+++ modified\n@@ -29,7 +29,7 @@\n     // one identical reduntant check.\n     fun is_zero_silly_code(x: u64): bool {\n         if (0 == x)\n-            return true;\n+            return false;\n\n         // Another check which does the same is silly:\n         if (x == 0)\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (true)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (!(x == 0))\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x != 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x > 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x >= 0)\n             return true;\n\n         false\n",
-          "--- original\n+++ modified\n@@ -32,7 +32,7 @@\n             return true;\n\n         // Another check which does the same is silly:\n-        if (x == 0)\n+        if (x == 1)\n             return true;\n\n         false\n",
           "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n         if (x == 0)\n             return true;\n\n-        false\n+        true\n     }\n\n     #[test]\n"
         ]
       }

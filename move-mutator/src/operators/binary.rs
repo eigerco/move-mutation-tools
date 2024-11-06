@@ -84,16 +84,13 @@ impl MutationOperator for Binary {
             Or | And => {
                 vec![Or, And]
             },
-            Operation::Eq
-            | Operation::Neq
-            | Operation::Lt
-            | Operation::Gt
-            | Operation::Le
-            | Operation::Ge => {
+            Eq | Neq | Lt | Gt | Le | Ge => {
                 vec![Eq, Neq, Lt, Gt, Le, Ge]
             },
             _ => vec![],
         };
+
+        let is_compound_assignment = check_compound_assignment(&self.operation, cur_op);
 
         let is_left_exp_zero = contains_value_zero(self.exps[0].exp.as_ref());
         let is_right_exp_zero = contains_value_zero(self.exps[1].exp.as_ref());
@@ -126,15 +123,23 @@ impl MutationOperator for Binary {
             })
             .map(|op| {
                 let mut mutated_source = source.to_string();
-                let op_str = op.to_string_if_binop().expect("binop not found");
-                mutated_source.replace_range(start..end, op_str);
+
+                let mut new_op = op.to_string_if_binop().expect("binop not found").to_owned();
+                // Compound assignments are resolved in the earlier compiler stages, so here we
+                // don't know whether, e.g., Operation::Add is a simple `+` operation or a `+=`
+                // plus-equal operation. So, we use this trick here:
+                if is_compound_assignment {
+                    new_op += "=";
+                }
+
+                mutated_source.replace_range(start..end, &new_op);
                 MutantInfo::new(
                     mutated_source,
                     Mutation::new(
                         report::Range::new(start, end),
                         OPERATOR_NAME.to_string(),
                         cur_op.to_owned(),
-                        op_str.to_owned(),
+                        new_op.to_owned(),
                     ),
                 )
             })
@@ -147,6 +152,23 @@ impl MutationOperator for Binary {
 
     fn name(&self) -> String {
         OPERATOR_NAME.to_string()
+    }
+}
+
+fn check_compound_assignment(op: &Operation, target_operation: &str) -> bool {
+    use Operation::*;
+    match *op {
+        Add => target_operation.starts_with("+="),
+        Sub => target_operation.starts_with("-="),
+        Mul => target_operation.starts_with("*="),
+        Div => target_operation.starts_with("/="),
+        Mod => target_operation.starts_with("%="),
+        BitOr => target_operation.starts_with("|="),
+        BitAnd => target_operation.starts_with("&="),
+        Xor => target_operation.starts_with("^="),
+        Shl => target_operation.starts_with("<<="),
+        Shr => target_operation.starts_with(">>="),
+        _ => false,
     }
 }
 
