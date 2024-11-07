@@ -339,10 +339,14 @@ pub(crate) fn compile_package(
     package_path: &Path,
 ) -> anyhow::Result<CompiledPackage> {
     let mut compilation_msg = vec![];
+    let extrenal_checks = vec![];
 
     // Compile the package.
-    let (compiled_package, _env) =
-        build_config.compile_package_no_exit(package_path, &mut compilation_msg)?;
+    let (compiled_package, _env) = build_config.compile_package_no_exit(
+        package_path,
+        extrenal_checks,
+        &mut compilation_msg,
+    )?;
 
     info!(
         "Compilation status: {}",
