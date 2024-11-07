@@ -158,7 +158,7 @@ fn run_tests<W: WriteColor + Send>(
         // Our tool doesn't use the .trace file at all, only the .coverage_map.mvcov file, and
         // since the tool copy package directory to temp directories for when running tests,
         // so let's keep copied directory as small as possible.
-        fs::remove_file(trace_path)?;
+        let _ = fs::remove_file(trace_path);
     }
 
     match result {
