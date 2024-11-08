@@ -2,10 +2,8 @@
 name = "simple_move_2_features"
 version = "0.0.0"
 
-[dependencies.AptosStdlib]
-git = 'https://github.com/aptos-labs/aptos-core.git'
-rev = 'main'
-subdir = 'aptos-move/framework/aptos-stdlib'
+[dependencies]
+AptosStdlib = { git = "https://github.com/aptos-labs/aptos-framework.git", subdir = "aptos-stdlib", rev = "main" }
 
 [addresses]
 TestAccount = "0xCAFE"
