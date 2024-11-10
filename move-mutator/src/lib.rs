@@ -158,7 +158,8 @@ pub fn run_move_mutator(
             // An informative description for the mutant.
             let mutant = format!("{module}::{function}: {:?}", mutated_info.mutation);
 
-            let rayon_tid = rayon::current_thread_index().expect("fetching rayon thread id failed");
+            // In case the number of mutants is very low, a single thread might be used.
+            let rayon_tid = rayon::current_thread_index().unwrap_or(0);
             info!("job_{rayon_tid}: Checking mutant {mutant}");
 
             if mutator_configuration.project.verify_mutants {
