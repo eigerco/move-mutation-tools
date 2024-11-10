@@ -111,8 +111,8 @@ pub fn run_mutation_test(
                 let mut benchmark = Benchmark::new();
 
                 let mutant_file = elem.mutant_path();
-                let rayon_tid =
-                    rayon::current_thread_index().expect("failed to fetch rayon thread id");
+                // In case the number of mutants is very low, a single thread might be used.
+                let rayon_tid = rayon::current_thread_index().unwrap_or(0);
                 info!(
                     "job_{rayon_tid}: Running tests for mutant {}",
                     mutant_file.display()
