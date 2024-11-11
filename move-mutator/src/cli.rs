@@ -37,10 +37,6 @@ pub struct CLIOptions {
     #[clap(long, short, default_value = "false")]
     pub no_overwrite: bool,
 
-    /// Name of the filter to use for downsampling. Downsampling reduces the amount of mutants to the desired amount.
-    #[clap(long, hide = true)]
-    pub downsample_filter: Option<String>,
-
     /// Remove averagely given percentage of mutants. See the doc for more details.
     #[clap(long)]
     pub downsampling_ratio_percentage: Option<usize>,
@@ -92,7 +88,6 @@ impl Default for CLIOptions {
             verify_mutants: false,
             no_overwrite: false,
             apply_coverage: false,
-            downsample_filter: None,
             downsampling_ratio_percentage: None,
             configuration_file: None,
         }
