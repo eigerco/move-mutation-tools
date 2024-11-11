@@ -16,15 +16,26 @@ pub struct CLIOptions {
     pub move_sources: Vec<PathBuf>,
 
     /// Work only over specified modules.
-    #[clap(long, value_parser, default_value = "all")]
+    #[clap(
+        long,
+        value_parser,
+        default_value = "all",
+        conflicts_with = "use_generated_mutants"
+    )]
     pub mutate_modules: ModuleFilter,
 
     /// Work only over specified functions (these are not qualifed functions).
-    #[clap(short = 'f', long, value_parser, default_value = "all")]
+    #[clap(
+        short = 'f',
+        long,
+        value_parser,
+        default_value = "all",
+        conflicts_with = "use_generated_mutants"
+    )]
     pub mutate_functions: FunctionFilter,
 
     /// Optional configuration file for mutator tool.
-    #[clap(long, value_parser)]
+    #[clap(long, value_parser, conflicts_with = "use_generated_mutants")]
     pub mutator_conf: Option<PathBuf>,
 
     /// Optional configuration file for prover tool.
@@ -40,12 +51,20 @@ pub struct CLIOptions {
     pub use_generated_mutants: Option<PathBuf>,
 
     /// Indicates if mutants should be verified and made sure mutants can compile.
-    #[clap(long, default_value = "false")]
+    #[clap(
+        long,
+        default_value = "false",
+        conflicts_with = "use_generated_mutants"
+    )]
     pub verify_mutants: bool,
 
     /// Extra arguments to pass to the prover.
     #[clap(long, value_parser)]
     pub extra_prover_args: Option<Vec<String>>,
+
+    /// Remove averagely given percentage of mutants. See the doc for more details.
+    #[clap(long, conflicts_with = "use_generated_mutants")]
+    pub downsampling_ratio_percentage: Option<usize>,
 }
 
 impl<'a> PackagePathCheck<'a> for CLIOptions {
@@ -63,6 +82,7 @@ pub fn create_mutator_options(options: &CLIOptions) -> move_mutator::cli::CLIOpt
         mutate_functions: options.mutate_functions.clone(),
         configuration_file: options.mutator_conf.clone(),
         verify_mutants: options.verify_mutants,
+        downsampling_ratio_percentage: options.downsampling_ratio_percentage,
         ..Default::default()
     }
 }
