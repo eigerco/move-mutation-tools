@@ -232,7 +232,6 @@ mod tests {
                     "out_mutant_dir": "/path/to/output",
                     "verify_mutants": true,
                     "no_overwrite": false,
-                    "downsample_filter": "filter",
                     "configuration_file": "/path/to/configuration"
                 },
                 "project_path": "/path/to/project",
@@ -267,7 +266,6 @@ mod tests {
         );
         assert!(config.project.verify_mutants);
         assert!(!config.project.no_overwrite);
-        assert_eq!(config.project.downsample_filter.unwrap(), "filter");
         assert_eq!(
             config.project.configuration_file.unwrap(),
             Path::new("/path/to/configuration")
