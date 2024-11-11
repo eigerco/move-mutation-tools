@@ -16,15 +16,26 @@ use std::path::PathBuf;
 #[serde(default, deny_unknown_fields)]
 pub struct CLIOptions {
     /// Work only over specified modules.
-    #[clap(long, value_parser, default_value = "all")]
+    #[clap(
+        long,
+        value_parser,
+        default_value = "all",
+        conflicts_with = "use_generated_mutants"
+    )]
     pub mutate_modules: ModuleFilter,
 
     /// Work only over specified functions (these are not qualifed functions).
-    #[clap(short = 'f', long, value_parser, default_value = "all")]
+    #[clap(
+        short = 'f',
+        long,
+        value_parser,
+        default_value = "all",
+        conflicts_with = "use_generated_mutants"
+    )]
     pub mutate_functions: FunctionFilter,
 
     /// Optional configuration file for mutator tool.
-    #[clap(long, value_parser)]
+    #[clap(long, value_parser, conflicts_with = "use_generated_mutants")]
     pub mutator_conf: Option<PathBuf>,
 
     /// Save report to a JSON file.
@@ -32,8 +43,12 @@ pub struct CLIOptions {
     pub output: Option<PathBuf>,
 
     /// Use previously generated mutants.
-    #[clap(long, short, value_parser)]
+    #[clap(long, value_parser)]
     pub use_generated_mutants: Option<PathBuf>,
+
+    /// Remove averagely given percentage of mutants. See the doc for more details.
+    #[clap(long, conflicts_with = "use_generated_mutants")]
+    pub downsampling_ratio_percentage: Option<usize>,
 }
 
 /// This function creates a mutator CLI options from the given mutation-test options.
@@ -46,6 +61,7 @@ pub fn create_mutator_options(
         mutate_functions: options.mutate_functions.clone(),
         mutate_modules: options.mutate_modules.clone(),
         configuration_file: options.mutator_conf.clone(),
+        downsampling_ratio_percentage: options.downsampling_ratio_percentage,
         apply_coverage,
         // To run tests, compilation must succeed
         verify_mutants: true,
@@ -89,7 +105,7 @@ pub struct TestBuildConfig {
     pub ignore_compile_warnings: bool,
 
     /// Compute and then use unit test computed coverage to generate mutants only for covered code.
-    #[clap(long = "coverage")]
+    #[clap(long = "coverage", conflicts_with = "use_generated_mutants")]
     pub apply_coverage: bool,
 
     /// The maximum gas limit for each test.
