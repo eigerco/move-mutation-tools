@@ -64,7 +64,9 @@ pub fn run_mutation_test(
     benchmarks.total_tool_duration.start();
 
     // Run original tests to ensure the original tests are working:
+    benchmarks.executing_original_package.start();
     run_tests_on_original_code(test_config, &package_path)?;
+    benchmarks.executing_original_package.stop();
 
     // Create mutants:
     let outdir_mutant = if let Some(mutant_path) = &options.use_generated_mutants {
@@ -74,6 +76,7 @@ pub fn run_mutation_test(
         let mutator_config = BuildConfig {
             dev_mode: test_config.move_pkg.dev,
             additional_named_addresses: test_config.move_pkg.named_addresses(),
+            full_model_generation: test_config.move_pkg.check_test_code,
             // No need to fetch latest deps again.
             skip_fetch_latest_git_deps: true,
             compiler_config: test_config.compiler_config(),
@@ -104,7 +107,9 @@ pub fn run_mutation_test(
     let mut mini_reports = Vec::<MiniReport>::with_capacity(mutants.len());
     //  Split mutants into chunks before applying rayon threads, as trying to process them all in
     //  one go can lead to memory starvation if the number of mutants is too huge to handle.
-    mutants.chunks(64).for_each(|mutant_set| {
+    const CHUNK_SIZE: usize = 64;
+    let mut chunk_iter = 0;
+    mutants.chunks(CHUNK_SIZE).for_each(|mutant_set| {
         let (mut benchmarks, mut reports) = mutant_set
             .into_par_iter()
             .map(|elem| {
@@ -164,6 +169,12 @@ pub fn run_mutation_test(
             .collect::<Vec<(_, _)>>()
             .into_iter()
             .unzip();
+
+        chunk_iter += 1;
+        info!(
+            "update: finished running tests for {} mutants",
+            chunk_iter * CHUNK_SIZE
+        );
 
         mutation_test_benchmarks.append(&mut benchmarks);
         mini_reports.append(&mut reports);
