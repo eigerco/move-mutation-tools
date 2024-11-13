@@ -25,9 +25,13 @@ use crate::{
     report::{MutationReport, Report},
 };
 use move_package::BuildConfig;
+use mutator_common::tmp_package_dir::setup_outdir_and_package_path;
 use rand::{seq::SliceRandom, thread_rng};
 use rayon::prelude::*;
-use std::{fs, path::Path};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 /// Runs the Move mutator tool.
 /// Entry point for the Move mutator tool both for the CLI and the Rust API.
@@ -61,10 +65,18 @@ pub fn run_move_mutator(
         "Executed move-mutator with the following options: {options:?} \n config: {config:?} \n package path: {package_path:?}"
     );
 
+    // Setup output dir and clone package path there.
+    let original_package_path = package_path.canonicalize()?;
+    let (_, package_path) = if options.move_sources.is_empty() {
+        setup_outdir_and_package_path(&original_package_path)?
+    } else {
+        (PathBuf::new(), package_path.to_owned())
+    };
+
     // Load configuration from file or create a new one.
     let mut mutator_configuration = match options.configuration_file {
         Some(path) => Configuration::from_file(path.as_path())?,
-        None => Configuration::new(options, Some(package_path.to_owned())),
+        None => Configuration::new(options, Some(original_package_path.to_owned())),
     };
 
     trace!("Mutator configuration: {mutator_configuration:?}");
@@ -80,6 +92,7 @@ pub fn run_move_mutator(
     // For the next compilation steps, we don't need to fetch git deps again.
     let mut config = config.clone();
     config.skip_fetch_latest_git_deps = true;
+    config.compiler_config.skip_attribute_checks = true;
 
     if mutator_configuration.project.apply_coverage {
         // This implies additional compilation inside.
