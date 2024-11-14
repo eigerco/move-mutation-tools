@@ -12,7 +12,7 @@ use std::path::PathBuf;
 #[serde(default, deny_unknown_fields)]
 pub struct CLIOptions {
     /// The paths to the Move sources.
-    #[clap(long, short, value_parser)]
+    #[clap(long, value_parser)]
     pub move_sources: Vec<PathBuf>,
 
     /// Work only over specified modules.
@@ -26,7 +26,6 @@ pub struct CLIOptions {
 
     /// Work only over specified functions (these are not qualifed functions).
     #[clap(
-        short = 'f',
         long,
         value_parser,
         default_value = "all",
@@ -43,11 +42,11 @@ pub struct CLIOptions {
     pub prover_conf: Option<PathBuf>,
 
     /// Save report to a JSON file.
-    #[clap(short, long, value_parser)]
+    #[clap(long, value_parser)]
     pub output: Option<PathBuf>,
 
     /// Use previously generated mutants.
-    #[clap(long, short, value_parser)]
+    #[clap(long, value_parser)]
     pub use_generated_mutants: Option<PathBuf>,
 
     /// Indicates if mutants should be verified and made sure mutants can compile.
