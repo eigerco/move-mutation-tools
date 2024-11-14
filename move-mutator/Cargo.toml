@@ -15,6 +15,7 @@ name = "move-mutator"
 path = "src/main.rs"
 
 [dependencies]
+ahash = { workspace = true }
 anyhow = { workspace = true }
 clap = { workspace = true }
 codespan = { workspace = true }
