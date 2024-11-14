@@ -1,5 +1,5 @@
 use crate::compiler::compile_package;
-use anyhow::Error;
+use anyhow::{bail, Error};
 use codespan::Span;
 use move_command_line_common::files::FileHash;
 use move_compiler::compiled_unit::{CompiledUnit, NamedCompiledModule};
@@ -14,6 +14,8 @@ use std::{
     fs,
     path::{Path, PathBuf},
 };
+
+const COVERAGE_MAP_NAME: &str = ".coverage_map.mvcov";
 
 /// Contains all uncovered spans in the project.
 #[derive(Debug, Default)]
@@ -32,7 +34,14 @@ impl Coverage {
     ) -> anyhow::Result<()> {
         info!("computing coverage");
 
-        let coverage_map = CoverageMap::from_binary_file(package_path.join(".coverage_map.mvcov"))
+        let coverage_file = package_path.join(COVERAGE_MAP_NAME);
+        if !coverage_file.exists() {
+            bail!(
+                "Coverage map not found, please run `aptos move test --coverage` for the package"
+            );
+        }
+
+        let coverage_map = CoverageMap::from_binary_file(coverage_file)
             .map_err(|e| Error::msg(format!("failed to retrieve the coverage map: {e}")))?;
 
         let mut coverage_config = build_config.clone();

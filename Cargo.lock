@@ -8375,6 +8375,7 @@ dependencies = [
 name = "move-mutator"
 version = "0.1.0"
 dependencies = [
+ "ahash 0.8.11",
  "anyhow",
  "clap 4.5.20",
  "codespan",
