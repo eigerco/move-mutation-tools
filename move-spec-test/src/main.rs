@@ -8,9 +8,7 @@ use clap::{Parser, Subcommand};
 use move_mutator::cli::PackagePathCheck;
 use move_package::BuildConfig;
 use move_spec_test::{cli::CLIOptions, run_spec_test};
-use mutator_common::display_report::{
-    display_coverage_on_screen, display_mutants_on_screen, DisplayReportCmd, DisplayReportOptions,
-};
+use mutator_common::display_report::DisplayReportOptions;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -54,16 +52,6 @@ fn main() -> anyhow::Result<()> {
             let package_path = cli_options.resolve(package_path)?;
             run_spec_test(&cli_options, &build_config, &package_path)
         },
-        Commands::DisplayReport(display_report) => {
-            let path_to_report = &display_report.path_to_report;
-            let modules = &display_report.modules;
-
-            match &display_report.cmds {
-                DisplayReportCmd::Coverage => display_coverage_on_screen(path_to_report, modules),
-                DisplayReportCmd::Mutants { functions, mutants } => {
-                    display_mutants_on_screen(path_to_report, modules, functions, mutants)
-                },
-            }
-        },
+        Commands::DisplayReport(display_report) => display_report.execute(),
     }
 }
