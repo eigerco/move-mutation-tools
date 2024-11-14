@@ -24,8 +24,8 @@ enum Commands {
     /// Runs the specification test tool.
     Run {
         /// The path to the target Move package.
-        #[clap(long, short, value_parser)]
-        package_path: Option<PathBuf>,
+        #[clap(long, value_parser)]
+        package_dir: Option<PathBuf>,
 
         /// Command line options for specification tester.
         #[clap(flatten)]
@@ -45,11 +45,11 @@ fn main() -> anyhow::Result<()> {
 
     match opts.command {
         Commands::Run {
-            package_path,
+            package_dir,
             cli_options,
             build_config,
         } => {
-            let package_path = cli_options.resolve(package_path)?;
+            let package_path = cli_options.resolve(package_dir)?;
             run_spec_test(&cli_options, &build_config, &package_path)
         },
         Commands::DisplayReport(display_report) => display_report.execute(),

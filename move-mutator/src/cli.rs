@@ -14,7 +14,7 @@ pub const DEFAULT_OUTPUT_DIR: &str = "mutants_output";
 #[serde(default, deny_unknown_fields)]
 pub struct CLIOptions {
     /// The paths to the Move sources.
-    #[clap(long, short, value_parser)]
+    #[clap(long, value_parser)]
     pub move_sources: Vec<PathBuf>,
 
     /// Module names to be mutated.
@@ -22,11 +22,11 @@ pub struct CLIOptions {
     pub mutate_modules: ModuleFilter,
 
     /// Function names to be mutated.
-    #[clap(short = 'f', long, value_parser, default_value = "all")]
+    #[clap(long, value_parser, default_value = "all")]
     pub mutate_functions: FunctionFilter,
 
     /// The path where to put the output files.
-    #[clap(long, short, value_parser)]
+    #[clap(long, value_parser)]
     pub out_mutant_dir: Option<PathBuf>,
 
     /// Indicates if mutants should be verified and made sure mutants can compile.
@@ -34,7 +34,7 @@ pub struct CLIOptions {
     pub verify_mutants: bool,
 
     /// Indicates if the output files should be overwritten.
-    #[clap(long, short, default_value = "false")]
+    #[clap(long, default_value = "false")]
     pub no_overwrite: bool,
 
     /// Remove averagely given percentage of mutants. See the doc for more details.
@@ -42,7 +42,7 @@ pub struct CLIOptions {
     pub downsampling_ratio_percentage: Option<usize>,
 
     /// Optional configuration file. If provided, it will override the default configuration.
-    #[clap(long, short, value_parser, conflicts_with = "move_sources")]
+    #[clap(long, value_parser, conflicts_with = "move_sources")]
     pub configuration_file: Option<PathBuf>,
 
     /// Use the unit test coverage report to generate mutants for source code with unit test coverage.
