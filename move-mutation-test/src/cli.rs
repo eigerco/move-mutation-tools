@@ -26,7 +26,6 @@ pub struct CLIOptions {
 
     /// Work only over specified functions (these are not qualifed functions).
     #[clap(
-        short = 'f',
         long,
         value_parser,
         default_value = "all",
@@ -39,7 +38,7 @@ pub struct CLIOptions {
     pub mutator_conf: Option<PathBuf>,
 
     /// Save report to a JSON file.
-    #[clap(short, long, value_parser)]
+    #[clap(long, value_parser)]
     pub output: Option<PathBuf>,
 
     /// Use previously generated mutants.
@@ -97,7 +96,7 @@ pub struct TestBuildConfig {
     pub dump_state: bool,
 
     /// A filter string to determine which unit tests to run.
-    #[clap(long, short)]
+    #[clap(long)]
     pub filter: Option<String>,
 
     /// A boolean value to skip warnings.
@@ -112,7 +111,7 @@ pub struct TestBuildConfig {
     ///
     /// Used mainly for disabling mutants with infinite loops.
     /// The default value is large enough for all normal tests in most projects.
-    #[clap(long = "gas-limit", default_value_t = 1_000_000)]
+    #[clap(long, default_value_t = 1_000_000)]
     pub gas_limit: u64,
 }
 
