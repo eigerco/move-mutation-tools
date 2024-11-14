@@ -154,7 +154,7 @@ impl Report {
     /// Prints the report to stdout in a table format.
     pub fn print_table(&self) {
         let mut builder = Builder::new();
-        builder.push_record(["Module", "Mutants tested", "Mutants killed", "Coverage"]);
+        builder.push_record(["Module", "Mutants tested", "Mutants killed", "Percentage"]);
 
         for (path, stats) in &self.files {
             for stat in stats {
