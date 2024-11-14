@@ -185,7 +185,8 @@ pub fn run_move_mutator(
                 }
             }
 
-            let Ok(mutant_path) = output::setup_mutant_path(&output_dir, &path) else {
+            let mutant_id = mutated_info.unique_id();
+            let Ok(mutant_path) = output::setup_mutant_path(&output_dir, &path, mutant_id) else {
                 // If we cannot set up the mutant path, we skip the mutant.
                 trace!("Cannot set up mutant path for {path:?}");
                 return None;
