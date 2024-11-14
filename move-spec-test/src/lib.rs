@@ -178,8 +178,6 @@ pub fn run_spec_test(
         }
     }
 
-    println!("\nTotal mutants tested: {}", test_report.mutants_tested());
-    println!("Total mutants killed: {}\n", test_report.mutants_killed());
     test_report.print_table();
 
     benchmarks.total_tool_duration.stop();
