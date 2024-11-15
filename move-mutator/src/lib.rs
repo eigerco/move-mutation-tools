@@ -73,11 +73,8 @@ pub fn run_move_mutator(
         (PathBuf::new(), package_path.to_owned())
     };
 
-    // Load configuration from file or create a new one.
-    let mut mutator_configuration = match options.configuration_file {
-        Some(path) => Configuration::from_file(path.as_path())?,
-        None => Configuration::new(options, Some(original_package_path.to_owned())),
-    };
+    let mut mutator_configuration =
+        Configuration::new(options, Some(original_package_path.to_owned()));
 
     trace!("Mutator configuration: {mutator_configuration:?}");
 
@@ -156,17 +153,6 @@ pub fn run_move_mutator(
 
     let mutation_reports: Vec<MutationReport> = transformed_mutants
         .into_par_iter()
-        .filter(|(mutated_info, _fn, _module, _path, _orig_src)| {
-            let Some(conf) = &mutator_configuration.mutation else {
-                return true;
-            };
-            if conf.operators.is_empty() {
-                return true;
-            }
-
-            conf.operators
-                .contains(&mutated_info.mutation.get_operator_name().to_owned())
-        })
         .map(|(mutated_info, function, module, path, original_source)| {
             // An informative description for the mutant.
             let mutant = format!("{module}::{function}: {:?}", mutated_info.mutation);

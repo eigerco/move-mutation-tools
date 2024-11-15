@@ -2,16 +2,13 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-pub use crate::configuration::FunctionFilter;
 use clap::Parser;
-use serde::{Deserialize, Serialize};
 use std::{path::PathBuf, str::FromStr};
 
 pub const DEFAULT_OUTPUT_DIR: &str = "mutants_output";
 
 /// Command line options for mutator
-#[derive(Parser, Debug, Clone, Deserialize, Serialize)]
-#[serde(default, deny_unknown_fields)]
+#[derive(Parser, Debug, Clone)]
 pub struct CLIOptions {
     /// The paths to the Move sources.
     #[clap(long, value_parser)]
@@ -40,10 +37,6 @@ pub struct CLIOptions {
     /// Remove averagely given percentage of mutants. See the doc for more details.
     #[clap(long)]
     pub downsampling_ratio_percentage: Option<usize>,
-
-    /// Optional configuration file. If provided, it will override the default configuration.
-    #[clap(long, value_parser, conflicts_with = "move_sources")]
-    pub configuration_file: Option<PathBuf>,
 
     /// Use the unit test coverage report to generate mutants for source code with unit test coverage.
     #[clap(long = "coverage", conflicts_with = "move_sources")]
@@ -89,13 +82,12 @@ impl Default for CLIOptions {
             no_overwrite: false,
             apply_coverage: false,
             downsampling_ratio_percentage: None,
-            configuration_file: None,
         }
     }
 }
 
 /// Filter allowing to select modules to be mutated.
-#[derive(Default, Debug, Clone, Deserialize, Serialize, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq)]
 pub enum ModuleFilter {
     #[default]
     All,
@@ -109,6 +101,27 @@ impl FromStr for ModuleFilter {
         match s {
             "all" => Ok(ModuleFilter::All),
             _ => Ok(ModuleFilter::Selected(
+                s.split(&[';', '-', ',']).map(String::from).collect(),
+            )),
+        }
+    }
+}
+
+/// Filter for the functions to mutate.
+#[derive(Default, Debug, Clone, PartialEq)]
+pub enum FunctionFilter {
+    #[default]
+    All,
+    Selected(Vec<String>),
+}
+
+impl FromStr for FunctionFilter {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "all" => Ok(FunctionFilter::All),
+            _ => Ok(FunctionFilter::Selected(
                 s.split(&[';', '-', ',']).map(String::from).collect(),
             )),
         }

@@ -224,16 +224,12 @@ fn run_mutator(
     outdir: &Path,
 ) -> anyhow::Result<PathBuf> {
     debug!("Running the move mutator tool");
-    let mut mutator_conf = cli::create_mutator_options(options, apply_coverage);
-
-    let outdir_mutant = if let Some(path) = cli::check_mutator_output_path(&mutator_conf) {
-        path
-    } else {
-        mutator_conf.out_mutant_dir = Some(outdir.join("mutants"));
-        mutator_conf.out_mutant_dir.clone().unwrap()
-    };
-
+    let outdir_mutant = outdir.join("mutants");
     fs::create_dir_all(&outdir_mutant)?;
+
+    let mut mutator_conf = cli::create_mutator_options(options, apply_coverage);
+    mutator_conf.out_mutant_dir = Some(outdir_mutant.clone());
+
     move_mutator::run_move_mutator(mutator_conf, config, package_path)?;
 
     Ok(outdir_mutant)
