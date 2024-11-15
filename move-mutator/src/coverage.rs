@@ -5,7 +5,7 @@ use move_command_line_common::files::FileHash;
 use move_compiler::compiled_unit::{CompiledUnit, NamedCompiledModule};
 use move_coverage::{
     coverage_map::CoverageMap,
-    source_coverage::{FunctionSourceCoverage, SourceCoverageBuilder},
+    source_coverage::{merge_spans, FunctionSourceCoverage, SourceCoverageBuilder},
 };
 use move_model::model::Loc;
 use move_package::BuildConfig;
@@ -156,30 +156,6 @@ impl UncoveredSpans {
         let optimized_spans = merge_spans_after_removing_whitespaces(merged_spans, file_contents);
         Self(optimized_spans)
     }
-}
-
-// There is a similar function in aptos-core with the same name, but that one doesn't merge
-// spans that are next to each other (e.g. spans (0..5] and (5..10]) - but that is not
-// noticeable in their usage for the coverage, so nobody noticed this. We can make an update
-// there maybe and then use a more efficient `merge_spans` function from aptos-core repo.
-/// Efficiently merge spans.
-fn merge_spans(file_hash: FileHash, cov: FunctionSourceCoverage) -> Vec<Span> {
-    let mut spans = cov
-        .uncovered_locations
-        .iter()
-        .filter(|loc| loc.file_hash() == file_hash)
-        .map(|loc| Span::new(loc.start(), loc.end()))
-        .collect::<Vec<_>>();
-    spans.sort();
-    spans.windows(2).fold(vec![], |mut acc, spans| {
-        let [curr, next] = spans else { return acc };
-        if curr.end() >= next.start() {
-            acc.push(curr.merge(*next));
-        } else {
-            acc.push(*curr);
-        }
-        acc
-    })
 }
 
 /// Remove all whitespaces between spans and merge spans again.
