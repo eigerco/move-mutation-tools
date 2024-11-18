@@ -61,6 +61,8 @@ $ cargo install --git https://github.com/eigerco/move-spec-testing.git --locked 
 $ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-mutation-test
 ```
 
+Note: we don't recommend using the `debug` build since this tool is very resource-intensive. For any development purposes, we recommend using the `release` mode only.
+
 That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
 Ensure to have this path in your `PATH` environment. This step can be done with the below command.
 ```bash
@@ -78,6 +80,7 @@ $ cargo uninstall move-mutation-test
 
 The basic tool overview is shown in the below chapters. To dive more deeply into each tool, please check out the documentation here:
 
+ - [`How to use guide`](docs/How-to-use.md)
  - [`move-mutator` documentation](move-mutator/README.md)
  - [`move-spec-test` documentation](move-spec-test/README.md)
  - [`move-mutation-test` documentation](move-mutation-test/README.md)
