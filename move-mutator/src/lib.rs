@@ -132,8 +132,6 @@ pub fn run_move_mutator(
 
     // If the downsample ratio is set, we need to downsample the mutants.
     if let Some(percentage) = mutator_configuration.project.downsampling_ratio_percentage {
-        //TODO: currently we are downsampling the mutants after they are generated. This is not
-        // ideal as we are generating all mutants and then removing some of them.
         let total_mutants = transformed_mutants.len();
 
         let no_of_mutants_to_keep =
