@@ -27,7 +27,7 @@ fn test_run_spec_test(path: &Path, expected_report: String) -> datatest_stable::
     // By default, let's run the tests with move 2 features enabled.
     let build_cfg = BuildConfig {
         compiler_config: CompilerConfig {
-            language_version: Some(LanguageVersion::V2_1),
+            language_version: Some(LanguageVersion::latest_stable()),
             ..Default::default()
         },
         ..Default::default()
@@ -67,7 +67,7 @@ fn test_run_spec_test(path: &Path, expected_report: String) -> datatest_stable::
 
     // Make sure we remove the file since these tests are executed serially - it makes no sense to
     // run these tests in parallel since every test spawns the maximum number of threads.
-    fs::remove_file(report_file).unwrap();
+    fs::remove_file(report_file).expect("failed to remove the report file");
 
     Ok(())
 }

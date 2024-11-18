@@ -25,8 +25,8 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
     move_pkg.package_dir = Some(PathBuf::from(package_path));
     // Run the tests with move 2 compiler by default.
     move_pkg.move_2 = true;
-    move_pkg.language_version = Some(LanguageVersion::V2_1);
-    move_pkg.compiler_version = Some(CompilerVersion::V2_1);
+    move_pkg.language_version = Some(LanguageVersion::latest_stable());
+    move_pkg.compiler_version = Some(CompilerVersion::latest_stable());
 
     let test_build_cfg = TestBuildConfig {
         move_pkg,
@@ -76,7 +76,7 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
 
     // Make sure we remove the file since these tests are executed serially - it makes no sense to
     // run these tests in parallel since every test spawns the maximum number of threads.
-    fs::remove_file(report_file).unwrap();
+    fs::remove_file(report_file).expect("failed to remove the report file");
 
     Ok(())
 }
