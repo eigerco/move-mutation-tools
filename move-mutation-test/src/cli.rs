@@ -22,7 +22,7 @@ pub struct CLIOptions {
     )]
     pub mutate_modules: ModuleFilter,
 
-    /// Work only over specified functions (these are not qualifed functions).
+    /// Work only over specified functions (these are not qualified functions).
     #[clap(
         long,
         value_parser,
