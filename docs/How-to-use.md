@@ -2,21 +2,21 @@
 
 This is a quick tutorial on how the `move-mutation-test` tool should be used.
 
-The  `move-mutation-test` can be used to improve unit test test suites. A similar tool, the `move-spec-test`, can be used to enhance specification tests.
+The `move-mutation-test` can be used to improve Move unit tests, by identifying possible blind spots in tests. A similar tool, the `move-spec-test`, can be used to improve Move specifications.
 
 _In this quick showcase below, only the `move-mutation-test` tool is presented, but the commands are the same for the `move-spec-test` tool, so it works in a similar way._
 
-## Using the tool in the `aptos-framework` project
+## Example tool usage for the `aptos-stdlib` project
 
 The tool mutates the original code and then reruns the tests for each mutation. Each code mutation is named the _mutant_.
-- If the test suite is passing for the mutant, it indicates the test suite should be improved, or in some rare cases - that the original code should be improved.
+- If the test suite is passing for the mutant, it indicates the test suite should be improved (because despite the code being mutated, the tests passed), or in some rare cases - that the original code should be improved.
 - If the test suite fails for the generated mutant, that's an indication the test suite is well written.
 
-The tool is relatively slow, so the recommended way to use it is on a per-module or per-function basis.
+The tool can be slow for whole programs (depending on a number of factors such as the number of mutants generated, compilation and test execution time), so the recommended way to use it is on a per-module or per-function basis.
 
 The tools are started by using the `run` subcommand. The other subcommand is called `display-report`, which can be used to parse the results after the `run` subcommand finishes.
 
-Let's try the tool in the `aptos-framework` project and let's select the `fixed_point64` module to scan the mutants. We'll use the `--coverage` flag to ensure mutated code is generated only on pieces of the code that have proper unit test coverage:
+Let's try the tool in the `aptos-stdlib` project and let's select the `fixed_point64` module to scan the mutants. We'll use the `--coverage` flag to ensure mutated code is generated only on pieces of the code that have proper unit test coverage:
 
 ```bash
 move-mutation-test run --coverage --output report.txt --mutate-modules fixed_point64

@@ -89,9 +89,6 @@ The legend is shown below in the table format
      │ module TestAccount::Sum {
      │     fun sum(x: u128, y: u128): u128 {
  4/4 │         let sum_r = x * y;
-     │         spec {
-     │                 assert sum_r == x+y;
-     │         };
      │
      │         sum_r
      │     }
