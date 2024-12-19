@@ -1,8 +1,8 @@
-# Move Specification Test tool
+# Move Specification Test Tool
 
 ## Summary
 
-This tool is used to test the quality of the Move specifications.
+The `move-spec-test` tool is used to test the quality of the Move specifications.
 
 ## Overview
 
@@ -22,12 +22,58 @@ The tool generates a report in a JSON format. The report contains information
 about the number of mutants tested and killed and also the differences between
 the original and modified code.
 
-## Setup check
+## Install
+
+<details>
+
+<summary>Prerequisites</summary>
+
+ _Move Prover_ depends on a tool called [boogie](https://github.com/boogie-org/boogie), which requires a `.net 6` runtime and an SMT solver, the default being [Z3](https://github.com/Z3Prover/z3).
+
+ Specific versions of these need to be installed, and the paths to the boogie and `z3` executables set in two environment variables:
+ ```
+ BOOGIE_EXE=/path/to/boogie
+ Z3_EXE=/path/to/z3
+ ```
+
+One way of getting this set up correctly is to [use the dev_setup.sh](https://aptos.dev/en/network/nodes/building-from-source) script from the aptos project.
+
+Alternatively, you can manually install them on a Debian-like Linux system using the following set of commands:
+```bash
+sudo apt-get install dotnet6
+dotnet tool install --global boogie --version 3.2.4
+wget https://github.com/Z3Prover/z3/releases/download/z3-4.11.2/z3-4.11.2-x64-glibc-2.31.zip
+unzip z3-4.11.2-x64-glibc-2.31.zip
+cp z3-4.11.2-x64-glibc-2.31/bin/z3 ~/.local/bin
+
+# You might want to put these in your .bashrc or similar
+export Z3_EXE=~/.local/bin/z3
+export BOOGIE_EXE=~/.dotnet/tools/boogie
+```
+
+-------------------------------------------- 
+
+</details>
+
+To build the tool, run:
+```bash
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-spec-test
+```
+
+That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
+Ensure to have this path in your `PATH` environment. This step can be done with the below command.
+```bash
+$ export PATH=~/.cargo/bin:$PATH
+```
+
+### Development setup
 
 Please build the whole repository first:
 ```bash
 cargo build --release
 ```
+
+**Note:** _For any development purposes, we recommend using the `release` mode only. We don't recommend using the `debug` build since this tool is very resource-intensive._
 
 Check if the tool is working properly by running its tests via the [`nextest`][nextest] tool:
 ```bash
