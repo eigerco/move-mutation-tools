@@ -1,4 +1,4 @@
-# move-mutator
+# Move Mutator Tool
 
 ## Summary
 
@@ -12,12 +12,27 @@ The tool mutates only the source code. Unit tests and specification blocks are n
 
 Please refer to the design document for more details: [Move Mutator Design](doc/design.md).
 
-## Setup check
+## Install
+
+To build the tools, run:
+```bash
+$ cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-mutator
+```
+
+That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
+Ensure to have this path in your `PATH` environment. This step can be done with the below command.
+```bash
+$ export PATH=~/.cargo/bin:$PATH
+```
+
+### Development setup
 
 Please build the whole repository first:
 ```bash
-cargo build -r
+cargo build --release
 ```
+
+**Note:** _For any development purposes, we recommend using the `release` mode only. We don't recommend using the `debug` build since this tool is very resource-intensive._
 
 Check if the tool is working properly by running its tests via the [`nextest`][nextest] tool:
 ```bash

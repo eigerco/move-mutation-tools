@@ -1,8 +1,8 @@
-# Move Mutation Tester tool
+# Move Mutation Test Tool
 
 ## Summary
 
-The tool is used to test the quality of the test suite and the source code.
+The `move-mutation-test` tool is used to test the quality of the test suite and the source code.
 
 ## Overview
 
@@ -13,7 +13,7 @@ The program logic is quite simple, the tool works using the following principles
 
 If the mutants are not killed, it might indicate the quality of the test suite could be improved, or in some rare cases, it might indicate an error in the original source code.
 
-**Move Mutation Tester** tool can be used on Move packages (projects) which can compile successfully and have valid tests that are passing.
+**Move Mutation Test** tool can be used on Move packages (projects) which can compile successfully and have valid tests that are passing.
 Using filters, it is possible to run the tool only on certain mutants filtered by:
  - Module name (`--mutate-modules` argument)
  - Function name (`--mutate-functions` argument)
@@ -24,12 +24,27 @@ The tool generates a report in a JSON format. The report contains information
 about the number of mutants tested and killed and also the differences between
 the original and modified code.
 
-## Setup check
+## Install
 
-Build the whole repository first:
+To build the tools, run:
+```bash
+$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-mutation-test
+```
+
+That will install the tools into `~/.cargo/bin` directory (at least on MacOS and Linux).
+Ensure to have this path in your `PATH` environment. This step can be done with the below command.
+```bash
+$ export PATH=~/.cargo/bin:$PATH
+```
+
+### Development setup
+
+Please build the whole repository first:
 ```bash
 cargo build --release
 ```
+
+**Note:** _For any development purposes, we recommend using the `release` mode only. We don't recommend using the `debug` build since this tool is very resource-intensive._
 
 Check if the tool is working properly by running its tests via the [`nextest`][nextest] tool:
 ```bash
