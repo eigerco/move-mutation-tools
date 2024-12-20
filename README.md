@@ -1,13 +1,12 @@
 ## Overview
 
-**Mutation testing** with Move offers a glimpse into how we can bolster the robustness of smart contract specifications, increasing overall assurance for developers working on the Aptos blockchain. Mutation testing introduces deliberate errors (mutations) to source code to test the quality of existing tests. It's a robust method to identify blind spots that traditional coverage tools might miss. To address this, in this repo we are providing three tools, to help developers identify and eliminate potential weak spots in their tests and code's specifications.
+**Mutation testing** with Move offers a glimpse into how we can bolster the robustness of smart contract specifications, increasing overall assurance for developers working on the Aptos blockchain. Mutation testing introduces deliberate faults (mutants) to source code to test the quality of existing tests. It's a robust method to identify blind spots that traditional coverage tools might miss. To address this, in this repo we are providing three tools, to help developers identify and eliminate potential weak spots in their tests and code's specifications.
 
-[**`move-mutator`**](move-mutator/README.md) is a tool that mutates Move source code. Every modification / mutation is called a mutant.
 
 [**`move-mutation-test`**](move-mutation-test/README.md) is a tool used to test the quality of the test suite and the source code.
 How it works:
 1. Runs tests on the original source code to ensure the original tests are valid.
-2. Internally runs the _Move Mutator_ tool to generate mutants.
+2. Internally runs the [**`move-mutator`**](move-mutator/README.md) tool to generate mutants.
 3. Runs the tests for all mutants to check if the mutants are killed by the original test suite.
 
 If the mutants are not killed, it might indicate the quality of the test suite could be improved, or in some rare cases, it might indicate an error in the original source code.
@@ -15,10 +14,12 @@ If the mutants are not killed, it might indicate the quality of the test suite c
 [**`move-spec-test`**](move-spec-test/README.md) is a tool used to test the quality of the Move specifications.
 How it works:
 1. Runs the _Move Prover_ on the original source code to ensure the original specification is valid.
-2. Internally runs the _Move Mutator_ tool to generate mutants.
+2. Internally runs the [**`move-mutator`**](move-mutator/README.md) tool to generate mutants.
 3. Runs the _Move Prover_ tool on all mutants to check if the mutants are killed (so _Prover_ will catch an error) by the original specifications.
 
 If some mutants are not killed, it means that the specification has issues and is incorrect or not tight enough to catch such cases, so it should be improved.
+
+[**`move-mutator`**](move-mutator/README.md) is a helper tool that mutates Move source code. Every modification / mutation is called a mutant. _Note that the tool mutates only the source code; tests and spec blocks are unaffected and are not mutated by this tool._
 
 ## Quick introduction to mutation tools
 
@@ -31,7 +32,7 @@ $ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerc
 ### Example usage for the `aptos-stdlib` project
 
 The tool mutates the original code and then reruns the tests for each mutation. Each code mutation is named the _mutant_.
-- If the test suite is passing for the mutant, it indicates the test suite should be improved (because despite the code being mutated, the tests passed), or in some rare cases - that the original code should be improved.
+- If the test suite is passing for the mutant, it indicates the test suite could be improved (because despite the code being mutated, the tests passed), or in some rare cases - that the original code should be improved.
 - If the test suite fails for the generated mutant, that's an indication the test suite is well written.
 
 The tool can be slow for whole programs (depending on a number of factors such as the number of mutants generated, compilation and test execution time), so the recommended way to use it is on a per-module or per-function basis.
