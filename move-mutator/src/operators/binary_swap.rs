@@ -51,10 +51,9 @@ impl BinarySwap {
                     let mut calls_function = |e: &ExpData| {
                         matches!(
                             e,
-                            ExpData::Call(_, Operation::MoveFunction(_, _), _)
-                                | ExpData::Call(_, Operation::Closure(_, _), _)
-                                | ExpData::Lambda(_, _, _)
-                                | ExpData::Invoke(_, _, _)
+                            ExpData::Call(_, Operation::MoveFunction(..), _)
+                                | ExpData::Lambda(..)
+                                | ExpData::Invoke(..)
                         )
                     };
 

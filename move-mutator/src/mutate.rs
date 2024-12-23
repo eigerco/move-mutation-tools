@@ -273,24 +273,24 @@ fn parse_expression_and_find_mutants(function: &FunctionEnv<'_>, exp: &ExpData) 
             ))))];
             mutants
         },
-        ExpData::LoopCont(node_id, _, _) => vec![Mutant::new(MutationOp::new(Box::new(
+        ExpData::LoopCont(node_id, ..) => vec![Mutant::new(MutationOp::new(Box::new(
             BreakContinue::new(function.module_env.env.get_node_loc(*node_id)),
         )))],
 
-        ExpData::Return(_, _)
-        | ExpData::Mutate(_, _, _)
-        | ExpData::Assign(_, _, _)
-        | ExpData::Block(_, _, _, _)
-        | ExpData::Invoke(_, _, _)
-        | ExpData::Lambda(_, _, _)
-        | ExpData::LocalVar(_, _)
-        | ExpData::Loop(_, _)
-        | ExpData::Temporary(_, _)
-        | ExpData::SpecBlock(_, _)
-        | ExpData::Sequence(_, _)
-        | ExpData::Quant(_, _, _, _, _, _)
-        | ExpData::Match(_, _, _)
-        | ExpData::Invalid(_) => vec![],
+        ExpData::Return(..)
+        | ExpData::Mutate(..)
+        | ExpData::Assign(..)
+        | ExpData::Block(..)
+        | ExpData::Invoke(..)
+        | ExpData::Lambda(..)
+        | ExpData::LocalVar(..)
+        | ExpData::Loop(..)
+        | ExpData::Temporary(..)
+        | ExpData::SpecBlock(..)
+        | ExpData::Sequence(..)
+        | ExpData::Quant(..)
+        | ExpData::Match(..)
+        | ExpData::Invalid(..) => vec![],
     }
 }
 

@@ -35,6 +35,7 @@ datatest-stable = "0.2"
 either = "1.9"
 fixed = "= 1.25.1" # required by aptos deps
 fs_extra = "1.3"
+home = "=0.5.9" # required by aptos deps
 itertools = "0.13"
 log = "0.4"
 move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
@@ -62,7 +63,6 @@ stacker = "0.1"
 tabled = "0.16"
 tempfile = "3.12"
 termcolor = "1.1" # aptos deps require 1.1 here
-toml = "0.8"
 
 # These below are necessary for some aptos deps
 [patch.crates-io]
