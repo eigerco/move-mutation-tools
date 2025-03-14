@@ -26,7 +26,7 @@ If some mutants are not killed, it means that the specification has issues and i
 This is a quick tutorial on how the `move-mutation-test` tool should be used. Install the tool with:
 
 ```
-$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-spec-testing.git --locked move-mutation-test
+$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-mutation-tools.git --locked move-mutation-test
 ```
 
 ### Example usage for the `aptos-stdlib` project
