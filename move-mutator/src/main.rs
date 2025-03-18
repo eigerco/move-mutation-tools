@@ -12,7 +12,9 @@ use move_mutator::{
 use move_package::BuildConfig;
 use std::path::PathBuf;
 
-#[derive(Default, Parser, Debug, Clone)]
+#[derive(Default, Parser, Debug)]
+#[command(version, about, long_about = None)]
+#[command(propagate_version = true)]
 pub struct Opts {
     /// The path to the target Move package.
     #[clap(long, value_parser)]
