@@ -1,6 +1,6 @@
 [package]
 name = "move-mutation-test"
-version = "0.1.0"
+version = "1.0.0"
 description = "Move mutation unit testing tool"
 authors.workspace = true
 edition.workspace = true
