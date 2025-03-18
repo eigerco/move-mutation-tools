@@ -8458,7 +8458,7 @@ dependencies = [
 
 [[package]]
 name = "move-mutation-test"
-version = "1.0.0"
+version = "1.0.1"
 dependencies = [
  "anyhow",
  "aptos",
@@ -8890,7 +8890,7 @@ dependencies = [
 
 [[package]]
 name = "mutator-common"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "clap 4.5.23",
