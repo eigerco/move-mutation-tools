@@ -8458,7 +8458,7 @@ dependencies = [
 
 [[package]]
 name = "move-mutation-test"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "aptos",
@@ -8488,7 +8488,7 @@ dependencies = [
 
 [[package]]
 name = "move-mutator"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "ahash 0.8.11",
  "anyhow",
@@ -8659,7 +8659,7 @@ dependencies = [
 
 [[package]]
 name = "move-spec-test"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "clap 4.5.23",
