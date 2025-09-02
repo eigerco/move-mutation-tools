@@ -122,6 +122,10 @@ To dive more deeply into each tool, please check out the documentation here:
  - [`move-mutation-test` documentation](move-mutation-test/README.md)
  - [`move-spec-test` documentation](move-spec-test/README.md)
 
+## Aptos Version Compatibility
+
+Move Mutation Tools tracks [Aptos releases](https://github.com/aptos-labs/aptos-core/releases) to ensure compatibility. Our version numbers align with the Aptos versions we support (e.g., Move Mutation Tools v1.34.x is compatible with Aptos v1.34.x).
+
 ## License
 
 All tools in this repo are released under the open source [Apache License](LICENSE)

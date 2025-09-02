@@ -17,16 +17,16 @@ homepage = "https://www.eiger.co/"
 license = "Apache-2.0"
 publish = false
 repository = "https://github.com/eigerco/move-spec-testing"
-rust-version = "1.78.0"
+rust-version = "1.89.0"
 
 [workspace.dependencies]
 ahash = "0.8"
 anyhow = "1.0"
-aptos = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+aptos = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
 clap = { version = "4.5", features = ["derive"] }
 codespan = "0.11"
 codespan-reporting = "0.11"
@@ -38,18 +38,18 @@ fs_extra = "1.3"
 home = "=0.5.9" # required by aptos deps
 itertools = "0.13"
 log = "0.4"
-move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-coverage = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-model = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+legacy-move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-coverage = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-model = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
 move-mutator = { path = "move-mutator" }
-move-package = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-prover = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
-move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "main" }
+move-package = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-prover = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
 mutator-common = { path = "mutator-common" }
 num = "0.4"
 num-traits = "0.2"
