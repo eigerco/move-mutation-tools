@@ -71,3 +71,12 @@ termcolor = "1.1" # aptos deps require 1.1 here
 [patch.crates-io]
 merlin = { git = "https://github.com/aptos-labs/merlin" }
 x25519-dalek = { git = "https://github.com/aptos-labs/x25519-dalek", branch = "zeroize_v1" }
+# poem-openapi = { git = "https://github.com/poem-web/poem", version = "=5.1.3", rev="f35094f01d9a782645c2ddba1a8be89792c41e42" }
+# poem = { git = "https://github.com/poem-web/poem", version = "=3.1.4", rev="f35094f01d9a782645c2ddba1a8be89792c41e4" }
+# poem-openapi-derive = { git = "https://github.com/poem-web/poem", version = "=5.1.3", rev="f35094f01d9a782645c2ddba1a8be89792c41e4" }
+
+[patch."https://github.com/aptos-labs/aptos-core.git"]
+poem = "=3.1.3"
+poem-openapi = "=5.1.2"
+poem-openapi-derive = "=5.1.1"
+darling = "= 0.20.10"
