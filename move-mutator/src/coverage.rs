@@ -109,7 +109,7 @@ fn compute_function_covered_spans(
 
                 // Calculate covered locations for this specific function
                 let covered_ir_locs: Vec<IrLoc> = match &function_def.code {
-                    None => vec![], // Native functions have no covered locations to track
+                    None => vec![],
                     Some(code_unit) => match module_map.function_maps.get(&fn_name) {
                         None => vec![], // Function has no coverage data - no covered locations
                         Some(function_coverage) => {
@@ -120,7 +120,6 @@ fn compute_function_covered_spans(
                                         function_def_idx,
                                         code_offset as CodeOffset,
                                     ) {
-                                        // If execution count > 0, it's covered
                                         if function_coverage
                                             .get(&(code_offset as u64))
                                             .unwrap_or(&0)
@@ -136,14 +135,13 @@ fn compute_function_covered_spans(
                                 })
                                 .collect();
 
-                            minimize_ir_locations(covered_locs)
+                            minimize_locations(covered_locs)
                         },
                     },
                 };
 
                 // Only include functions that have covered locations
                 if !covered_ir_locs.is_empty() {
-                    // Convert IrLoc to Span for easier comparison with move_model::Loc.span()
                     let covered_spans: Vec<Span> = covered_ir_locs
                         .into_iter()
                         .map(|ir_loc| Span::new(ir_loc.start(), ir_loc.end()))
@@ -159,8 +157,9 @@ fn compute_function_covered_spans(
     function_covered_map
 }
 
-/// Helper function to minimize IR locations by merging overlapping/adjacent ones
-fn minimize_ir_locations(mut locs: Vec<IrLoc>) -> Vec<IrLoc> {
+/// Given a list of locations, merge overlapping and abutting locations.
+/// Taken from aptos-core third-party/move/tools/move-coverage/src/source_coverage.rs
+fn minimize_locations(mut locs: Vec<IrLoc>) -> Vec<IrLoc> {
     locs.sort();
     let mut result = vec![];
     let mut locs_iter = locs.into_iter();
