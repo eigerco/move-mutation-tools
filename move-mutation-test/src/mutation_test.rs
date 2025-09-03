@@ -88,9 +88,9 @@ pub(crate) fn run_tests_on_mutated_code(
 
     // Do not calculate the coverage on mutants.
     let mut test_config = cfg.clone();
-    test_config.apply_coverage = false;
+    test_config.compute_coverage = false;
     test_config.ignore_compile_warnings = true;
-    test_config.move_pkg.skip_attribute_checks = true;
+    test_config.move_options.skip_attribute_checks = true;
 
     // Rayon pool will utilize all CPU threads anyway, so one test thread per the bigger rayon
     // thread should be more than enough. Using more threads here slows the overall time.
@@ -118,11 +118,11 @@ fn run_tests<W: WriteColor + Send>(
     mut error_writer: &mut W,
 ) -> anyhow::Result<()> {
     let config = BuildConfig {
-        dev_mode: cfg.move_pkg.dev,
-        additional_named_addresses: cfg.move_pkg.named_addresses(),
+        dev_mode: cfg.move_options.dev,
+        additional_named_addresses: cfg.move_options.named_addresses(),
         test_mode: true,
-        full_model_generation: cfg.move_pkg.check_test_code,
-        install_dir: cfg.move_pkg.output_dir.clone(),
+        full_model_generation: cfg.move_options.skip_checks_on_test_code,
+        install_dir: cfg.move_options.output_dir.clone(),
         skip_fetch_latest_git_deps,
         compiler_config: cfg.compiler_config(),
         ..Default::default()
@@ -144,7 +144,7 @@ fn run_tests<W: WriteColor + Send>(
             report_statistics,
             num_threads,
             named_address_values: cfg
-                .move_pkg
+                .move_options
                 .named_addresses()
                 .iter()
                 .map(|(name, account_address)| {
@@ -173,7 +173,7 @@ fn run_tests<W: WriteColor + Send>(
     )
     .map_err(|err| Error::msg(format!("failed to run unit tests: {err:#}")))?;
 
-    if cfg.apply_coverage {
+    if cfg.compute_coverage {
         // Disk space optimization:
         let trace_path = package_path.join(".trace");
         // Our tool doesn't use the .trace file at all, only the .coverage_map.mvcov file, and
