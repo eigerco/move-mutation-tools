@@ -7,8 +7,11 @@ use codespan_reporting::diagnostic::Severity;
 use either::Either;
 use fs_extra::dir::CopyOptions;
 use itertools::Itertools;
+use legacy_move_compiler::shared::{
+    known_attributes::{AttributeKind, KnownAttribute},
+    Flags,
+};
 use move_command_line_common::{address::NumericalAddress, parser::NumberFormat};
-use move_compiler::{attr_derivation, shared::Flags};
 use move_compiler_v2::run_checker;
 use move_model::model::GlobalEnv;
 use move_package::{
@@ -157,6 +160,7 @@ fn prepare_compiler_for_package(
             source_package_map.insert(dep_path.as_str().to_string(), *dep_package_name);
         }
     }
+
     let root_package_name = root_package.source_package.package.name;
 
     // gather source/dep files with their address mappings
@@ -172,8 +176,9 @@ fn prepare_compiler_for_package(
         Flags::empty()
     };
     flags = flags.set_skip_attribute_checks(config.compiler_config.skip_attribute_checks);
+
     let mut known_attributes = config.compiler_config.known_attributes.clone();
-    attr_derivation::add_attributes_for_flavor(&flags, &mut known_attributes);
+    KnownAttribute::add_attribute_names(&mut known_attributes);
 
     // Partition deps_package according whether src is available
     let (src_deps, bytecode_deps): (Vec<_>, Vec<_>) = deps_package_paths
@@ -212,6 +217,7 @@ fn prepare_compiler_for_package(
         known_attributes: known_attributes.clone(),
         language_version: config.compiler_config.language_version,
         compiler_version: config.compiler_config.compiler_version,
+        compile_test_code: flags.keep_testing_functions(),
         experiments: config.compiler_config.experiments.clone(),
         ..Default::default()
     };
@@ -339,10 +345,13 @@ pub(crate) fn compile_package(
 ) -> anyhow::Result<CompiledPackage> {
     let mut compilation_msg = vec![];
     let external_checks = vec![];
+    let resolved_graph = build_config
+        .clone()
+        .resolution_graph_for_package(package_path, &mut compilation_msg)?;
 
     // Compile the package.
     let (compiled_package, _env) = build_config.compile_package_no_exit(
-        package_path,
+        resolved_graph,
         external_checks,
         &mut compilation_msg,
     )?;
