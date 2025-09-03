@@ -22,11 +22,11 @@ rust-version = "1.89.0"
 [workspace.dependencies]
 ahash = "0.8"
 anyhow = "1.0"
-aptos = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+aptos = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+aptos-framework = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+aptos-gas-schedule = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+aptos-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+aptos-vm = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
 clap = { version = "4.5", features = ["derive"] }
 codespan = "0.11"
 codespan-reporting = "0.11"
@@ -38,18 +38,21 @@ fs_extra = "1.3"
 home = "=0.5.9" # required by aptos deps
 itertools = "0.13"
 log = "0.4"
-move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-legacy-move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-coverage = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-model = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-binary-format = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-bytecode-source-map = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-cli = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-command-line-common = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+legacy-move-compiler = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-compiler-v2 = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-coverage = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-ir-types = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-model = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
 move-mutator = { path = "move-mutator" }
-move-package = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-prover = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
-move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.34" }
+move-package = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-prover = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-symbol-pool = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-unit-test = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
+move-vm-runtime = { git = "https://github.com/aptos-labs/aptos-core.git", branch = "aptos-release-v1.35" }
 mutator-common = { path = "mutator-common" }
 num = "0.4"
 num-traits = "0.2"
