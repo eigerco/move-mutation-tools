@@ -89,6 +89,10 @@ impl Coverage {
 /// Compute per-function covered spans with function names preserved.
 /// Returns a map from qualified function names (e.g., "vector::append") to their covered spans.
 /// Only functions with some covered code are included in the result.
+///
+/// Some of the logic is borrowed from the implementation of `SourceCoverageBuilder` in
+/// aptos-core/third_party/move/tools/move-coverage/src/source_coverage.rs
+/// The difference is that we map the covered code to function in belongs to
 fn compute_function_covered_spans(
     coverage_map: &CoverageMap,
     root_modules: Vec<(&move_binary_format::CompiledModule, &SourceMap)>,
@@ -158,7 +162,7 @@ fn compute_function_covered_spans(
 }
 
 /// Given a list of locations, merge overlapping and abutting locations.
-/// Taken from aptos-core third-party/move/tools/move-coverage/src/source_coverage.rs
+/// Borrowed from aptos-core/third-party/move/tools/move-coverage/src/source_coverage.rs
 fn minimize_locations(mut locs: Vec<IrLoc>) -> Vec<IrLoc> {
     locs.sort();
     let mut result = vec![];
