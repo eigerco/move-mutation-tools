@@ -74,7 +74,7 @@ pub struct TestBuildConfig {
     pub ignore_compile_warnings: bool,
 
     #[clap(flatten)]
-    pub(crate) move_options: MovePackageOptions,
+    pub move_options: MovePackageOptions,
 
     /// The maximum number of instructions that can be executed by a test
     ///
