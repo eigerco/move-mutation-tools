@@ -2,16 +2,6 @@
   "files": {
     "sources/Operators.move": [
       {
-        "module_func": "Operators::and",
-        "tested": 2,
-        "killed": 2,
-        "mutants_alive_diffs": [],
-        "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -119,7 +119,7 @@\n\n     fun and(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret &= y;\n+        ret |= y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -119,7 +119,7 @@\n\n     fun and(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret &= y;\n+        ret ^= y;\n         ret\n     }\n\n"
-        ]
-      },
-      {
         "module_func": "Operators::div",
         "tested": 4,
         "killed": 4,
@@ -21,6 +11,40 @@
           "--- original\n+++ modified\n@@ -92,7 +92,7 @@\n\n     fun div(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret /= y;\n+        ret -= y;\n         ret\n     }\n\n",
           "--- original\n+++ modified\n@@ -92,7 +92,7 @@\n\n     fun div(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret /= y;\n+        ret *= y;\n         ret\n     }\n\n",
           "--- original\n+++ modified\n@@ -92,7 +92,7 @@\n\n     fun div(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret /= y;\n+        ret %= y;\n         ret\n     }\n\n"
+        ]
+      },
+      {
+        "module_func": "Operators::mul",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret += y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret -= y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret /= y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret %= y;\n         ret\n     }\n\n"
+        ]
+      },
+      {
+        "module_func": "Operators::sub",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret += y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret *= y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret /= y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret %= y;\n         ret\n     }\n\n"
+        ]
+      },
+      {
+        "module_func": "Operators::and",
+        "tested": 2,
+        "killed": 2,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -119,7 +119,7 @@\n\n     fun and(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret &= y;\n+        ret |= y;\n         ret\n     }\n\n",
+          "--- original\n+++ modified\n@@ -119,7 +119,7 @@\n\n     fun and(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret &= y;\n+        ret ^= y;\n         ret\n     }\n\n"
         ]
       },
       {
@@ -45,18 +69,6 @@
         ]
       },
       {
-        "module_func": "Operators::mul",
-        "tested": 4,
-        "killed": 4,
-        "mutants_alive_diffs": [],
-        "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret += y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret -= y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret /= y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -35,7 +35,7 @@\n\n     fun mul(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret *= y;\n+        ret %= y;\n         ret\n     }\n\n"
-        ]
-      },
-      {
         "module_func": "Operators::or",
         "tested": 2,
         "killed": 2,
@@ -73,18 +85,6 @@
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -204,7 +204,7 @@\n\n     fun rsh(x: u64, y: u8): u64 {\n         let ret = x;\n-        ret >>= y;\n+        ret <<= y;\n         ret\n     }\n\n"
-        ]
-      },
-      {
-        "module_func": "Operators::sub",
-        "tested": 4,
-        "killed": 4,
-        "mutants_alive_diffs": [],
-        "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret += y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret *= y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret /= y;\n         ret\n     }\n\n",
-          "--- original\n+++ modified\n@@ -16,7 +16,7 @@\n\n     fun sub(x: u64, y: u64): u64 {\n         let ret = x;\n-        ret -= y;\n+        ret %= y;\n         ret\n     }\n\n"
         ]
       },
       {
@@ -111,5 +111,5 @@
       }
     ]
   },
-  "package_dir": "move-spec-testing/move-mutator/tests/move-assets/simple-move-2-features"
+  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/simple_move_2_features"
 }
