@@ -9,7 +9,7 @@ use std::{fs, path::PathBuf};
 use tempfile::tempdir;
 
 fn clone_project(move_asset_project: &str) -> PathBuf {
-    let outdir = tempdir().unwrap().into_path();
+    let outdir = tempdir().unwrap().keep();
     let options = CopyOptions::new().content_only(true);
 
     if let Err(e) = fs_extra::dir::copy(move_asset_project, &outdir, &options) {
@@ -97,7 +97,7 @@ fn check_mutator_verify_mutants_correctly() {
 // Check if the mutator fails on non-existing input path.
 #[test]
 fn check_mutator_fails_on_non_existing_path() {
-    let outdir = tempdir().unwrap().into_path();
+    let outdir = tempdir().unwrap().keep();
 
     let options = CLIOptions {
         out_mutant_dir: Some(outdir.clone()),
