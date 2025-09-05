@@ -17,7 +17,7 @@ homepage = "https://www.eiger.co/"
 license = "Apache-2.0"
 publish = false
 repository = "https://github.com/eigerco/move-spec-testing"
-rust-version = "1.89.0"
+rust-version = "1.86.0"
 
 [workspace.dependencies]
 ahash = "0.8"
