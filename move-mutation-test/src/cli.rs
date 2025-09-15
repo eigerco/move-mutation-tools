@@ -76,12 +76,6 @@ pub struct TestBuildConfig {
     #[clap(flatten)]
     pub move_options: MovePackageOptions,
 
-    /// The maximum number of instructions that can be executed by a test
-    ///
-    /// If set, the number of instructions executed by one test will be bounded
-    #[clap(long = "instructions", default_value_t = 100000)]
-    pub instruction_execution_bound: u64,
-
     /// Collect coverage information for later use with the various `aptos move coverage` subcommands
     #[clap(long = "coverage")]
     pub compute_coverage: bool,

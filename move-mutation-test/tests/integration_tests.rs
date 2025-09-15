@@ -36,7 +36,6 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
         // the `build.rs` - using `process::Command` slowed down the execution a lot
         compute_coverage: false,
         gas_limit: 2000,
-        instruction_execution_bound: Default::default(),
     };
 
     let report_file = PathBuf::from("report.txt");
