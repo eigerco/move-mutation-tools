@@ -99,7 +99,7 @@ impl TestBuildConfig {
         CompilerConfig {
             known_attributes: known_attributes.clone(),
             skip_attribute_checks: self.move_options.skip_attribute_checks,
-            bytecode_version: fix_bytecode_version(
+            bytecode_version: get_bytecode_version(
                 self.move_options.bytecode_version,
                 self.move_options.language_version,
             ),
@@ -116,19 +116,11 @@ impl TestBuildConfig {
     }
 }
 
-fn fix_bytecode_version(
+fn get_bytecode_version(
     bytecode_version_in: Option<u32>,
     language_version: Option<LanguageVersion>,
 ) -> Option<u32> {
-    if bytecode_version_in.is_none() {
-        if let Some(language_version) = language_version {
-            Some(language_version.infer_bytecode_version(bytecode_version_in))
-        } else {
-            bytecode_version_in
-        }
-    } else {
-        bytecode_version_in
-    }
+    bytecode_version_in.or_else(|| language_version.map(|lv| lv.infer_bytecode_version(None)))
 }
 
 #[cfg(test)]
