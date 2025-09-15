@@ -111,5 +111,5 @@
       }
     ]
   },
-  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/simple_move_2_features"
+  "package_dir": "move-mutation-tools/move-mutator/tests/move-assets/simple_move_2_features"
 }

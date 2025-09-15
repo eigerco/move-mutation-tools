@@ -549,5 +549,5 @@
       }
     ]
   },
-  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/simple"
+  "package_dir": "move-mutation-tools/move-mutator/tests/move-assets/simple"
 }
