@@ -25,7 +25,7 @@ env:
 
 jobs:
   basic-lint-and-check:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     name: Basic ci-check for fmt/clippy/check
     steps:
       - uses: actions/checkout@v4
