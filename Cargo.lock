@@ -8896,7 +8896,6 @@ dependencies = [
  "codespan-reporting",
  "diffy",
  "either",
- "fixed",
  "fs_extra",
  "itertools 0.13.0",
  "legacy-move-compiler",
