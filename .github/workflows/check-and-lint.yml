@@ -41,6 +41,12 @@ jobs:
       - name: Rustfmt Check
         uses: actions-rust-lang/rustfmt@v1
 
+      - name: rust version
+        run: rustc --version
+
+      - name: cargo version
+        run: cargo --version
+
       - name: Run clippy
         run: cargo clippy --all-targets -- -D warnings
 
