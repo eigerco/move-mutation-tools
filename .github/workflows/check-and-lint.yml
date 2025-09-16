@@ -2,7 +2,7 @@ name: Basic check and lint
 
 on:
   push:
-    branches: [ dev-m1 ]
+    branches: [ main ]
     paths:
       - Cargo.toml
       - Cargo.lock
@@ -11,7 +11,7 @@ on:
       - move-mutation-test/**
       - .github/workflows/check-and-lint.yml
   pull_request:
-    branches: [ dev-m1 ]
+    branches: [ main ]
     paths:
       - Cargo.toml
       - Cargo.lock
@@ -40,12 +40,6 @@ jobs:
 
       - name: Rustfmt Check
         uses: actions-rust-lang/rustfmt@v1
-
-      - name: rust version
-        run: rustc --version
-
-      - name: cargo version
-        run: cargo --version
 
       - name: Run clippy
         run: cargo clippy --all-targets -- -D warnings

@@ -2,7 +2,7 @@ name: Basic test run
 
 on:
   push:
-    branches: [ dev-m1 ]
+    branches: [ main ]
     paths:
       - Cargo.toml
       - Cargo.lock
@@ -11,7 +11,7 @@ on:
       - move-mutation-test/**
       - .github/workflows/run-tests.yml
   pull_request:
-    branches: [ dev-m1 ]
+    branches: [ main ]
     paths:
       - Cargo.toml
       - Cargo.lock
