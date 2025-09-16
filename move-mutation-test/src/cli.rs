@@ -2,10 +2,10 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use aptos::{common::types::MovePackageDir, move_tool::experiments_from_opt_level};
+use aptos::common::types::MovePackageOptions;
 use aptos_framework::extended_checks;
 use clap::Parser;
-use move_model::metadata::LanguageVersion;
+use move_model::metadata::{CompilerVersion, LanguageVersion};
 use move_mutator::cli::{FunctionFilter, ModuleFilter};
 use move_package::CompilerConfig;
 use std::path::PathBuf;
@@ -65,27 +65,24 @@ pub fn create_mutator_options(
 // Info: this set struct is based on TestPackage in `aptos-core/crates/aptos/src/move_tool/mod.rs`.
 #[derive(Parser, Debug, Clone)]
 pub struct TestBuildConfig {
-    /// Options for compiling a move package dir.
-    // We might move some options out and have our own option struct here - not all options are
-    // needed for mutation testing.
-    #[clap(flatten)]
-    pub move_pkg: MovePackageDir,
-
-    /// Dump storage state on failure.
-    #[clap(long = "dump")]
-    pub dump_state: bool,
-
-    /// A filter string to determine which unit tests to run.
-    #[clap(long)]
+    /// A filter string to determine which unit tests to run
+    #[clap(long, short)]
     pub filter: Option<String>,
 
     /// A boolean value to skip warnings.
     #[clap(long)]
     pub ignore_compile_warnings: bool,
 
-    /// Compute and then use unit test computed coverage to generate mutants only for covered code.
-    #[clap(long = "coverage", conflicts_with = "use_generated_mutants")]
-    pub apply_coverage: bool,
+    #[clap(flatten)]
+    pub move_options: MovePackageOptions,
+
+    /// Collect coverage information for later use with the various `aptos move coverage` subcommands
+    #[clap(long = "coverage")]
+    pub compute_coverage: bool,
+
+    /// Dump storage state on failure.
+    #[clap(long = "dump")]
+    pub dump_state: bool,
 
     /// The maximum gas limit for each test.
     ///
@@ -100,20 +97,25 @@ impl TestBuildConfig {
     pub fn compiler_config(&self) -> CompilerConfig {
         let known_attributes = extended_checks::get_all_attribute_names().clone();
         CompilerConfig {
-            known_attributes,
-            skip_attribute_checks: self.move_pkg.skip_attribute_checks,
+            known_attributes: known_attributes.clone(),
+            skip_attribute_checks: self.move_options.skip_attribute_checks,
             bytecode_version: get_bytecode_version(
-                self.move_pkg.bytecode_version,
-                self.move_pkg.language_version,
+                self.move_options.bytecode_version,
+                self.move_options.language_version,
             ),
-            compiler_version: self.move_pkg.compiler_version,
-            language_version: self.move_pkg.language_version,
-            experiments: experiments_from_opt_level(&self.move_pkg.optimize),
+            compiler_version: self
+                .move_options
+                .compiler_version
+                .or_else(|| Some(CompilerVersion::latest_stable())),
+            language_version: self
+                .move_options
+                .language_version
+                .or_else(|| Some(LanguageVersion::latest_stable())),
+            experiments: self.move_options.compute_experiments(),
         }
     }
 }
 
-/// Get bytecode version.
 fn get_bytecode_version(
     bytecode_version_in: Option<u32>,
     language_version: Option<LanguageVersion>,

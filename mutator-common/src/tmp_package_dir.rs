@@ -23,7 +23,7 @@ pub fn setup_outdir_and_package_path<P: AsRef<Path>>(
     let package_path = SourcePackageLayout::try_find_root(&package_path.as_ref().canonicalize()?)?;
     info!("Found package path: {package_path:?}");
 
-    let outdir = tempfile::tempdir()?.into_path();
+    let outdir = tempfile::tempdir()?.keep();
     let new_package_path = outdir.join(ORIGINAL_PACKAGE_PATH);
     fs::create_dir_all(&new_package_path)?;
 

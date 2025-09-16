@@ -52,7 +52,10 @@ pub fn run_mutation_test(
     let _ = pretty_env_logger::try_init();
 
     // Setup output dir and clone package path there.
-    let original_package_path = test_config.move_pkg.get_package_path()?.canonicalize()?;
+    let original_package_path = test_config
+        .move_options
+        .get_package_path()?
+        .canonicalize()?;
     let (outdir, package_path) = setup_outdir_and_package_path(&original_package_path)?;
 
     info!("Running tool the following options: {options:?} and test config: {test_config:?}");
@@ -74,9 +77,9 @@ pub fn run_mutation_test(
     } else {
         benchmarks.mutator.start();
         let mutator_config = BuildConfig {
-            dev_mode: test_config.move_pkg.dev,
-            additional_named_addresses: test_config.move_pkg.named_addresses(),
-            full_model_generation: test_config.move_pkg.check_test_code,
+            dev_mode: test_config.move_options.dev,
+            additional_named_addresses: test_config.move_options.named_addresses(),
+            full_model_generation: test_config.move_options.skip_checks_on_test_code,
             // No need to fetch latest deps again.
             skip_fetch_latest_git_deps: true,
             compiler_config: test_config.compiler_config(),
@@ -84,7 +87,7 @@ pub fn run_mutation_test(
         };
         let outdir_mutant = run_mutator(
             options,
-            test_config.apply_coverage,
+            test_config.compute_coverage,
             &mutator_config,
             &package_path,
             &outdir,

@@ -22,12 +22,14 @@ codespan = { workspace = true }
 codespan-reporting = { workspace = true }
 diffy = { workspace = true }
 either = { workspace = true }
-fixed = { workspace = true }
 fs_extra = { workspace = true }
 itertools = { workspace = true }
 log = { workspace = true }
+move-binary-format = { workspace = true }
+move-bytecode-source-map = { workspace = true }
 move-command-line-common = { workspace = true }
-move-compiler = { workspace = true }
+move-ir-types = { workspace = true }
+legacy-move-compiler = { workspace = true }
 move-compiler-v2 = { workspace = true }
 move-coverage = { workspace = true }
 move-model = { workspace = true }

@@ -1,4 +1,4 @@
-use aptos::common::types::MovePackageDir;
+use aptos::common::types::MovePackageOptions;
 use log::info;
 use move_model::metadata::{CompilerVersion, LanguageVersion};
 use move_mutation_test::{
@@ -21,21 +21,20 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
         Report::load_from_str(expected_report).expect("failed to load the report");
     let package_path = path.parent().expect("package path not found");
 
-    let mut move_pkg = MovePackageDir::new();
-    move_pkg.package_dir = Some(PathBuf::from(package_path));
+    let mut move_options = MovePackageOptions::new();
+    move_options.package_dir = Some(PathBuf::from(package_path));
     // Run the tests with move 2 compiler by default.
-    move_pkg.move_2 = true;
-    move_pkg.language_version = Some(LanguageVersion::latest_stable());
-    move_pkg.compiler_version = Some(CompilerVersion::latest_stable());
+    move_options.language_version = Some(LanguageVersion::latest_stable());
+    move_options.compiler_version = Some(CompilerVersion::latest_stable());
 
     let test_build_cfg = TestBuildConfig {
-        move_pkg,
+        move_options,
         dump_state: false,
         filter: None,
         ignore_compile_warnings: false,
         // TODO(rqnsom): maybe we could set it to true, but it would require `aptos` command in
         // the `build.rs` - using `process::Command` slowed down the execution a lot
-        apply_coverage: false,
+        compute_coverage: false,
         gas_limit: 2000,
     };
 
