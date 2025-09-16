@@ -41,8 +41,8 @@ jobs:
       - name: Rustfmt Check
         uses: actions-rust-lang/rustfmt@v1
 
-      - name: Run check
-        run: cargo check --all-targets
-
       - name: Run clippy
         run: cargo clippy --all-targets -- -D warnings
+
+      - name: Run check
+        run: cargo check --all-targets
