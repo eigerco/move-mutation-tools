@@ -164,10 +164,8 @@ fn traverse_function(
             let fn_loc = function.module_env.env.get_node_loc(exp_data.node_id());
             let fn_name = function.get_full_name_str();
             trace!("checking coverage {fn_loc:?} for {fn_name}");
-            if conf.project.apply_coverage {
-                if !conf.coverage.check_location(fn_name, &fn_loc) {
-                    return true;
-                }
+            if conf.project.apply_coverage && !conf.coverage.check_location(fn_name, &fn_loc) {
+                return true;
             }
 
             result.extend(parse_expression_and_find_mutants(function, exp_data));
