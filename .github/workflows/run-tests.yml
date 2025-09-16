@@ -35,7 +35,7 @@ jobs:
 
       - name: Get aptos-core
         shell: bash
-        run: git clone https://github.com/aptos-labs/aptos-core.git
+        run: git clone git@github.com:aptos-labs/aptos-core.git
 
       - name: Install related tools and prover dependencies
         shell: bash
@@ -54,10 +54,7 @@ jobs:
           echo "/home/$USER/.dotnet/tools" | tee -a $GITHUB_PATH
 
       - name: Setup Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: default
-          toolchain: stable
+        uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Install nextest
         uses: taiki-e/install-action@nextest
