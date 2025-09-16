@@ -48,7 +48,7 @@ jobs:
         run: cargo --version
 
       - name: Run clippy
-        run: cargo clippy --all-targets --release --locked -- -D warnings
+        run: cargo clippy --all-targets -- -D warnings
 
       - name: Run check
         run: cargo check --all-targets
