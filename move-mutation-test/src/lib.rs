@@ -114,7 +114,7 @@ pub fn run_mutation_test(
         ProgressStyle::with_template(
             "{spinner} [{elapsed_precise}] [{bar:40}] {pos}/{len} ({percent}%) ETA {eta_precise}",
         )
-        .unwrap()
+        .expect("Failed to create ProgressBar style: invalid template string")
         .progress_chars("#>-"),
     );
     pb.enable_steady_tick(std::time::Duration::from_millis(100));
@@ -126,10 +126,10 @@ pub fn run_mutation_test(
     const CHUNK_SIZE: usize = 64;
     let mut chunk_iter = 0;
     mutants.chunks(CHUNK_SIZE).for_each(|mutant_set| {
-        let pb_handle = pb.clone();
         let (mut benchmarks, mut reports) = mutant_set
             .into_par_iter()
             .map(|elem| {
+                let pb_handle = pb.clone();
                 let mut benchmark = Benchmark::new();
 
                 let mutant_file = elem.mutant_path();
