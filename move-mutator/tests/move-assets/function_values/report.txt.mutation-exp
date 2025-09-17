@@ -1,0 +1,235 @@
+{
+  "files": {
+    "sources/FunctionValues.move": [
+      {
+        "module_func": "FunctionValues::add_with_lambda",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -21,7 +21,7 @@\n\n     // Test addition operator mutation (mutates to -, *, /, %)\n     fun add_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x + y, a, b)\n+        apply2(|x, y| x - y, a, b)\n     }\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n",
+          "--- original\n+++ modified\n@@ -21,7 +21,7 @@\n\n     // Test addition operator mutation (mutates to -, *, /, %)\n     fun add_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x + y, a, b)\n+        apply2(|x, y| x * y, a, b)\n     }\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n",
+          "--- original\n+++ modified\n@@ -21,7 +21,7 @@\n\n     // Test addition operator mutation (mutates to -, *, /, %)\n     fun add_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x + y, a, b)\n+        apply2(|x, y| x / y, a, b)\n     }\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n",
+          "--- original\n+++ modified\n@@ -21,7 +21,7 @@\n\n     // Test addition operator mutation (mutates to -, *, /, %)\n     fun add_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x + y, a, b)\n+        apply2(|x, y| x % y, a, b)\n     }\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::and_with_lambda",
+        "tested": 2,
+        "killed": 2,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -46,7 +46,7 @@\n\n     // Test bitwise AND operator mutation (mutates to |, ^)\n     fun and_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x & y, a, b)\n+        apply2(|x, y| x | y, a, b)\n     }\n\n     // Test bitwise OR operator mutation (mutates to &, ^)\n",
+          "--- original\n+++ modified\n@@ -46,7 +46,7 @@\n\n     // Test bitwise AND operator mutation (mutates to |, ^)\n     fun and_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x & y, a, b)\n+        apply2(|x, y| x ^ y, a, b)\n     }\n\n     // Test bitwise OR operator mutation (mutates to &, ^)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::div_with_lambda",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -36,7 +36,7 @@\n\n     // Test division operator mutation (mutates to +, -, *, %)\n     fun div_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x / y, a, b)\n+        apply2(|x, y| x + y, a, b)\n     }\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n",
+          "--- original\n+++ modified\n@@ -36,7 +36,7 @@\n\n     // Test division operator mutation (mutates to +, -, *, %)\n     fun div_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x / y, a, b)\n+        apply2(|x, y| x - y, a, b)\n     }\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n",
+          "--- original\n+++ modified\n@@ -36,7 +36,7 @@\n\n     // Test division operator mutation (mutates to +, -, *, %)\n     fun div_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x / y, a, b)\n+        apply2(|x, y| x * y, a, b)\n     }\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n",
+          "--- original\n+++ modified\n@@ -36,7 +36,7 @@\n\n     // Test division operator mutation (mutates to +, -, *, %)\n     fun div_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x / y, a, b)\n+        apply2(|x, y| x % y, a, b)\n     }\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::eq_with_lambda",
+        "tested": 6,
+        "killed": 6,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -91,7 +91,7 @@\n\n     // Test equality operator mutation (requires references)\n     fun eq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test inequality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -91,7 +91,7 @@\n\n     // Test equality operator mutation (requires references)\n     fun eq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test inequality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -91,7 +91,7 @@\n\n     // Test equality operator mutation (requires references)\n     fun eq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| &x == &y, a, b))) true else false\n     }\n\n     // Test inequality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -91,7 +91,7 @@\n\n     // Test equality operator mutation (requires references)\n     fun eq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n     }\n\n     // Test inequality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -91,7 +91,7 @@\n\n     // Test equality operator mutation (requires references)\n     fun eq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x == &y, a, b)) false else false\n     }\n\n     // Test inequality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -91,7 +91,7 @@\n\n     // Test equality operator mutation (requires references)\n     fun eq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x == &y, a, b)) true else true\n     }\n\n     // Test inequality operator mutation (requires references)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::gt_with_lambda",
+        "tested": 8,
+        "killed": 8,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| x > y, a, b))) true else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (apply2_bool(|x, y| x < y, a, b)) true else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (apply2_bool(|x, y| x > y, a, b)) false else false\n     }\n\n     // Test greater than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n     fun gt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x > y, a, b)) true else false\n+        if (apply2_bool(|x, y| x > y, a, b)) true else true\n     }\n\n     // Test greater than or equal operator mutation\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::gte_with_lambda",
+        "tested": 8,
+        "killed": 8,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| x >= y, a, b))) true else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x < y, a, b)) true else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x > y, a, b)) true else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x >= y, a, b)) false else false\n     }\n\n     // Test less than operator mutation\n",
+          "--- original\n+++ modified\n@@ -76,7 +76,7 @@\n\n     // Test greater than or equal operator mutation\n     fun gte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x >= y, a, b)) true else true\n     }\n\n     // Test less than operator mutation\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::logical_and_with_lambda",
+        "tested": 6,
+        "killed": 6,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -101,7 +101,7 @@\n\n     // Test logical AND operator mutation\n     fun logical_and_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test logical OR operator mutation\n",
+          "--- original\n+++ modified\n@@ -101,7 +101,7 @@\n\n     // Test logical AND operator mutation\n     fun logical_and_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test logical OR operator mutation\n",
+          "--- original\n+++ modified\n@@ -101,7 +101,7 @@\n\n     // Test logical AND operator mutation\n     fun logical_and_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n+        if (!(apply2_conditional(|x, y| x && y, a, b))) true else false\n     }\n\n     // Test logical OR operator mutation\n",
+          "--- original\n+++ modified\n@@ -101,7 +101,7 @@\n\n     // Test logical AND operator mutation\n     fun logical_and_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n+        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n     }\n\n     // Test logical OR operator mutation\n",
+          "--- original\n+++ modified\n@@ -101,7 +101,7 @@\n\n     // Test logical AND operator mutation\n     fun logical_and_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n+        if (apply2_conditional(|x, y| x && y, a, b)) false else false\n     }\n\n     // Test logical OR operator mutation\n",
+          "--- original\n+++ modified\n@@ -101,7 +101,7 @@\n\n     // Test logical AND operator mutation\n     fun logical_and_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n+        if (apply2_conditional(|x, y| x && y, a, b)) true else true\n     }\n\n     // Test logical OR operator mutation\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::logical_or_with_lambda",
+        "tested": 6,
+        "killed": 6,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -106,7 +106,7 @@\n\n     // Test logical OR operator mutation\n     fun logical_or_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Tests killing all mutants\n",
+          "--- original\n+++ modified\n@@ -106,7 +106,7 @@\n\n     // Test logical OR operator mutation\n     fun logical_or_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Tests killing all mutants\n",
+          "--- original\n+++ modified\n@@ -106,7 +106,7 @@\n\n     // Test logical OR operator mutation\n     fun logical_or_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n+        if (!(apply2_conditional(|x, y| x || y, a, b))) true else false\n     }\n\n     // Tests killing all mutants\n",
+          "--- original\n+++ modified\n@@ -106,7 +106,7 @@\n\n     // Test logical OR operator mutation\n     fun logical_or_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n+        if (apply2_conditional(|x, y| x && y, a, b)) true else false\n     }\n\n     // Tests killing all mutants\n",
+          "--- original\n+++ modified\n@@ -106,7 +106,7 @@\n\n     // Test logical OR operator mutation\n     fun logical_or_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n+        if (apply2_conditional(|x, y| x || y, a, b)) false else false\n     }\n\n     // Tests killing all mutants\n",
+          "--- original\n+++ modified\n@@ -106,7 +106,7 @@\n\n     // Test logical OR operator mutation\n     fun logical_or_with_lambda(a: bool, b: bool): bool {\n-        if (apply2_conditional(|x, y| x || y, a, b)) true else false\n+        if (apply2_conditional(|x, y| x || y, a, b)) true else true\n     }\n\n     // Tests killing all mutants\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::lsh_with_lambda",
+        "tested": 1,
+        "killed": 1,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -61,7 +61,7 @@\n\n     // Test left shift operator mutation (mutates to >>)\n     fun lsh_with_lambda(a: u64, b: u8): u64 {\n-        apply(|x| x << b, a)\n+        apply(|x| x >> b, a)\n     }\n\n     // Test right shift operator mutation (mutates to <<)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::lt_with_lambda",
+        "tested": 8,
+        "killed": 8,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| x < y, a, b))) true else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (apply2_bool(|x, y| x > y, a, b)) true else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (apply2_bool(|x, y| x < y, a, b)) false else false\n     }\n\n     // Test less than or equal operator mutation\n",
+          "--- original\n+++ modified\n@@ -81,7 +81,7 @@\n\n     // Test less than operator mutation\n     fun lt_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x < y, a, b)) true else false\n+        if (apply2_bool(|x, y| x < y, a, b)) true else true\n     }\n\n     // Test less than or equal operator mutation\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::lte_with_lambda",
+        "tested": 8,
+        "killed": 8,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| x <= y, a, b))) true else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x < y, a, b)) true else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x > y, a, b)) true else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x >= y, a, b)) true else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x <= y, a, b)) false else false\n     }\n\n     // Test equality operator mutation (requires references)\n",
+          "--- original\n+++ modified\n@@ -86,7 +86,7 @@\n\n     // Test less than or equal operator mutation\n     fun lte_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| x <= y, a, b)) true else false\n+        if (apply2_bool(|x, y| x <= y, a, b)) true else true\n     }\n\n     // Test equality operator mutation (requires references)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::mod_with_lambda",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -41,7 +41,7 @@\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n     fun mod_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x % y, a, b)\n+        apply2(|x, y| x + y, a, b)\n     }\n\n     // Test bitwise AND operator mutation (mutates to |, ^)\n",
+          "--- original\n+++ modified\n@@ -41,7 +41,7 @@\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n     fun mod_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x % y, a, b)\n+        apply2(|x, y| x - y, a, b)\n     }\n\n     // Test bitwise AND operator mutation (mutates to |, ^)\n",
+          "--- original\n+++ modified\n@@ -41,7 +41,7 @@\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n     fun mod_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x % y, a, b)\n+        apply2(|x, y| x * y, a, b)\n     }\n\n     // Test bitwise AND operator mutation (mutates to |, ^)\n",
+          "--- original\n+++ modified\n@@ -41,7 +41,7 @@\n\n     // Test modulo operator mutation (mutates to +, -, *, /)\n     fun mod_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x % y, a, b)\n+        apply2(|x, y| x / y, a, b)\n     }\n\n     // Test bitwise AND operator mutation (mutates to |, ^)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::mul_with_lambda",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -31,7 +31,7 @@\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n     fun mul_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x * y, a, b)\n+        apply2(|x, y| x + y, a, b)\n     }\n\n     // Test division operator mutation (mutates to +, -, *, %)\n",
+          "--- original\n+++ modified\n@@ -31,7 +31,7 @@\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n     fun mul_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x * y, a, b)\n+        apply2(|x, y| x - y, a, b)\n     }\n\n     // Test division operator mutation (mutates to +, -, *, %)\n",
+          "--- original\n+++ modified\n@@ -31,7 +31,7 @@\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n     fun mul_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x * y, a, b)\n+        apply2(|x, y| x / y, a, b)\n     }\n\n     // Test division operator mutation (mutates to +, -, *, %)\n",
+          "--- original\n+++ modified\n@@ -31,7 +31,7 @@\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n     fun mul_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x * y, a, b)\n+        apply2(|x, y| x % y, a, b)\n     }\n\n     // Test division operator mutation (mutates to +, -, *, %)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::neq_with_lambda",
+        "tested": 6,
+        "killed": 6,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test logical AND operator mutation\n",
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test logical AND operator mutation\n",
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| &x != &y, a, b))) true else false\n     }\n\n     // Test logical AND operator mutation\n",
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n",
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x != &y, a, b)) false else false\n     }\n\n     // Test logical AND operator mutation\n",
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x != &y, a, b)) true else true\n     }\n\n     // Test logical AND operator mutation\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::or_with_lambda",
+        "tested": 2,
+        "killed": 2,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -51,7 +51,7 @@\n\n     // Test bitwise OR operator mutation (mutates to &, ^)\n     fun or_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x | y, a, b)\n+        apply2(|x, y| x & y, a, b)\n     }\n\n     // Test bitwise XOR operator mutation (mutates to &, |)\n",
+          "--- original\n+++ modified\n@@ -51,7 +51,7 @@\n\n     // Test bitwise OR operator mutation (mutates to &, ^)\n     fun or_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x | y, a, b)\n+        apply2(|x, y| x ^ y, a, b)\n     }\n\n     // Test bitwise XOR operator mutation (mutates to &, |)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::rsh_with_lambda",
+        "tested": 1,
+        "killed": 1,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -66,7 +66,7 @@\n\n     // Test right shift operator mutation (mutates to <<)\n     fun rsh_with_lambda(a: u64, b: u8): u64 {\n-        apply(|x| x >> b, a)\n+        apply(|x| x << b, a)\n     }\n\n     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::sub_with_lambda",
+        "tested": 4,
+        "killed": 4,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n     fun sub_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x - y, a, b)\n+        apply2(|x, y| x + y, a, b)\n     }\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n",
+          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n     fun sub_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x - y, a, b)\n+        apply2(|x, y| x * y, a, b)\n     }\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n",
+          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n     fun sub_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x - y, a, b)\n+        apply2(|x, y| x / y, a, b)\n     }\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n",
+          "--- original\n+++ modified\n@@ -26,7 +26,7 @@\n\n     // Test subtraction operator mutation (mutates to +, *, /, %)\n     fun sub_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x - y, a, b)\n+        apply2(|x, y| x % y, a, b)\n     }\n\n     // Test multiplication operator mutation (mutates to +, -, /, %)\n"
+        ]
+      },
+      {
+        "module_func": "FunctionValues::xor_with_lambda",
+        "tested": 2,
+        "killed": 2,
+        "mutants_alive_diffs": [],
+        "mutants_killed_diff": [
+          "--- original\n+++ modified\n@@ -56,7 +56,7 @@\n\n     // Test bitwise XOR operator mutation (mutates to &, |)\n     fun xor_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x ^ y, a, b)\n+        apply2(|x, y| x | y, a, b)\n     }\n\n     // Test left shift operator mutation (mutates to >>)\n",
+          "--- original\n+++ modified\n@@ -56,7 +56,7 @@\n\n     // Test bitwise XOR operator mutation (mutates to &, |)\n     fun xor_with_lambda(a: u64, b: u64): u64 {\n-        apply2(|x, y| x ^ y, a, b)\n+        apply2(|x, y| x & y, a, b)\n     }\n\n     // Test left shift operator mutation (mutates to >>)\n"
+        ]
+      }
+    ]
+  },
+  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/function_values"
+}
