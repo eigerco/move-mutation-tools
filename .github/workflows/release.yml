@@ -1,0 +1,244 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'move-mutation-test-v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (without v prefix, e.g., 1.0.0)'
+        required: true
+        type: string
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: 1
+
+jobs:
+  build-and-release:
+    name: Build ${{ matrix.target }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Linux x86_64
+          - target: x86_64-unknown-linux-gnu
+            runner: ubuntu-22.04
+            asset_name: x86_64-unknown-linux-gnu
+
+          # Linux ARM64 (using cross-compilation)
+          - target: aarch64-unknown-linux-gnu
+            runner: ubuntu-22.04
+            asset_name: aarch64-unknown-linux-gnu
+            use_cross: true
+
+          # macOS x86_64
+          - target: x86_64-apple-darwin
+            runner: macos-13
+            asset_name: x86_64-apple-darwin
+
+          # macOS ARM64
+          - target: aarch64-apple-darwin
+            runner: macos-latest
+            asset_name: aarch64-apple-darwin
+
+          # Windows x86_64
+          - target: x86_64-pc-windows-msvc
+            runner: windows-latest
+            asset_name: x86_64-windows
+            binary_ext: .exe
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install cross for ARM64
+        if: matrix.use_cross == true
+        run: cargo install cross --locked
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-${{ matrix.target }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
+
+      # Build all three tools
+      - name: Build all tools
+        shell: bash
+        run: |
+          if [ "${{ matrix.use_cross }}" = "true" ]; then
+            cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+            cross build --release --target ${{ matrix.target }} --bin move-mutator
+            cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          else
+            cargo build --release --target ${{ matrix.target }} --bin move-mutation-test
+            cargo build --release --target ${{ matrix.target }} --bin move-mutator
+            cargo build --release --target ${{ matrix.target }} --bin move-spec-test
+          fi
+
+      # Basic smoke test
+      - name: Test binaries
+        if: matrix.use_cross != true
+        shell: bash
+        run: |
+          ./target/${{ matrix.target }}/release/move-mutation-test${{ matrix.binary_ext }} --version
+          ./target/${{ matrix.target }}/release/move-mutator${{ matrix.binary_ext }} --version
+          ./target/${{ matrix.target }}/release/move-spec-test${{ matrix.binary_ext }} --version
+
+      # Determine version for asset naming
+      - name: Get version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            # Extract version from tag (remove 'move-mutation-test-v' prefix)
+            VERSION="${GITHUB_REF#refs/tags/move-mutation-test-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      # Package all tools (Aptos CLI will use move-mutation-test, others available for manual use)
+      - name: Package all tools
+        shell: bash
+        run: |
+          mkdir -p package
+          cp target/${{ matrix.target }}/release/move-mutation-test${{ matrix.binary_ext }} package/move-mutation-test${{ matrix.binary_ext }}
+          cp target/${{ matrix.target }}/release/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
+          cp target/${{ matrix.target }}/release/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
+
+          # Add README for manual users
+          cat > package/README.md << 'EOF'
+          # Move Mutation Tools
+
+          This package contains three tools:
+          - move-mutation-test: Tests the quality of your unit test suite
+          - move-mutator: Core mutation engine
+          - move-spec-test: Tests the quality of your formal specifications
+
+          ## Installation via Aptos CLI
+          If you just need move-mutation-test:
+          ```
+          aptos update move-mutation-test
+          ```
+
+          ## Manual Installation
+          All three binaries are included in this archive for manual use.
+
+          For more information: https://github.com/eigerco/move-mutation-tools
+          EOF
+
+          cd package
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            7z a -tzip ../move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip *
+          else
+            zip -r ../move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip *
+          fi
+          cd ..
+
+      # Generate checksum
+      - name: Generate checksum
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            shasum -a 256 move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip > move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip.sha256
+          else
+            sha256sum move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip > move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip.sha256
+          fi
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.target }}
+          path: |
+            move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip
+            move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip.sha256
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build-and-release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            TAG="move-mutation-test-v$VERSION"
+          else
+            TAG="${GITHUB_REF#refs/tags/}"
+            VERSION="${TAG#move-mutation-test-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Prepare release assets
+        run: |
+          mkdir -p release-assets
+          find artifacts -name "*.zip" -o -name "*.sha256" | while read file; do
+            cp "$file" release-assets/
+          done
+          ls -lh release-assets/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: Move Mutation Tools v${{ steps.version.outputs.version }}
+          body: |
+            ## Installation Options
+
+            ### Via Aptos CLI (Recommended for most users)
+            ```bash
+            aptos update move-mutation-test
+            ```
+            This installs `move-mutation-test` which is the main tool most users need.
+
+            ### Direct Download (All tools)
+            Download the appropriate archive for your platform below. Each archive contains:
+            - `move-mutation-test` - Tests the quality of your unit test suite
+            - `move-mutator` - Core mutation engine for advanced users
+            - `move-spec-test` - Tests the quality of your formal specifications
+
+            ## Platform Support
+
+            | Platform | Architecture | File |
+            |----------|--------------|------|
+            | Linux | x86_64 | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-unknown-linux-gnu.zip` |
+            | Linux | ARM64 | `move-mutation-test-${{ steps.version.outputs.version }}-aarch64-unknown-linux-gnu.zip` |
+            | macOS | x86_64 (Intel) | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-apple-darwin.zip` |
+            | macOS | ARM64 (Apple Silicon) | `move-mutation-test-${{ steps.version.outputs.version }}-aarch64-apple-darwin.zip` |
+            | Windows | x86_64 | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-windows.zip` |
+
+            ## Verification
+            SHA256 checksums are provided for each archive (`.sha256` files).
+
+            ## Documentation
+            For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
+          draft: false
+          prerelease: false
+          files: release-assets/*
+          fail_on_unmatched_files: true
