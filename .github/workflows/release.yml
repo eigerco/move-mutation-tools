@@ -19,6 +19,9 @@ jobs:
   build-and-release:
     name: Build ${{ matrix.target }}
     runs-on: ${{ matrix.runner }}
+    env:
+      OPENSSL_STATIC: 1
+      OPENSSL_VENDORED: 1
     strategy:
       fail-fast: false
       matrix:
