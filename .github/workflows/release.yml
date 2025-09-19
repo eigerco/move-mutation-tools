@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Linux x86_64 (change to trigger PR)
+          # Linux x86_64
           - target: x86_64-unknown-linux-gnu
             runner: ubuntu-22.04
             asset_name: x86_64-unknown-linux-gnu
