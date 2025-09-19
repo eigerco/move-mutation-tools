@@ -105,8 +105,8 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             VERSION="${{ github.event.inputs.version }}"
           else
-            # Extract version from tag (remove 'move-mutation-test-v' prefix)
-            VERSION="${GITHUB_REF#refs/tags/move-mutation-test-v}"
+            # Extract version from tag (remove 'v' prefix)
+            VERSION="${GITHUB_REF#refs/tags/v}"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
@@ -182,10 +182,10 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             VERSION="${{ github.event.inputs.version }}"
-            TAG="move-mutation-test-v$VERSION"
+            TAG="v$VERSION"
           else
             TAG="${GITHUB_REF#refs/tags/}"
-            VERSION="${TAG#move-mutation-test-v}"
+            VERSION="${TAG#v}"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
