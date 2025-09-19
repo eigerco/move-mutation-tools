@@ -30,7 +30,7 @@ jobs:
 
           # Linux ARM64 (using cross-compilation)
           - target: aarch64-unknown-linux-gnu
-            runner: ubuntu-latest
+            runner: self-hosted
             asset_name: aarch64-unknown-linux-gnu
             use_cross: true
 
