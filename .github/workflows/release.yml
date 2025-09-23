@@ -22,6 +22,7 @@ jobs:
     env:
       OPENSSL_STATIC: 1
       OPENSSL_VENDORED: 1
+      RUSTFLAGS: "--cfg tokio_unstable"
     strategy:
       fail-fast: false
       matrix:
