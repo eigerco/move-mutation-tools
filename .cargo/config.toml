@@ -32,3 +32,11 @@ rustflags = [
   "-C",
   "link-arg=/STACK:8000000" # Set stack to 8 MB
 ]
+
+# macOS x86_64
+[target.x86_64-apple-darwin]
+rustflags = ["--cfg", "tokio_unstable", "-C", "force-frame-pointers=yes", "-C", "force-unwind-tables=yes"]
+
+# macOS ARM64
+[target.aarch64-apple-darwin]
+rustflags = ["--cfg", "tokio_unstable", "-C", "force-frame-pointers=yes", "-C", "force-unwind-tables=yes"]

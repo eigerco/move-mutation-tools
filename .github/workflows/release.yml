@@ -28,12 +28,6 @@ jobs:
             runner: self-hosted
             asset_name: x86_64-unknown-linux-gnu
 
-          # Linux ARM64 (using cross-compilation)
-          - target: aarch64-unknown-linux-gnu
-            runner: self-hosted
-            asset_name: aarch64-unknown-linux-gnu
-            use_cross: true
-
           # macOS x86_64
           - target: x86_64-apple-darwin
             runner: macos-13
@@ -63,12 +57,6 @@ jobs:
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
-
-      - name: Install cross for ARM64
-        if: matrix.use_cross == true
-        run: cargo install cross --locked
 
       - name: Cache Cargo
         uses: actions/cache@v4
@@ -85,25 +73,17 @@ jobs:
       - name: Build all tools
         shell: bash
         run: |
-          # if [ "${{ matrix.use_cross }}" = "true" ]; then
-            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
-            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
-          # else
-            cargo clean
-            RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutation-test
-            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutator
-            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-spec-test
-          # fi
+          cargo build --release --bin move-mutation-test
+          # cargo build --release --bin move-mutator
+          # cargo build --release --bin move-spec-test
 
       # Basic smoke test
       - name: Test binaries
-        if: matrix.use_cross != true
         shell: bash
         run: |
-          ./target/${{ matrix.target }}/release/move-mutation-test${{ matrix.binary_ext }} --version
-          ./target/${{ matrix.target }}/release/move-mutator${{ matrix.binary_ext }} --version
-          ./target/${{ matrix.target }}/release/move-spec-test${{ matrix.binary_ext }} --version
+          ./target/release/move-mutation-test${{ matrix.binary_ext }} --version
+          ./target/release/move-mutator${{ matrix.binary_ext }} --version
+          ./target/release/move-spec-test${{ matrix.binary_ext }} --version
 
       # Determine version for asset naming
       - name: Get version
@@ -123,9 +103,9 @@ jobs:
         shell: bash
         run: |
           mkdir -p package
-          cp target/${{ matrix.target }}/release/move-mutation-test${{ matrix.binary_ext }} package/move-mutation-test${{ matrix.binary_ext }}
-          cp target/${{ matrix.target }}/release/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
-          cp target/${{ matrix.target }}/release/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
+          cp target/release/move-mutation-test${{ matrix.binary_ext }} package/move-mutation-test${{ matrix.binary_ext }}
+          cp target/release/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
+          cp target/release/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
 
           # Add README for manual users
           cat > package/README.md << 'EOF'
@@ -236,7 +216,6 @@ jobs:
             | Platform | Architecture | File |
             |----------|--------------|------|
             | Linux | x86_64 | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-unknown-linux-gnu.zip` |
-            | Linux | ARM64 | `move-mutation-test-${{ steps.version.outputs.version }}-aarch64-unknown-linux-gnu.zip` |
             | macOS | x86_64 (Intel) | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-apple-darwin.zip` |
             | macOS | ARM64 (Apple Silicon) | `move-mutation-test-${{ steps.version.outputs.version }}-aarch64-apple-darwin.zip` |
             | Windows | x86_64 | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-windows.zip` |
