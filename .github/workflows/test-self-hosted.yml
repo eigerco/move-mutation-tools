@@ -23,7 +23,6 @@ jobs:
           echo "Contents of .cargo:"
           ls -la .cargo/ || echo ".cargo directory not found"
           echo "Testing without RUSTFLAGS env var:"
-          cargo config get target.x86_64-unknown-linux-gnu.rustflags
           cargo build --release --bin move-mutation-test
           echo "Build completed successfully"
 
