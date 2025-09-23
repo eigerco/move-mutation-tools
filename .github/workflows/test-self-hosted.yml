@@ -23,7 +23,7 @@ jobs:
           echo "Contents of .cargo:"
           ls -la .cargo/ || echo ".cargo directory not found"
           echo "Testing without RUSTFLAGS env var:"
-          cargo build --release --bin move-mutation-test
+          RUSTFLAGS="--cfg tokio_unstable" cargo build --release --bin move-mutation-test
           echo "Build completed successfully"
 
       - name: Check binary exists
