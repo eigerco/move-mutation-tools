@@ -19,7 +19,7 @@ jobs:
 
       - name: Test build with RUSTFLAGS
         run: |
-          RUSTFLAGS="--cfg tokio_unstable" cargo build --release --bin move-mutation-test
+          RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target x86_64-unknown-linux-gnu --bin move-mutation-test
           echo "Build completed successfully"
 
       - name: Check binary exists
