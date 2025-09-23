@@ -85,15 +85,15 @@ jobs:
       - name: Build all tools
         shell: bash
         run: |
-          if [ "${{ matrix.use_cross }}" = "true" ]; then
+          # if [ "${{ matrix.use_cross }}" = "true" ]; then
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
-          else
-            RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutation-test
+          # else
+            RUSTFLAGS="--cfg tokio_unstable" cargo build --release --bin move-mutation-test
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutator
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-spec-test
-          fi
+          # fi
 
       # Basic smoke test
       - name: Test binaries
