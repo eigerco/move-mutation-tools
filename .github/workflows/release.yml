@@ -86,13 +86,13 @@ jobs:
         shell: bash
         run: |
           if [ "${{ matrix.use_cross }}" = "true" ]; then
-            OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-            OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
-            OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
+            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
+            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
           else
-            OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutation-test
-            OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutator
-            OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-spec-test
+            RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutation-test
+            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutator
+            # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-spec-test
           fi
 
       # Basic smoke test

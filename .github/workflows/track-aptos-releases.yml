@@ -1,0 +1,102 @@
+name: Track Aptos Releases
+
+on:
+  schedule:
+    # Check daily for new Aptos releases
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-new-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for new Aptos release branches
+        id: check
+        run: |
+          # Get all Aptos release branches
+          APTOS_BRANCHES=$(git ls-remote --heads https://github.com/aptos-labs/aptos-core.git | 
+            grep 'refs/heads/aptos-release-v' | 
+            sed 's/.*refs\/heads\///' | 
+            sort -V)
+          
+          # Get our tracked branches
+          OUR_BRANCHES=$(git branch -r | grep 'origin/release/v' | sed 's/.*origin\/release\///' | sort -V)
+          
+          # Find new releases we haven't tracked yet
+          for aptos_branch in $APTOS_BRANCHES; do
+            version=${aptos_branch#aptos-release-}
+            our_branch="release/$version"
+            
+            if ! echo "$OUR_BRANCHES" | grep -q "^$version$"; then
+              echo "New Aptos release found: $aptos_branch"
+              echo "new_version=$version" >> $GITHUB_OUTPUT
+              echo "aptos_branch=$aptos_branch" >> $GITHUB_OUTPUT
+            fi
+          done
+      
+      - name: Create tracking issue for new release
+        if: steps.check.outputs.new_version
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const version = '${{ steps.check.outputs.new_version }}';
+            const aptosBranch = '${{ steps.check.outputs.aptos_branch }}';
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Track Aptos Release ${version}`,
+              body: `## New Aptos Release Detected: ${version}
+
+              Aptos has created a new release branch: \`${aptosBranch}\`
+
+              ### Required Actions:
+              - [ ] Create \`release/${version}\` branch
+              - [ ] Update Cargo.toml dependencies to use \`${aptosBranch}\`
+              - [ ] Run full test suite
+              - [ ] Update compatibility matrix in documentation
+              - [ ] Create release notes
+              - [ ] Tag releases:
+                - \`move-mutation-test-${version}.0\` for Aptos CLI
+                - \`${version}.0\` for bundled release
+              - [ ] Verify GitHub Actions automatically build and publish binaries
+
+              ### Automated PR Creation:
+              A PR will be automatically created to update dependencies.
+
+              ### Release Automation:
+              Once tags are pushed, GitHub Actions will automatically:
+              - Build binaries for all platforms
+              - Create GitHub releases
+              - Upload artifacts for both Aptos CLI and bundled distribution`,
+              labels: ['release', 'aptos-tracking']
+            });
+      
+      - name: Create PR for dependency update
+        if: steps.check.outputs.new_version
+        run: |
+          VERSION=${{ steps.check.outputs.new_version }}
+          APTOS_BRANCH=${{ steps.check.outputs.aptos_branch }}
+          
+          # Create new branch
+          git checkout -b update-aptos-$VERSION
+          
+          # Update Cargo.toml dependencies
+          sed -i "s/branch = \"main\"/branch = \"$APTOS_BRANCH\"/g" Cargo.toml
+          
+          # Commit and push
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add Cargo.toml
+          git commit -m "chore: Update dependencies to Aptos $VERSION"
+          git push origin update-aptos-$VERSION
+          
+          # Create PR using GitHub CLI
+          gh pr create \
+            --title "Update to Aptos Release $VERSION" \
+            --body "Updates all Aptos dependencies to track release branch \`$APTOS_BRANCH\`" \
+            --label "dependencies,aptos-tracking"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
