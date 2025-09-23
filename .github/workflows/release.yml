@@ -90,6 +90,8 @@ jobs:
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
           # else
+            cargo clean
+            gh cache delete --all
             RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutation-test
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-mutator
             # OPENSSL_STATIC=1 OPENSSL_VENDORED=1 RUSTFLAGS="--cfg tokio_unstable" cargo build --release --target ${{ matrix.target }} --bin move-spec-test
