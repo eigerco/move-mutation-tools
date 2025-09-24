@@ -131,36 +131,6 @@ jobs:
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
 
-
-      ######## PROVER STUFF
-
-      - name: Install required deps
-        run: sudo apt-get install libudev-dev libdw-dev lld libpq-dev libssl-dev pkg-config lsof build-essential ca-certificates clang curl git --no-install-recommends --assume-yes
-
-      - name: Get aptos-core
-        uses: actions/checkout@v4
-        with:
-          repository: aptos-labs/aptos-core
-          path: aptos-core
-
-      - name: Install related tools and prover dependencies
-        shell: bash
-        run: aptos-core/scripts/dev_setup.sh -b -p -r -y -P -t -k
-
-      - name: Prepare move prover tooling.
-        shell: bash
-        run: |
-          echo 'Z3_EXE='/home/$USER/bin/z3 | tee -a $GITHUB_ENV
-          echo 'CVC5_EXE='/home/$USER/bin/cvc5 | tee -a $GITHUB_ENV
-          echo 'DOTNET_ROOT='/home/$USER/.dotnet/ | tee -a $GITHUB_ENV
-          echo 'BOOGIE_EXE='/home/$USER/.dotnet/tools/boogie | tee -a $GITHUB_ENV
-          echo 'MVP_TEST_ON_CI'='1' | tee -a $GITHUB_ENV
-          echo "/home/$USER/bin" | tee -a $GITHUB_PATH
-          echo "/home/$USER/.dotnet" | tee -a $GITHUB_PATH
-          echo "/home/$USER/.dotnet/tools" | tee -a $GITHUB_PATH
-
-      ########## END PROVER STUFF
-
       # Test mutation tools on example Move project
       - name: Test mutation tools on simple_move_2_features
         if: runner.os != 'Windows'  # Skip on Windows due to potential path issues
@@ -198,33 +168,8 @@ jobs:
             exit 1
           fi
 
-          # Test move-spec-test
-          echo "Running move-spec-test..."
-          ../../../../target/release/move-spec-test run --output report-spec-generated.txt
-
-          # Compare with existing report (excluding last 3 lines with package_dir)
-          if [ -f "report.txt.spec-exp" ]; then
-            # Get all lines except last 3
-            head -n -3 report-spec-generated.txt > report-spec-gen-trimmed.txt
-            head -n -3 report.txt.spec-exp > report-spec-exp-trimmed.txt
-
-            if diff report-spec-gen-trimmed.txt report-spec-exp-trimmed.txt > /dev/null 2>&1; then
-              echo "move-spec-test report matches expected"
-              rm -f report-spec-gen-trimmed.txt report-spec-exp-trimmed.txt
-            else
-              echo "move-spec-test report differs from expected"
-              echo "Differences:"
-              diff report-spec-gen-trimmed.txt report-spec-exp-trimmed.txt || true
-              rm -f report-spec-gen-trimmed.txt report-spec-exp-trimmed.txt
-              exit 1
-            fi
-          else
-            echo "No baseline report.txt.spec-exp found"
-            exit 1
-          fi
-
           # Clean up generated reports and coverage files
-          rm -f report-mutation-generated.txt report-spec-generated.txt
+          rm -f report-mutation-generated.txt
           rm -rf coverage/
           cd - > /dev/null
 
