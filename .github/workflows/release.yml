@@ -156,6 +156,8 @@ jobs:
           echo "/home/$USER/.dotnet/tools" | tee -a $GITHUB_PATH
 
       ########## END PROVER STUFF
+      - name: Install required deps
+        run: sudo apt-get install libudev-dev libdw-dev lld libpq-dev libssl-dev pkg-config lsof build-essential ca-certificates clang curl git --no-install-recommends --assume-yes
 
       # Test mutation tools on example Move project
       - name: Test mutation tools on simple_move_2_features
