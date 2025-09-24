@@ -145,7 +145,7 @@ jobs:
 
           # Test move-mutation-test with coverage
           echo "Running move-mutation-test with coverage..."
-          ../../../../target/release/move-mutation-test --move-2 --coverage > report-mutation-generated.txt 2>&1
+          ../../../../target/release/move-mutation-test run --coverage --output report-mutation-generated.txt
 
           # Compare with existing report
           if [ -f "report-mutation.txt" ]; then
@@ -164,7 +164,7 @@ jobs:
 
           # Test move-spec-test with coverage
           echo "Running move-spec-test with coverage..."
-          ../../../../target/release/move-spec-test --move-2 --coverage > report-spec-generated.txt 2>&1
+          ../../../../target/release/move-spec-test run --coverage --output report-spec-generated.txt
 
           # Compare with existing report
           if [ -f "report-spec.txt" ]; then
