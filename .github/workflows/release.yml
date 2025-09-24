@@ -44,20 +44,20 @@ jobs:
         with:
           fetch-depth: 0  # Need full history to verify tag is from "main" branch
 
-      - name: Verify tag is from feat/ci-releases branch
+      - name: Verify tag is from main branch
         shell: bash
         run: |
           # Get the commit SHA that the tag points to
           TAG_COMMIT=$(git rev-list -n 1 ${{ github.ref }})
 
-          # Check if this commit exists on feat/ci-releases branch
-          git fetch origin feat/ci-releases
-          if ! git merge-base --is-ancestor $TAG_COMMIT origin/feat/ci-releases; then
-            echo "Error: Tag must be created from feat/ci-releases branch!"
-            echo "This tag points to commit $TAG_COMMIT which is not on feat/ci-releases branch."
+          # Check if this commit exists on main branch
+          git fetch origin main
+          if ! git merge-base --is-ancestor $TAG_COMMIT origin/main; then
+            echo "Error: Tag must be created from main branch!"
+            echo "This tag points to commit $TAG_COMMIT which is not on main branch."
             exit 1
           fi
-          echo "Tag is from feat/ci-releases branch (commit: $TAG_COMMIT)"
+          echo "Tag is from main branch (commit: $TAG_COMMIT)"
 
       # Make sure that Cargo.toml version for each tool is the same as the tag
       - name: Verify version consistency
