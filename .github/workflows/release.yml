@@ -132,7 +132,7 @@ jobs:
           if [ "${{ runner.os }}" = "Windows" ]; then
             7z a -tzip ../move-mutation-test-${{ matrix.asset_name }}.zip *
           else
-            zip -r ../move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip *
+            zip -r ../move-mutation-test-${{ matrix.asset_name }}.zip *
           fi
           cd ..
 
@@ -141,7 +141,7 @@ jobs:
         with:
           name: release-${{ matrix.target }}
           path: |
-            move-mutation-test-${{ steps.version.outputs.version }}-${{ matrix.asset_name }}.zip
+            move-mutation-test-${{ matrix.asset_name }}.zip
 
   create-release:
     name: Create GitHub Release
@@ -204,10 +204,10 @@ jobs:
 
             | Platform | Architecture | File |
             |----------|--------------|------|
-            | Linux | x86_64 | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-unknown-linux-gnu.zip` |
-            | macOS | x86_64 (Intel) | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-apple-darwin.zip` |
-            | macOS | ARM64 (Apple Silicon) | `move-mutation-test-${{ steps.version.outputs.version }}-aarch64-apple-darwin.zip` |
-            | Windows | x86_64 | `move-mutation-test-${{ steps.version.outputs.version }}-x86_64-windows.zip` |
+            | Linux | x86_64 | `move-mutation-test-x86_64-unknown-linux-gnu.zip` |
+            | macOS | x86_64 (Intel) | `move-mutation-test-x86_64-apple-darwin.zip` |
+            | macOS | ARM64 (Apple Silicon) | `move-mutation-test-aarch64-apple-darwin.zip` |
+            | Windows | x86_64 | `move-mutation-test-x86_64-windows.zip` |
 
             ## Documentation
             For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
