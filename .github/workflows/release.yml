@@ -168,9 +168,9 @@ jobs:
             exit 1
           fi
 
-          # Test move-spec-test with coverage
-          echo "Running move-spec-test with coverage..."
-          ../../../../target/release/move-spec-test run --coverage --output report-spec-generated.txt
+          # Test move-spec-test
+          echo "Running move-spec-test..."
+          ../../../../target/release/move-spec-test run --output report-spec-generated.txt
 
           # Compare with existing report (excluding last 3 lines with package_dir)
           if [ -f "report.txt.spec-exp" ]; then
