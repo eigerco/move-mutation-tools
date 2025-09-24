@@ -17,21 +17,21 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Linux x86_64
-          - target: x86_64-unknown-linux-gnu
-            runner: self-hosted
-            asset_name: x86_64-unknown-linux-gnu
-          #
-          # # macOS x86_64
-          # - target: x86_64-apple-darwin
-          #   runner: macos-13
-          #   asset_name: x86_64-apple-darwin
-          #
-          # # macOS ARM64
-          # - target: aarch64-apple-darwin
-          #   runner: macos-latest
-          #   asset_name: aarch64-apple-darwin
-          #
+          # # Linux x86_64
+          # - target: x86_64-unknown-linux-gnu
+          #   runner: self-hosted
+          #   asset_name: x86_64-unknown-linux-gnu
+
+          # macOS x86_64
+          - target: x86_64-apple-darwin
+            runner: macos-13
+            asset_name: x86_64-apple-darwin
+
+          # macOS ARM64
+          - target: aarch64-apple-darwin
+            runner: macos-latest
+            asset_name: aarch64-apple-darwin
+
           # # Windows x86_64
           # - target: x86_64-pc-windows-msvc
           #   runner: windows-latest
@@ -131,8 +131,7 @@ jobs:
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
 
-      # Test mutation tools on example Move project
-      - name: Test mutation tools on simple_move_2_features
+      - name: Test move-mutation-test tool on simple_move_2_features
         if: runner.os != 'Windows'  # Skip on Windows due to potential path issues
         shell: bash
         run: |
@@ -173,7 +172,7 @@ jobs:
           rm -rf coverage/
           cd - > /dev/null
 
-          echo "✅ All reports match - tests passed!"
+          echo "All reports match - tests passed!"
 
       # Determine version for asset naming
       - name: Get version
