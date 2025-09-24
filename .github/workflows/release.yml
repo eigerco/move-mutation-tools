@@ -94,10 +94,14 @@ jobs:
         run: |
           echo "Installing Aptos CLI..."
           curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
-          # Add aptos to PATH for current step
-          echo "$HOME/.aptos/bin" >> $GITHUB_PATH
-          # Verify installation
+          # Source profile to get aptos in PATH
           source ~/.profile
+          # Find where aptos was installed
+          APTOS_PATH=$(dirname $(which aptos))
+          echo "Aptos installed at: $APTOS_PATH"
+          # Add to PATH for subsequent steps
+          echo "$APTOS_PATH" >> $GITHUB_PATH
+          # Verify installation
           aptos --version
 
       - name: Cache Cargo
