@@ -21,22 +21,22 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             runner: self-hosted
             asset_name: x86_64-unknown-linux-gnu
-
-          # macOS x86_64
-          - target: x86_64-apple-darwin
-            runner: macos-13
-            asset_name: x86_64-apple-darwin
-
-          # macOS ARM64
-          - target: aarch64-apple-darwin
-            runner: macos-latest
-            asset_name: aarch64-apple-darwin
-
-          # Windows x86_64
-          - target: x86_64-pc-windows-msvc
-            runner: windows-latest
-            asset_name: x86_64-windows
-            binary_ext: .exe
+          #
+          # # macOS x86_64
+          # - target: x86_64-apple-darwin
+          #   runner: macos-13
+          #   asset_name: x86_64-apple-darwin
+          #
+          # # macOS ARM64
+          # - target: aarch64-apple-darwin
+          #   runner: macos-latest
+          #   asset_name: aarch64-apple-darwin
+          #
+          # # Windows x86_64
+          # - target: x86_64-pc-windows-msvc
+          #   runner: windows-latest
+          #   asset_name: x86_64-windows
+          #   binary_ext: .exe
 
     steps:
       - name: Checkout code
@@ -89,6 +89,17 @@ jobs:
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
+      - name: Install Aptos CLI
+        shell: bash
+        run: |
+          echo "Installing Aptos CLI..."
+          curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
+          # Add aptos to PATH for current step
+          echo "$HOME/.aptos/bin" >> $GITHUB_PATH
+          # Verify installation
+          source ~/.profile
+          aptos --version
+
       - name: Cache Cargo
         uses: actions/cache@v4
         with:
@@ -115,6 +126,63 @@ jobs:
           ./target/release/move-mutation-test${{ matrix.binary_ext }} --version
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
+
+      # Test mutation tools on example Move project
+      - name: Test mutation tools on simple_move_2_features
+        if: runner.os != 'Windows'  # Skip on Windows due to potential path issues
+        shell: bash
+        run: |
+          echo "Testing mutation tools on simple_move_2_features project..."
+          cd move-mutator/tests/move-assets/simple_move_2_features
+
+          # Generate coverage data first
+          echo "Generating coverage data with aptos move test..."
+          aptos move test --coverage
+
+          # Test move-mutation-test with coverage
+          echo "Running move-mutation-test with coverage..."
+          ../../../../target/release/move-mutation-test --move-2 --coverage > report-mutation-generated.txt 2>&1
+
+          # Compare with existing report
+          if [ -f "report-mutation.txt" ]; then
+            if diff report-mutation-generated.txt report-mutation.txt > /dev/null 2>&1; then
+              echo "✓ move-mutation-test report matches expected"
+            else
+              echo "❌ move-mutation-test report differs from expected"
+              echo "Differences:"
+              diff report-mutation-generated.txt report-mutation.txt || true
+              exit 1
+            fi
+          else
+            echo "❌ No baseline report-mutation.txt found"
+            exit 1
+          fi
+
+          # Test move-spec-test with coverage
+          echo "Running move-spec-test with coverage..."
+          ../../../../target/release/move-spec-test --move-2 --coverage > report-spec-generated.txt 2>&1
+
+          # Compare with existing report
+          if [ -f "report-spec.txt" ]; then
+            if diff report-spec-generated.txt report-spec.txt > /dev/null 2>&1; then
+              echo "✓ move-spec-test report matches expected"
+            else
+              echo "❌ move-spec-test report differs from expected"
+              echo "Differences:"
+              diff report-spec-generated.txt report-spec.txt || true
+              exit 1
+            fi
+          else
+            echo "❌ No baseline report-spec.txt found"
+            exit 1
+          fi
+
+          # Clean up generated reports and coverage files
+          rm -f report-mutation-generated.txt report-spec-generated.txt
+          rm -rf coverage/
+          cd - > /dev/null
+
+          echo "✅ All reports match - tests passed!"
 
       # Determine version for asset naming
       - name: Get version
