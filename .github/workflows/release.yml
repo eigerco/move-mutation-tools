@@ -148,17 +148,17 @@ jobs:
           ../../../../target/release/move-mutation-test run --coverage --output report-mutation-generated.txt
 
           # Compare with existing report
-          if [ -f "report-mutation.txt" ]; then
-            if diff report-mutation-generated.txt report-mutation.txt > /dev/null 2>&1; then
-              echo "✓ move-mutation-test report matches expected"
+          if [ -f "report.txt.mutation-exp" ]; then
+            if diff report-mutation-generated.txt report.txt.mutation-exp > /dev/null 2>&1; then
+              echo "move-mutation-test report matches expected"
             else
-              echo "❌ move-mutation-test report differs from expected"
+              echo "move-mutation-test report differs from expected"
               echo "Differences:"
-              diff report-mutation-generated.txt report-mutation.txt || true
+              diff report-mutation-generated.txt report.txt.mutation-exp || true
               exit 1
             fi
           else
-            echo "❌ No baseline report-mutation.txt found"
+            echo "No baseline report.txt.mutation-exp found"
             exit 1
           fi
 
@@ -167,17 +167,17 @@ jobs:
           ../../../../target/release/move-spec-test run --coverage --output report-spec-generated.txt
 
           # Compare with existing report
-          if [ -f "report-spec.txt" ]; then
-            if diff report-spec-generated.txt report-spec.txt > /dev/null 2>&1; then
-              echo "✓ move-spec-test report matches expected"
+          if [ -f "report.txt.spec-exp" ]; then
+            if diff report-spec-generated.txt report.txt.spec-exp > /dev/null 2>&1; then
+              echo "move-spec-test report matches expected"
             else
-              echo "❌ move-spec-test report differs from expected"
+              echo "move-spec-test report differs from expected"
               echo "Differences:"
-              diff report-spec-generated.txt report-spec.txt || true
+              diff report-spec-generated.txt report.txt.spec-exp || true
               exit 1
             fi
           else
-            echo "❌ No baseline report-spec.txt found"
+            echo "No baseline report.txt.spec-exp found"
             exit 1
           fi
 
