@@ -4,12 +4,6 @@ on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (without v prefix, e.g., 1.0.0)'
-        required: true
-        type: string
 
 env:
   CARGO_TERM_COLOR: always
@@ -47,6 +41,24 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Verify version consistency
+        shell: bash
+        run: |
+          # Extract version from tag
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+
+          # Check each tool's Cargo.toml version
+          for tool in move-mutation-test move-mutator move-spec-test; do
+            CARGO_VERSION=$(grep "^version" $tool/Cargo.toml | head -1 | cut -d'"' -f2)
+            if [ "$CARGO_VERSION" != "$TAG_VERSION" ]; then
+              echo "Version mismatch for $tool!"
+              echo "   Tag version: $TAG_VERSION"
+              echo "   Cargo.toml version: $CARGO_VERSION"
+              exit 1
+            fi
+            echo "$tool version matches: $CARGO_VERSION"
+          done
 
       - name: Enable long paths on Windows
         if: runner.os == 'Windows'
@@ -90,12 +102,8 @@ jobs:
         id: version
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-          else
-            # Extract version from tag (remove 'v' prefix)
-            VERSION="${GITHUB_REF#refs/tags/v}"
-          fi
+          # Extract version from tag (remove 'v' prefix)
+          VERSION="${GITHUB_REF#refs/tags/v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       # Package all tools (Aptos CLI will use move-mutation-test, others available for manual use)
@@ -130,9 +138,9 @@ jobs:
 
           cd package
           if [ "${{ runner.os }}" = "Windows" ]; then
-            7z a -tzip ../move-mutation-test-${{ matrix.asset_name }}.zip *
+            7z a -tzip ../mutation-tools-${{ matrix.asset_name }}.zip *
           else
-            zip -r ../move-mutation-test-${{ matrix.asset_name }}.zip *
+            zip -r ../mutation-tools-${{ matrix.asset_name }}.zip *
           fi
           cd ..
 
@@ -141,7 +149,7 @@ jobs:
         with:
           name: release-${{ matrix.target }}
           path: |
-            move-mutation-test-${{ matrix.asset_name }}.zip
+            mutation-tools-${{ matrix.asset_name }}.zip
 
   create-release:
     name: Create GitHub Release
@@ -157,13 +165,8 @@ jobs:
       - name: Determine version
         id: version
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            VERSION="${{ github.event.inputs.version }}"
-            TAG="v$VERSION"
-          else
-            TAG="${GITHUB_REF#refs/tags/}"
-            VERSION="${TAG#v}"
-          fi
+          TAG="${GITHUB_REF#refs/tags/}"
+          VERSION="${TAG#v}"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
@@ -204,10 +207,10 @@ jobs:
 
             | Platform | Architecture | File |
             |----------|--------------|------|
-            | Linux | x86_64 | `move-mutation-test-x86_64-unknown-linux-gnu.zip` |
-            | macOS | x86_64 (Intel) | `move-mutation-test-x86_64-apple-darwin.zip` |
-            | macOS | ARM64 (Apple Silicon) | `move-mutation-test-aarch64-apple-darwin.zip` |
-            | Windows | x86_64 | `move-mutation-test-x86_64-windows.zip` |
+            | Linux | x86_64 | `mutation-tools-x86_64-unknown-linux-gnu.zip` |
+            | macOS | x86_64 (Intel) | `mutation-tools-x86_64-apple-darwin.zip` |
+            | macOS | ARM64 (Apple Silicon) | `mutation-tools-aarch64-apple-darwin.zip` |
+            | Windows | x86_64 | `mutation-tools-x86_64-windows.zip` |
 
             ## Documentation
             For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
