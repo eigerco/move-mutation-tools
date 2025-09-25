@@ -94,6 +94,7 @@ jobs:
         run: |
           echo "Installing Aptos CLI..."
           curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
+
           # Source profile to get aptos in PATH
           source ~/.profile
           # Find where aptos was installed
@@ -147,10 +148,16 @@ jobs:
           ../../../../target/release/move-mutation-test run --coverage --output report-mutation-generated.txt
 
           # Compare with existing report (excluding last 3 lines with package_dir)
+          # I'm not using the `head` command, because what we need is not supported on MacOS
           if [ -f "report.txt.mutation-exp" ]; then
-            # Get all lines except last 3
-            head -n -3 report-mutation-generated.txt > report-mutation-gen-trimmed.txt
-            head -n -3 report.txt.mutation-exp > report-mutation-exp-trimmed.txt
+            # Get all lines except last 3 (portable way)
+            LINES_GEN=$(wc -l < report-mutation-generated.txt)
+            LINES_EXP=$(wc -l < report.txt.mutation-exp)
+            KEEP_GEN=$((LINES_GEN - 3))
+            KEEP_EXP=$((LINES_EXP - 3))
+
+            head -n "$KEEP_GEN" report-mutation-generated.txt > report-mutation-gen-trimmed.txt
+            head -n "$KEEP_EXP" report.txt.mutation-exp > report-mutation-exp-trimmed.txt
 
             if diff report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
               echo "move-mutation-test report matches expected"
