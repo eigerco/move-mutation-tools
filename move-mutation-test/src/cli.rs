@@ -56,7 +56,7 @@ pub fn create_mutator_options(
         downsampling_ratio_percentage: options.downsampling_ratio_percentage,
         apply_coverage,
         // To run tests, compilation must succeed
-        verify_mutants: true,
+        verify_mutants: false,
         ..Default::default()
     }
 }
@@ -90,6 +90,10 @@ pub struct TestBuildConfig {
     /// The default value is large enough for all normal tests in most projects.
     #[clap(long, default_value_t = 1_000_000)]
     pub gas_limit: u64,
+
+    /// Whether to stop testing upon the first failure.
+    #[clap(long, default_value_t = true, action = clap::ArgAction::Set)]
+    pub fail_fast: bool,
 }
 
 impl TestBuildConfig {

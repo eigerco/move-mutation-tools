@@ -66,6 +66,12 @@ impl MutationOperator for Binary {
         let end = source[..end]
             .rfind(|c: char| !c.is_whitespace())
             .map_or(end, |i| i + 1);
+
+        // sanity check
+        if start >= end || end > source.len() {
+            return vec![];
+        }
+
         let cur_op = &source[start..end];
 
         // Group of exchangeable binary operators - we only want to replace the operator with a different one
