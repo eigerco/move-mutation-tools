@@ -134,8 +134,9 @@ jobs:
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
 
-      - name: Test move-mutation-test tool on simple_move_2_features
-        if: runner.os != 'Windows'  # Skip on Windows due to potential path issues
+      # Test for non-Windows platforms
+      - name: Test move-mutation-test tool on simple_move_2_features (Unix)
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           echo "Testing mutation tools on simple_move_2_features project..."
@@ -189,6 +190,64 @@ jobs:
           rm -f report-mutation-generated.txt
           rm -rf coverage/
           cd - > /dev/null
+
+          echo "All reports match - tests passed!"
+
+      # Test for Windows platforms
+      - name: Test move-mutation-test tool on simple_move_2_features (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          # Install any needed tools with choco if required
+          choco install unxutils
+
+          echo "Testing mutation tools on simple_move_2_features project (Windows)..."
+          cd move-mutator/tests/move-assets/simple_move_2_features
+
+          # Generate coverage data first
+          echo "Generating coverage data with aptos move test..."
+          aptos move test --coverage
+
+          # Test move-mutation-test with coverage
+          echo "Running move-mutation-test with coverage..."
+          ../../../../target/release/move-mutation-test.exe run --coverage --output report-mutation-generated.txt
+
+          # Compare with existing report (excluding last 3 lines with package_dir)
+          if [ -f "report.txt.mutation-exp" ]; then
+            # Windows doesn't have perl by default, use PowerShell for trimming
+            # Get line count and keep all but last 3
+            LINES_GEN=$(wc -l < report-mutation-generated.txt)
+            LINES_EXP=$(wc -l < report.txt.mutation-exp)
+            KEEP_GEN=$((LINES_GEN - 3))
+            KEEP_EXP=$((LINES_EXP - 3))
+
+            head -n "$KEEP_GEN" report-mutation-generated.txt > report-mutation-gen-trimmed.txt
+            head -n "$KEEP_EXP" report.txt.mutation-exp > report-mutation-exp-trimmed.txt
+
+            echo "=== Generated report (trimmed) ==="
+            cat report-mutation-gen-trimmed.txt
+            echo "=== Expected report (trimmed) ==="
+            cat report-mutation-exp-trimmed.txt
+
+            # Use fc command on Windows for comparison (or diff if Git Bash has it)
+            if diff report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
+              echo "move-mutation-test report matches expected"
+              rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
+            else
+              echo "move-mutation-test report differs from expected"
+              echo "=== Differences ==="
+              diff report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt || true
+              rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
+              exit 1
+            fi
+          else
+            echo "No baseline report.txt.mutation-exp found"
+            exit 1
+          fi
+
+          # Clean up generated reports and coverage files
+          rm -f report-mutation-generated.txt
+          rm -rf coverage/
 
           echo "All reports match - tests passed!"
 
