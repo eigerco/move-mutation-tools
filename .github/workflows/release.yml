@@ -157,6 +157,10 @@ jobs:
           # Compare with existing report (excluding last 3 lines with package_dir)
           # I'm not using the `head` command, because what we need is not supported on MacOS
           if [ -f "report.txt.mutation-exp" ]; then
+            # Remove trailing newlines from both files
+            perl -pi -e 'chomp if eof' report-mutation-generated.txt
+            perl -pi -e 'chomp if eof' report.txt.mutation-exp
+
             # Get all lines except last 3 (portable way)
             LINES_GEN=$(wc -l < report-mutation-generated.txt)
             LINES_EXP=$(wc -l < report.txt.mutation-exp)
@@ -171,13 +175,13 @@ jobs:
             echo "=== Expected report (trimmed) ==="
             cat report-mutation-exp-trimmed.txt
 
-            if diff report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
+            if diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
               echo "move-mutation-test report matches expected"
               rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
             else
               echo "move-mutation-test report differs from expected"
               echo "=== Differences ==="
-              diff report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt || true
+              diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt || true
               rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
               exit 1
             fi
