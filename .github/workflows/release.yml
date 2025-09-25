@@ -90,27 +90,9 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install Aptos CLI
-        shell: bash
-        run: |
-          echo "Installing Aptos CLI..."
-          curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
-
-          # Source the appropriate profile file based on platform
-          if [ "${{ runner.os }}" = "Linux" ]; then
-            echo "Sourcing ~/.profile for Linux"
-            source ~/.profile
-          elif [ "${{ runner.os }}" = "macOS" ]; then
-            echo "Sourcing ~/.bash_profile for macOS"
-            source ~/.bash_profile
-          fi
-
-          # Find where aptos was installed
-          APTOS_PATH=$(dirname $(which aptos))
-          echo "Aptos installed at: $APTOS_PATH"
-          # Add to PATH for subsequent steps
-          echo "$APTOS_PATH" >> $GITHUB_PATH
-          # Verify installation
-          aptos --version
+        uses: aptos-labs/actions/install-aptos-cli@main
+        with:
+          version: latest
 
       - name: Cache Cargo
         uses: actions/cache@v4
