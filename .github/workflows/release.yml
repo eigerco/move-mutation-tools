@@ -98,7 +98,8 @@ jobs:
           # Source profile to get aptos in PATH
           ls -la /Users
           ls -la /Users/runner
-          source ~/.profile
+          cat ~/.bash_profile
+          # source ~/.profile
           # Find where aptos was installed
           APTOS_PATH=$(dirname $(which aptos))
           echo "Aptos installed at: $APTOS_PATH"
