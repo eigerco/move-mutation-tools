@@ -95,6 +95,9 @@ jobs:
           if [ "${{ runner.os }}" = "macOS" ]; then
             echo "Installing Aptos CLI via Homebrew..."
             brew install aptos
+          elif [ "${{ runner.os }}" = "Windows" ]; then
+            echo "Installing Aptos CLI via Chocolatey..."
+            choco install aptos -y
           else
             echo "Installing Aptos CLI via installer script..."
             curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
