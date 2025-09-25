@@ -92,15 +92,15 @@ jobs:
       - name: Install Aptos CLI
         shell: bash
         run: |
-          echo "Installing Aptos CLI..."
-          curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
-
-          # Find where aptos was installed
-          APTOS_PATH=$(dirname $(which aptos))
-          echo "Aptos installed at: $APTOS_PATH"
-          # Add to PATH for subsequent steps
-          echo "$APTOS_PATH" >> $GITHUB_PATH
-          # Verify installation
+          # echo "Installing Aptos CLI..."
+          # curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
+          #
+          # # Find where aptos was installed
+          # APTOS_PATH=$(dirname $(which aptos))
+          # echo "Aptos installed at: $APTOS_PATH"
+          # # Add to PATH for subsequent steps
+          # echo "$APTOS_PATH" >> $GITHUB_PATH
+          # # Verify installation
           aptos --version
 
       - name: Cache Cargo
