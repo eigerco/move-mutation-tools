@@ -270,14 +270,15 @@
       {
         "module_func": "FunctionValues::neq_with_lambda",
         "tested": 10,
-        "killed": 10,
-        "mutants_alive_diffs": [],
+        "killed": 9,
+        "mutants_alive_diffs": [
+          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x < &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n"
+        ],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (true) true else false\n     }\n\n     // Test logical AND operator mutation\n",
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (false) true else false\n     }\n\n     // Test logical AND operator mutation\n",
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (!(apply2_bool(|x, y| &x != &y, a, b))) true else false\n     }\n\n     // Test logical AND operator mutation\n",
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x == &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n",
-          "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x < &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n",
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x > &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n",
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x <= &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n",
           "--- original\n+++ modified\n@@ -96,7 +96,7 @@\n\n     // Test inequality operator mutation (requires references)\n     fun neq_with_lambda(a: u64, b: u64): bool {\n-        if (apply2_bool(|x, y| &x != &y, a, b)) true else false\n+        if (apply2_bool(|x, y| &x >= &y, a, b)) true else false\n     }\n\n     // Test logical AND operator mutation\n",

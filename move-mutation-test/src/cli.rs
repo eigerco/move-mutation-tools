@@ -117,6 +117,10 @@ pub struct TestBuildConfig {
     /// The default value is large enough for all normal tests in most projects.
     #[clap(long, default_value_t = 1_000_000)]
     pub gas_limit: u64,
+
+    /// Whether to stop testing upon the first failure.
+    #[clap(long, default_value_t = true, action = clap::ArgAction::Set)]
+    pub fail_fast: bool,
 }
 
 impl TestBuildConfig {
@@ -139,6 +143,7 @@ impl TestBuildConfig {
                 .language_version
                 .or_else(|| Some(LanguageVersion::latest_stable())),
             experiments: self.move_options.compute_experiments(),
+            print_errors: false,
         }
     }
 }
