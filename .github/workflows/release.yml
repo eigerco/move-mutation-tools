@@ -199,7 +199,7 @@ jobs:
         shell: bash
         run: |
           # Install any needed tools with choco if required
-          choco install unxutils
+          choco install unxutils strawberryperl
 
           echo "Testing mutation tools on simple_move_2_features project (Windows)..."
           cd move-mutator/tests/move-assets/simple_move_2_features
@@ -214,7 +214,10 @@ jobs:
 
           # Compare with existing report (excluding last 3 lines with package_dir)
           if [ -f "report.txt.mutation-exp" ]; then
-            # Windows doesn't have perl by default, use PowerShell for trimming
+            # Remove trailing newlines from both files
+            perl -pi -e 'chomp if eof' report-mutation-generated.txt
+            perl -pi -e 'chomp if eof' report.txt.mutation-exp
+
             # Get line count and keep all but last 3
             LINES_GEN=$(wc -l < report-mutation-generated.txt)
             LINES_EXP=$(wc -l < report.txt.mutation-exp)
