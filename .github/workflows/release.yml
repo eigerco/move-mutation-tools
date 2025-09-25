@@ -90,9 +90,19 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install Aptos CLI
-        uses: aptos-labs/actions/install-aptos-cli@main
-        with:
-          version: latest
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            echo "Installing Aptos CLI via Homebrew..."
+            brew install aptos
+          else
+            echo "Installing Aptos CLI via installer script..."
+            curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
+            source ~/.profile
+            APTOS_PATH=$(dirname $(which aptos))
+            echo "$APTOS_PATH" >> $GITHUB_PATH
+          fi
+          aptos --version
 
       - name: Cache Cargo
         uses: actions/cache@v4
