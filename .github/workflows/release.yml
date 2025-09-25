@@ -96,6 +96,8 @@ jobs:
           curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
 
           # Source profile to get aptos in PATH
+          ls -la /Users
+          ls -la /Users/runner
           source ~/.profile
           # Find where aptos was installed
           APTOS_PATH=$(dirname $(which aptos))
