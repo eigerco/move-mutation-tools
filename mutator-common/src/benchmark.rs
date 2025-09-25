@@ -2,7 +2,7 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use log::info;
+use log::warn;
 use std::time::{Duration, Instant};
 
 /// A benchmark for a specific operation.
@@ -69,20 +69,20 @@ impl Benchmarks {
 
     /// Displays the benchmarks with the `RUST_LOG` info level.
     pub fn display(&self) {
-        info!(
+        warn!(
             "Test execution time on the original package is {} msecs",
             self.executing_original_package.elapsed.as_millis()
         );
-        info!(
+        warn!(
             "Generating mutants took {} msecs",
             self.mutator.elapsed.as_millis()
         );
-        info!(
-            "Executing the tool on all mutants took {} msecs",
+        warn!(
+            "Executing the tests on all mutants took {} msecs",
             self.executing_tests_on_mutants.elapsed.as_millis()
         );
         if !self.mutant_results.is_empty() {
-            info!(
+            warn!(
                 "Min execution time for a mutant: {} msecs",
                 self.mutant_results
                     .iter()
@@ -90,7 +90,7 @@ impl Benchmarks {
                     .min()
                     .unwrap()
             );
-            info!(
+            warn!(
                 "Max execution time for a mutant: {} msecs",
                 self.mutant_results
                     .iter()
@@ -98,13 +98,13 @@ impl Benchmarks {
                     .max()
                     .unwrap()
             );
-            info!(
+            warn!(
                 "Average execution time for each mutant: {:.2} msecs",
                 self.executing_tests_on_mutants.elapsed.as_millis() as f64
                     / self.mutant_results.len() as f64
             );
         }
-        info!(
+        warn!(
             "Total tool execution time is {} msecs",
             self.total_tool_duration.elapsed.as_millis()
         );

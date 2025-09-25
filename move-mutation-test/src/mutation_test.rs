@@ -154,6 +154,7 @@ fn run_tests<W: WriteColor + Send>(
                     )
                 })
                 .collect(),
+            fail_fast: cfg.fail_fast,
             ..UnitTestingConfig::default()
         },
         natives,
