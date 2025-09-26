@@ -297,7 +297,7 @@ jobs:
 
             ## Documentation
             For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
-          draft: true
+          draft: false
           prerelease: false
           files: release-assets/*
           fail_on_unmatched_files: true
