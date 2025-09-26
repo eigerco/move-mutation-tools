@@ -214,6 +214,9 @@ jobs:
 
           # Compare with existing report (excluding last 3 lines with package_dir)
           if [ -f "report.txt.mutation-exp" ]; then
+            # Normalize Windows paths (backslash to forward slash) in generated report
+            sed -i 's/\\/\//g' report-mutation-generated.txt
+
             # Remove trailing newlines from both files
             perl -pi -e 'chomp if eof' report-mutation-generated.txt
             perl -pi -e 'chomp if eof' report.txt.mutation-exp
