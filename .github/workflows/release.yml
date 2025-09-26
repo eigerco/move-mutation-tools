@@ -198,27 +198,6 @@ jobs:
           cp target/release/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
           cp target/release/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
 
-          # Add README for manual users
-          cat > package/README.md << 'EOF'
-          # Move Mutation Tools
-
-          This package contains three tools:
-          - move-mutation-test: Tests the quality of your unit test suite
-          - move-mutator: Core mutation engine
-          - move-spec-test: Tests the quality of your formal specifications
-
-          ## Installation via Aptos CLI
-          If you just need move-mutation-test:
-          ```
-          aptos update move-mutation-test
-          ```
-
-          ## Manual Installation
-          All three binaries are included in this archive for manual use.
-
-          For more information: https://github.com/eigerco/move-mutation-tools
-          EOF
-
           cd package
           if [ "${{ runner.os }}" = "Windows" ]; then
             7z a -tzip ../mutation-tools-${{ matrix.asset_name }}.zip *
