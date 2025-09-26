@@ -214,8 +214,8 @@ jobs:
 
           # Compare with existing report (excluding last 3 lines with package_dir)
           if [ -f "report.txt.mutation-exp" ]; then
-            # Normalize Windows paths (backslash to forward slash) in generated report
-            sed -i 's/\\/\//g' report-mutation-generated.txt
+            # HACK: Normalize Windows path. This only works, because we test for a single Move project
+            sed -i 's/"sources\\\\Operators.move"/"sources\/Operators.move"/g' report-mutation-generated.txt
 
             # Remove trailing newlines from both files
             perl -pi -e 'chomp if eof' report-mutation-generated.txt
