@@ -134,7 +134,7 @@ jobs:
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
 
-      Test for non-Windows platforms
+      #Test for non-Windows platforms
       - name: Test move-mutation-test tool on simple_move_2_features (Unix)
         if: runner.os != 'Windows'
         shell: bash
