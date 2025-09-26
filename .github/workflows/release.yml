@@ -21,22 +21,22 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             runner: self-hosted
             asset_name: x86_64-unknown-linux-gnu
-          #
-          # # macOS x86_64
-          # - target: x86_64-apple-darwin
-          #   runner: macos-13
-          #   asset_name: x86_64-apple-darwin
-          #
-          # # macOS ARM64
-          # - target: aarch64-apple-darwin
-          #   runner: macos-latest
-          #   asset_name: aarch64-apple-darwin
-          #
-          # # Windows x86_64
-          # - target: x86_64-pc-windows-msvc
-          #   runner: windows-latest
-          #   asset_name: x86_64-windows
-          #   binary_ext: .exe
+
+          # macOS x86_64
+          - target: x86_64-apple-darwin
+            runner: macos-13
+            asset_name: x86_64-apple-darwin
+
+          # macOS ARM64
+          - target: aarch64-apple-darwin
+            runner: macos-latest
+            asset_name: aarch64-apple-darwin
+
+          # Windows x86_64
+          - target: x86_64-pc-windows-msvc
+            runner: windows-latest
+            asset_name: x86_64-windows
+            binary_ext: .exe
 
     steps:
       - name: Checkout code
@@ -297,7 +297,7 @@ jobs:
 
             ## Documentation
             For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
-          draft: false
+          draft: true
           prerelease: false
           files: release-assets/*
           fail_on_unmatched_files: true
