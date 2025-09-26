@@ -21,22 +21,22 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             runner: self-hosted
             asset_name: x86_64-unknown-linux-gnu
-
-          # macOS x86_64
-          - target: x86_64-apple-darwin
-            runner: macos-13
-            asset_name: x86_64-apple-darwin
-
-          # macOS ARM64
-          - target: aarch64-apple-darwin
-            runner: macos-latest
-            asset_name: aarch64-apple-darwin
-
-          # Windows x86_64
-          - target: x86_64-pc-windows-msvc
-            runner: windows-latest
-            asset_name: x86_64-windows
-            binary_ext: .exe
+          #
+          # # macOS x86_64
+          # - target: x86_64-apple-darwin
+          #   runner: macos-13
+          #   asset_name: x86_64-apple-darwin
+          #
+          # # macOS ARM64
+          # - target: aarch64-apple-darwin
+          #   runner: macos-latest
+          #   asset_name: aarch64-apple-darwin
+          #
+          # # Windows x86_64
+          # - target: x86_64-pc-windows-msvc
+          #   runner: windows-latest
+          #   asset_name: x86_64-windows
+          #   binary_ext: .exe
 
     steps:
       - name: Checkout code
@@ -118,7 +118,6 @@ jobs:
             target/
           key: ${{ runner.os }}-${{ matrix.target }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
 
-      # Build all three tools
       - name: Build all tools
         shell: bash
         run: |
@@ -126,19 +125,16 @@ jobs:
           cargo build --release --bin move-mutator
           cargo build --release --bin move-spec-test
 
-      # Basic smoke test
-      - name: Test binaries
+      - name: Basic smoke test
         shell: bash
         run: |
           ./target/release/move-mutation-test${{ matrix.binary_ext }} --version
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
 
-      # Test mutation tools on all platforms
-      - name: Test move-mutation-test tool on simple_move_2_features
+      - name: Test move-mutation-test tool on simple_move_2_features (Linux, Mac, Windows)
         shell: bash
         run: |
-          # Install Windows-specific tools if needed
           if [ "${{ runner.os }}" = "Windows" ]; then
             choco install unxutils strawberryperl
           fi
@@ -146,20 +142,16 @@ jobs:
           echo "Testing mutation tools on simple_move_2_features project..."
           cd move-mutator/tests/move-assets/simple_move_2_features
 
-          # Generate coverage data first
           echo "Generating coverage data with aptos move test..."
           aptos move test --coverage
 
-          # Test move-mutation-test with coverage
           echo "Running move-mutation-test with coverage..."
-          # Use appropriate binary extension for Windows
           if [ "${{ runner.os }}" = "Windows" ]; then
             ../../../../target/release/move-mutation-test.exe run --coverage --output report-mutation-generated.txt
           else
             ../../../../target/release/move-mutation-test run --coverage --output report-mutation-generated.txt
           fi
 
-          # Windows-specific path normalization
           if [ "${{ runner.os }}" = "Windows" ]; then
             # HACK: Normalize Windows path. This only works because we test a single Move project
             sed -i 's/"sources\\\\Operators.move"/"sources\/Operators.move"/g' report-mutation-generated.txt
@@ -169,7 +161,7 @@ jobs:
           perl -pi -e 'chomp if eof' report-mutation-generated.txt
           perl -pi -e 'chomp if eof' report.txt.mutation-exp
 
-          # Get all lines except last 3 (portable way)
+          # Get all lines except last 3 (excluding package_dir)
           LINES_GEN=$(wc -l < report-mutation-generated.txt)
           LINES_EXP=$(wc -l < report.txt.mutation-exp)
           KEEP_GEN=$((LINES_GEN - 3))
@@ -177,11 +169,6 @@ jobs:
 
           head -n "$KEEP_GEN" report-mutation-generated.txt > report-mutation-gen-trimmed.txt
           head -n "$KEEP_EXP" report.txt.mutation-exp > report-mutation-exp-trimmed.txt
-
-          echo "=== Generated report (trimmed) ==="
-          cat report-mutation-gen-trimmed.txt
-          echo "=== Expected report (trimmed) ==="
-          cat report-mutation-exp-trimmed.txt
 
           if diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
             echo "move-mutation-test report matches expected"
@@ -193,13 +180,6 @@ jobs:
             rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
             exit 1
           fi
-
-          # Clean up generated reports and coverage files
-          rm -f report-mutation-generated.txt
-          rm -rf coverage/
-          cd - > /dev/null
-
-          echo "All reports match - tests passed!"
 
       # Determine version for asset naming
       - name: Get version
