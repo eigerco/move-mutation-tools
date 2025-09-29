@@ -160,7 +160,26 @@ pub fn run_mutation_test(
                     .expect("copying file failed");
 
                 benchmark.start();
-                let result = run_tests_on_mutated_code(test_config, &job_outdir);
+                let module_filter = if test_config.filter.is_none() {
+                    Some(elem.get_module_name())
+                } else {
+                    None
+                };
+                let module_only_result = if let Some(filter) = module_filter {
+                    run_tests_on_mutated_code(test_config, &job_outdir, Some(filter))
+                } else {
+                    Ok(())
+                };
+                let result = match module_only_result {
+                    Ok(()) => {
+                        warn!("mutant NOT killed by module filter!");
+                        run_tests_on_mutated_code(test_config, &job_outdir, None)
+                    },
+                    Err(err) => {
+                        warn!("mutant killed by module filter!");
+                        Err(err)
+                    },
+                };
                 benchmark.stop();
 
                 let mutant_status = if let Err(e) = result {
