@@ -82,8 +82,6 @@ pub fn create_mutator_options(
         mutate_modules: options.mutate_modules.clone(),
         downsampling_ratio_percentage: options.downsampling_ratio_percentage,
         apply_coverage,
-        // To run tests, compilation must succeed
-        verify_mutants: true,
         mode: options.mode,
         operators: options.operators.clone(),
         ..Default::default()

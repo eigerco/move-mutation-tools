@@ -78,7 +78,6 @@ fn check_mutator_verify_mutants_correctly() {
 
     let options = CLIOptions {
         out_mutant_dir: Some(outdir.clone()),
-        verify_mutants: true,
         ..Default::default()
     };
 
@@ -187,7 +186,6 @@ fn check_mutator_fails_verify_file_without_package() {
     let options = CLIOptions {
         move_sources: vec![package_path.join("Sub.move")],
         out_mutant_dir: Some(outdir.clone()),
-        verify_mutants: true,
         ..Default::default()
     };
 

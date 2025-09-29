@@ -5,7 +5,6 @@
 use crate::configuration::Configuration;
 use codespan_reporting::diagnostic::Severity;
 use either::Either;
-use fs_extra::dir::CopyOptions;
 use itertools::Itertools;
 use legacy_move_compiler::shared::{
     known_attributes::{AttributeKind, KnownAttribute},
@@ -17,7 +16,6 @@ use move_model::model::GlobalEnv;
 use move_package::{
     compilation::compiled_package::{make_source_and_deps_for_compiler, CompiledPackage},
     resolution::resolution_graph::ResolvedTable,
-    source_package::layout::SourcePackageLayout,
     BuildConfig,
 };
 use move_symbol_pool::Symbol;
@@ -273,70 +271,6 @@ fn prepare_compiler_for_files(
         known_attributes: known_attributes.clone(),
         ..Default::default()
     }
-}
-
-/// Verify the mutant.
-/// This function compiles the mutated source and checks if the compilation is successful.
-/// If the compilation is successful, the mutant is valid.
-///
-/// This function uses the Move compiler to compile the mutated source. To do so, it copies the whole package
-/// to a temporary directory and replaces the original file with the mutated source. It may introduce problems
-/// with dependencies that are specified as relative paths to the package root.
-///
-/// # Arguments
-///
-/// * `config` - the build configuration.
-/// * `mutated_source` - the mutated source code as a string.
-/// * `original_file` - the path to the original file.
-///
-/// # Errors
-///
-/// * If any error occurs during the verification, the string with the cause is returned.
-///
-/// # Returns
-///
-/// * `Result<(), anyhow::Error>` - Ok if the mutant is valid, or an error if any error occurs.
-pub fn verify_mutant(
-    config: &BuildConfig,
-    mutated_source: &str,
-    original_file: &Path,
-) -> Result<(), anyhow::Error> {
-    // Find the root for the package.
-    let root = SourcePackageLayout::try_find_root(&original_file.canonicalize()?)?;
-
-    debug!("Package path found: {root:?}");
-
-    // Get the relative path to the original file.
-    let relative_path = original_file.canonicalize()?;
-    let relative_path = relative_path.strip_prefix(&root)?;
-
-    debug!("Relative path: {relative_path:?}");
-
-    let tempdir = tempfile::tempdir()?;
-
-    debug!("Temporary directory: {:?}", tempdir.path());
-
-    // Copy the whole package to the tempdir.
-    // We need to copy the whole package because the Move compiler needs to find the Move.toml file and all the dependencies
-    // as we don't know which files are needed for the compilation.
-    let options = CopyOptions::new().content_only(true);
-    fs_extra::dir::copy(&root, &tempdir, &options)?;
-
-    // Write the mutated source to the tempdir in place of the original file.
-    std::fs::write(tempdir.path().join(relative_path), mutated_source)?;
-
-    debug!(
-        "Mutated source written to {:?}",
-        tempdir.path().join(relative_path)
-    );
-
-    // Create a working config, making sure that the test mode is disabled.
-    // We want just check if the compilation is successful.
-    let mut working_config = config.clone();
-    working_config.test_mode = false;
-    let _ = compile_package(working_config, tempdir.path())?;
-
-    Ok(())
 }
 
 pub(crate) fn compile_package(
