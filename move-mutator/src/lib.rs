@@ -21,7 +21,7 @@ mod output;
 pub mod report;
 
 use crate::{
-    compiler::{generate_ast, verify_mutant},
+    compiler::generate_ast,
     configuration::Configuration,
     report::{MutationReport, Report},
 };
@@ -168,16 +168,6 @@ pub fn run_move_mutator(
             // In case the number of mutants is very low, a single thread might be used.
             let rayon_tid = rayon::current_thread_index().unwrap_or(0);
             info!("job_{rayon_tid}: Checking mutant {mutant}");
-
-            if mutator_configuration.project.verify_mutants {
-                let res = verify_mutant(&config, &mutated_info.mutated_source, &path);
-
-                // In case the mutant is not a valid Move file, skip the mutant (do not save it).
-                if let Err(e) = res {
-                    info!("job_{rayon_tid}: Mutant {mutant} is invalid and will not be generated: {e:?}");
-                    return None;
-                }
-            }
 
             let mutant_id = mutated_info.unique_id();
             let Ok(mutant_path) = output::setup_mutant_path(&output_dir, &path, mutant_id) else {
