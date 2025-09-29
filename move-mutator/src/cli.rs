@@ -36,10 +36,6 @@ pub struct CLIOptions {
     #[clap(long, value_parser)]
     pub out_mutant_dir: Option<PathBuf>,
 
-    /// Indicates if mutants should be verified and made sure mutants can compile.
-    #[clap(long, default_value = "false", conflicts_with = "move_sources")]
-    pub verify_mutants: bool,
-
     /// Indicates if the output files should be overwritten.
     #[clap(long, default_value = "false")]
     pub no_overwrite: bool,
@@ -104,7 +100,6 @@ impl Default for CLIOptions {
             mutate_modules: ModuleFilter::All,
             mutate_functions: FunctionFilter::All,
             out_mutant_dir: Some(PathBuf::from(DEFAULT_OUTPUT_DIR)),
-            verify_mutants: false,
             no_overwrite: false,
             apply_coverage: false,
             downsampling_ratio_percentage: None,
