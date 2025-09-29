@@ -8,8 +8,7 @@ This document outlines the release process for Move Mutation Tools, which follow
 
 1. Ensure all tests pass on the main branch
 2. Verify compatibility with the target Aptos version
-3. Update CHANGELOG.md with release notes
-4. Ensure all tools have matching version numbers in their Cargo.toml files
+3. Ensure all tools have matching version numbers in their Cargo.toml files
 
 ### Step-by-Step Process
 
