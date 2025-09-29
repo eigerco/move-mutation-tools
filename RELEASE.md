@@ -21,6 +21,9 @@ git pull origin main
 ```
 
 # Run all tests
+
+This command will take some time
+
 ```bash
 cargo nextest run -r
 ```
@@ -58,10 +61,17 @@ Monitor the workflow at: https://github.com/eigerco/move-mutation-tools/actions
 #### 4. Verify the Release
 
 Once the workflow completes:
-1. Check the release page: https://github.com/eigerco/move-mutation-tools/releases
+1. Check the draft release page: https://github.com/eigerco/move-mutation-tools/releases
 2. Verify all platform artifacts are attached
 3. Install the fresh release on your machine
    ```bash
    aptos update move-mutation-test --target-version v2.0.0
    move-mutation-test --version
    ```
+4. Run it on a Move project to test it's functionality
+
+If there's anything you want to edit on the release(or delete it), you have the ability do it, because the release is still a draft.
+
+#### 5. Publish the release (discard draft)
+
+Go to the releases page, edit your new draft release, click on "Discard draft".
