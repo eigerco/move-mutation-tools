@@ -30,7 +30,7 @@ cargo nextest run -r
 
 #### 1. Update Version Numbers
 
-Update with the same version all three Cargo.toml files:
+Update all three Cargo.toml files to the same version:
 - `move-mutation-test/Cargo.toml`
 - `move-mutator/Cargo.toml`
 - `move-spec-test/Cargo.toml`
