@@ -180,9 +180,15 @@ pub fn run_mutation_test(
 
                 pb_handle.inc(1);
 
+                // Extract operator name from mutant report
+                let operator_name = elem.get_mutations()
+                    .first()
+                    .map(|m| m.get_operator_name().to_string())
+                    .unwrap_or_else(|| "unknown".to_string());
+
                 (
                     benchmark,
-                    MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff),
+                    MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff, operator_name),
                 )
             })
             .collect::<Vec<(_, _)>>()
@@ -211,9 +217,15 @@ pub fn run_mutation_test(
         qname,
         mutant_status,
         diff,
+        operator_name,
     } in mini_reports
     {
         test_report.increment_mutants_tested(&original_file, &qname);
+
+        // Update operator statistics
+        let is_killed = matches!(mutant_status, MutantStatus::Killed);
+        test_report.update_operator_stats(&operator_name, is_killed);
+
         if let MutantStatus::Alive = mutant_status {
             test_report.add_mutants_alive_diff(&original_file, &qname, &diff);
         } else {
@@ -223,6 +235,11 @@ pub fn run_mutation_test(
     }
 
     test_report.print_table();
+
+    // Print operator effectiveness statistics if requested
+    if options.show_operator_stats {
+        test_report.print_operator_stats();
+    }
 
     benchmarks.total_tool_duration.stop();
     benchmarks.display();

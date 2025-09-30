@@ -20,6 +20,37 @@ pub enum MutantStatus {
     Alive,
 }
 
+/// Statistics for a specific mutation operator.
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct OperatorStats {
+    /// The name of the operator.
+    pub name: String,
+    /// The number of mutants tested for this operator.
+    pub tested: u32,
+    /// The number of mutants killed for this operator.
+    pub killed: u32,
+}
+
+impl OperatorStats {
+    /// Creates a new operator stats instance.
+    pub fn new(name: String) -> Self {
+        Self {
+            name,
+            tested: 0,
+            killed: 0,
+        }
+    }
+
+    /// Returns the effectiveness percentage of the operator.
+    pub fn effectiveness(&self) -> f64 {
+        if self.tested == 0 {
+            0.0
+        } else {
+            f64::from(self.killed) / f64::from(self.tested) * 100.0
+        }
+    }
+}
+
 /// This struct represents a report single mutation test.
 #[derive(Debug)]
 pub struct MiniReport {
@@ -31,6 +62,8 @@ pub struct MiniReport {
     pub mutant_status: MutantStatus,
     /// A file difference that identifies mutants.
     pub diff: String,
+    /// The operator that generated this mutant.
+    pub operator_name: String,
 }
 
 impl MiniReport {
@@ -40,12 +73,14 @@ impl MiniReport {
         qname: String,
         mutant_status: MutantStatus,
         diff: String,
+        operator_name: String,
     ) -> Self {
         Self {
             original_file,
             qname,
             mutant_status,
             diff,
+            operator_name,
         }
     }
 }
@@ -60,6 +95,8 @@ pub struct Report {
     pub files: BTreeMap<PathBuf, Vec<MutantStats>>,
     /// Package directory location.
     pub package_dir: PathBuf,
+    /// Operator effectiveness statistics.
+    pub operator_stats: BTreeMap<String, OperatorStats>,
 }
 
 impl Report {
@@ -68,6 +105,7 @@ impl Report {
         Self {
             files: BTreeMap::new(),
             package_dir,
+            operator_stats: BTreeMap::new(),
         }
     }
 
@@ -124,6 +162,41 @@ impl Report {
             new_entry.mutants_killed_diff.push(diff.to_owned());
             entry.push(new_entry);
         }
+    }
+
+    /// Updates operator statistics for a given operator.
+    pub fn update_operator_stats(&mut self, operator_name: &str, killed: bool) {
+        let stats = self.operator_stats
+            .entry(operator_name.to_string())
+            .or_insert_with(|| OperatorStats::new(operator_name.to_string()));
+
+        stats.tested += 1;
+        if killed {
+            stats.killed += 1;
+        }
+    }
+
+    /// Prints operator effectiveness table.
+    pub fn print_operator_stats(&self) {
+        println!("\n=== Operator Effectiveness Analysis ===\n");
+
+        let mut builder = Builder::new();
+        builder.push_record(["Operator", "Mutants Tested", "Mutants Killed", "Effectiveness"]);
+
+        let mut sorted_stats: Vec<_> = self.operator_stats.values().collect();
+        sorted_stats.sort_by(|a, b| b.effectiveness().partial_cmp(&a.effectiveness()).unwrap());
+
+        for stat in sorted_stats {
+            builder.push_record([
+                stat.name.clone(),
+                stat.tested.to_string(),
+                stat.killed.to_string(),
+                format!("{:.2}%", stat.effectiveness()),
+            ]);
+        }
+
+        let table = builder.build().with(Style::modern_rounded()).to_string();
+        println!("{}", table);
     }
 
     /// Save the report to a JSON file.
