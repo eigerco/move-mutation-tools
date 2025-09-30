@@ -4,7 +4,7 @@ version = "0.0.0"
 
 [dependencies.AptosStdlib]
 git = 'https://github.com/aptos-labs/aptos-core.git'
-rev = 'main'
+rev = 'aptos-release-v1.35'
 subdir = 'aptos-move/framework/aptos-stdlib'
 
 [addresses]
