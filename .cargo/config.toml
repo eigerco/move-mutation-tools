@@ -36,3 +36,4 @@ rustflags = ["--cfg", "tokio_unstable"]
 # macOS ARM64
 [target.aarch64-apple-darwin]
 rustflags = ["--cfg", "tokio_unstable"]
+
