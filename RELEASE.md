@@ -74,4 +74,4 @@ If there's anything you want to edit on the release(or delete it), you have the 
 
 #### 5. Publish the release (discard draft)
 
-Go to the releases page, edit your new draft release, click on "Discard draft".
+Go to the releases page, edit your new draft release, click on "Publish release".
