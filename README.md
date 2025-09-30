@@ -40,7 +40,7 @@ aptos update move-mutation-test --target-version v2.0.0
 Alternatively, you can build from source:
 
 ```bash
-RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-mutation-tools.git --locked move-mutation-test
+cargo install --git https://github.com/eigerco/move-mutation-tools.git --locked move-mutation-test
 ```
 
 ## Quick introduction to mutation tools
