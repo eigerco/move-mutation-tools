@@ -2,36 +2,33 @@ name: Basic test run
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - Cargo.toml
-      - Cargo.lock
-      - move-mutator/**
-      - move-spec-test/**
-      - move-mutation-test/**
-      - .github/workflows/run-tests.yml
-  pull_request:
-    branches: [ main ]
-    paths:
-      - Cargo.toml
-      - Cargo.lock
-      - move-mutator/**
-      - move-spec-test/**
-      - move-mutation-test/**
-      - .github/workflows/run-tests.yml
+  #   branches: [ main ]
+  #   paths:
+  #     - Cargo.toml
+  #     - Cargo.lock
+  #     - move-mutator/**
+  #     - move-spec-test/**
+  #     - move-mutation-test/**
+  #     - .github/workflows/run-tests.yml
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - Cargo.toml
+  #     - Cargo.lock
+  #     - move-mutator/**
+  #     - move-spec-test/**
+  #     - move-mutation-test/**
+  #     - .github/workflows/run-tests.yml
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   basic-test-run:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Basic ci-check for tests
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install required deps
-        run: sudo apt-get install libudev-dev libdw-dev lld libpq-dev libssl-dev pkg-config lsof build-essential ca-certificates clang curl git --no-install-recommends --assume-yes
 
       - name: Get aptos-core
         uses: actions/checkout@v4
