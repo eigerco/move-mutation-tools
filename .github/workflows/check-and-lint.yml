@@ -25,7 +25,7 @@ env:
 
 jobs:
   basic-lint-and-check:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Basic ci-check for fmt/clippy/check
     steps:
       - uses: actions/checkout@v4
@@ -45,4 +45,4 @@ jobs:
         run: RUSTFLAGS="--cfg tokio_unstable" cargo clippy --all-targets -- -D warnings
 
       - name: Run check
-        run: cargo check --all-targets
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo check --all-targets

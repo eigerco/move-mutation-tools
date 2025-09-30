@@ -62,4 +62,4 @@ jobs:
         uses: taiki-e/install-action@nextest
 
       - name: Run normal tests in the release mode due to test duration speed bump.
-        run: cargo nextest run -r --profile ci
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo nextest run -r --profile ci
