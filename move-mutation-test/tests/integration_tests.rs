@@ -32,8 +32,6 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
         dump_state: false,
         filter: None,
         ignore_compile_warnings: false,
-        // TODO(rqnsom): maybe we could set it to true, but it would require `aptos` command in
-        // the `build.rs` - using `process::Command` slowed down the execution a lot
         compute_coverage: false,
         gas_limit: 2000,
     };

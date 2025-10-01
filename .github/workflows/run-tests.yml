@@ -2,23 +2,23 @@ name: Basic test run
 
 on:
   push:
-  #   branches: [ main ]
-  #   paths:
-  #     - Cargo.toml
-  #     - Cargo.lock
-  #     - move-mutator/**
-  #     - move-spec-test/**
-  #     - move-mutation-test/**
-  #     - .github/workflows/run-tests.yml
-  # pull_request:
-  #   branches: [ main ]
-  #   paths:
-  #     - Cargo.toml
-  #     - Cargo.lock
-  #     - move-mutator/**
-  #     - move-spec-test/**
-  #     - move-mutation-test/**
-  #     - .github/workflows/run-tests.yml
+    branches: [ main ]
+    paths:
+      - Cargo.toml
+      - Cargo.lock
+      - move-mutator/**
+      - move-spec-test/**
+      - move-mutation-test/**
+      - .github/workflows/run-tests.yml
+  pull_request:
+    branches: [ main ]
+    paths:
+      - Cargo.toml
+      - Cargo.lock
+      - move-mutator/**
+      - move-spec-test/**
+      - move-mutation-test/**
+      - .github/workflows/run-tests.yml
 
 env:
   CARGO_TERM_COLOR: always
@@ -41,9 +41,7 @@ jobs:
 
       - name: Install related tools and prover dependencies
         shell: bash
-        run: |
-          whoami
-          aptos-core/scripts/dev_setup.sh -b -p -r -y -P -t -k
+        run: aptos-core/scripts/dev_setup.sh -b -p -r -y -P -t -k
 
       - name: Prepare move prover tooling.
         shell: bash
