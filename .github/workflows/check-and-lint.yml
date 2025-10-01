@@ -2,30 +2,30 @@ name: Basic check and lint
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - Cargo.toml
-      - Cargo.lock
-      - move-mutator/**
-      - move-spec-test/**
-      - move-mutation-test/**
-      - .github/workflows/check-and-lint.yml
-  pull_request:
-    branches: [ main ]
-    paths:
-      - Cargo.toml
-      - Cargo.lock
-      - move-mutator/**
-      - move-spec-test/**
-      - move-mutation-test/**
-      - .github/workflows/check-and-lint.yml
+  #   branches: [ main ]
+  #   paths:
+  #     - Cargo.toml
+  #     - Cargo.lock
+  #     - move-mutator/**
+  #     - move-spec-test/**
+  #     - move-mutation-test/**
+  #     - .github/workflows/check-and-lint.yml
+  # pull_request:
+  #   branches: [ main ]
+  #   paths:
+  #     - Cargo.toml
+  #     - Cargo.lock
+  #     - move-mutator/**
+  #     - move-spec-test/**
+  #     - move-mutation-test/**
+  #     - .github/workflows/check-and-lint.yml
 
 env:
   CARGO_TERM_COLOR: always
 
 jobs:
   basic-lint-and-check:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Basic ci-check for fmt/clippy/check
     steps:
       - uses: actions/checkout@v4
@@ -42,7 +42,7 @@ jobs:
         uses: actions-rust-lang/rustfmt@v1
 
       - name: Run clippy
-        run: cargo clippy --all-targets -- -D warnings
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo clippy --all-targets -- -D warnings
 
       - name: Run check
-        run: cargo check --all-targets
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo check --all-targets
