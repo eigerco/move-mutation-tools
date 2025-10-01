@@ -29,6 +29,9 @@ jobs:
     name: Basic ci-check for tests
     steps:
       - uses: actions/checkout@v4
+      
+      - name: Install required deps
+        run: sudo apt-get install libudev-dev libdw-dev lld libpq-dev libssl-dev pkg-config lsof build-essential ca-certificates clang curl git --no-install-recommends --assume-yes
 
       - name: Get aptos-core
         uses: actions/checkout@v4
