@@ -38,7 +38,9 @@ jobs:
 
       - name: Install related tools and prover dependencies
         shell: bash
-        run: aptos-core/scripts/dev_setup.sh -b -p -r -y -P -t -k
+        run: |
+          whoami
+          aptos-core/scripts/dev_setup.sh -b -p -r -y -P -t -k
 
       - name: Prepare move prover tooling.
         shell: bash
