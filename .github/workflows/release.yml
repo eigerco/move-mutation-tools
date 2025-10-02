@@ -26,7 +26,7 @@ jobs:
 
           # Linux ARM64 (aarch64) - Cross-compilation
           - target: aarch64-unknown-linux-gnu
-            runner: ubuntu-latest
+            runner: self-hosted
             asset_name: aarch64-unknown-linux-gnu
 
           # # macOS x86_64
@@ -152,8 +152,8 @@ jobs:
       - name: Build all tools (ARM64 Linux cross-compilation)
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         shell: bash
-        env:
-          RUSTFLAGS: "--cfg tokio_unstable"
+        # env:
+        #   RUSTFLAGS: "--cfg tokio_unstable"
         run: |
           cross build --release --target ${{ matrix.target }} --bin move-mutation-test
           cross build --release --target ${{ matrix.target }} --bin move-mutator

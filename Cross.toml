@@ -2,6 +2,7 @@
 pre-build = [
     "dpkg --add-architecture arm64",
     "apt-get update",
-    "apt-get install --assume-yes libssl-dev:arm64"
+    "apt-get install --assume-yes libssl-dev:arm64",
+	"export RUSTFLAGS=\"--cfg tokio_unstable\""
 ]
-env.passthrough = ["RUSTFLAGS"]
+# env.passthrough = ["RUSTFLAGS"]
