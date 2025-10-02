@@ -4,5 +4,10 @@ pre-build = [
     "apt-get update",
     "apt-get install --assume-yes libssl-dev:arm64",
 	"echo DEBUG: CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS=$CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS",
-    "env | grep -i cargo || true"
 ]
+
+[build.env]
+passthrough = ["CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS=--cfg tokio_unstable"]
+
+[target.aarch64-unknown-linux-gnu.env]
+passthrough = ["CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS=--cfg tokio_unstable"]
