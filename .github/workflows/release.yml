@@ -153,7 +153,8 @@ jobs:
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         shell: bash
         env:
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "--cfg tokio_unstable"
+          # CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "--cfg tokio_unstable"
+          RUSTFLAGS: "--cfg tokio_unstable"
         run: |
           RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-mutation-test
           RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-mutator
