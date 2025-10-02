@@ -153,9 +153,9 @@ jobs:
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         shell: bash
         run: |
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
-          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+          cross build --release --target ${{ matrix.target }} --bin move-mutator
+          cross build --release --target ${{ matrix.target }} --bin move-spec-test
 
       - name: Basic smoke test
         if: matrix.target != 'aarch64-unknown-linux-gnu'
