@@ -2,8 +2,7 @@
 pre-build = [
     "dpkg --add-architecture arm64",
     "apt-get update",
-    "apt-get install --assume-yes libssl-dev:arm64",
-	"echo DEBUG: CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS=$CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS",
+    "apt-get install --assume-yes libssl-dev:arm64"
 ]
 
 [build.env]
