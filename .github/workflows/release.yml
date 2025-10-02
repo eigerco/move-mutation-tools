@@ -157,10 +157,10 @@ jobs:
           OPENSSL_STATIC: 1
           OPENSSL_VENDORED: 1
         run: |
-          cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-          cross build --release --target ${{ matrix.target }} --bin move-mutator
-          cross build --release --target ${{ matrix.target }} --bin move-spec-test
-          cross build --release --target ${{ matrix.target }} --bin move-mutation-analyzer
+          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
+          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-analyzer
 
       - name: Basic smoke test
         if: matrix.target != 'aarch64-unknown-linux-gnu'
