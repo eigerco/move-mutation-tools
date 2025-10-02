@@ -12,6 +12,8 @@ env:
 jobs:
   build-and-release:
     name: Build ${{ matrix.target }}
+    permissions:
+      contents: read
     runs-on: ${{ matrix.runner }}
     strategy:
       fail-fast: false
