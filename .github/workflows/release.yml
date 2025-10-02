@@ -155,6 +155,7 @@ jobs:
         # env:
         #   RUSTFLAGS: "--cfg tokio_unstable"
         run: |
+          cross --version
           CARGO_BUILD_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
           CARGO_BUILD_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
           CARGO_BUILD_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
