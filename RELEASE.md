@@ -22,7 +22,7 @@ git pull origin main
 
 # Run all tests
 
-This command will take some time
+This command will take some time, especially if you're building the project for the first time.
 
 ```bash
 cargo nextest run -r
@@ -30,12 +30,12 @@ cargo nextest run -r
 
 #### 1. Update Version Numbers
 
-Update all three Cargo.toml files to the same version:
+Update all three Cargo.toml files to the same release version (example below is with v2.0.0):
 - `move-mutation-test/Cargo.toml`
 - `move-mutator/Cargo.toml`
 - `move-spec-test/Cargo.toml`
 
-#### 2. Create and Push the Tag
+#### 2. Create and Push a Tag with the release version
 
 ```bash
 # Commit version updates
@@ -50,7 +50,8 @@ git push origin v2.0.0
 
 #### 3. Monitor the Release
 
-The GitHub Actions workflow will automatically:
+When you push the tag on the main branch a GitHub Actions workflow will be triggered.
+The workflow will automatically:
 1. Build binaries for all supported platforms (Linux, macOS Intel/ARM, Windows)
 2. Run tests, which compares a pre-generated report with a report generated from each freshly built binary
 3. Create a draft GitHub release
@@ -58,20 +59,23 @@ The GitHub Actions workflow will automatically:
 
 Monitor the workflow at: https://github.com/eigerco/move-mutation-tools/actions
 
-#### 4. Verify the Release
+#### 4. Verify the draft Release
 
 Once the workflow completes:
 1. Check the draft release page: https://github.com/eigerco/move-mutation-tools/releases
 2. Verify all platform artifacts are attached
-3. Install the fresh release on your machine
-   ```bash
-   aptos update move-mutation-test --target-version v2.0.0
-   move-mutation-test --version
-   ```
-4. Run it on a Move project to test it's functionality
+3. Download the artifact for your architecture and run it on a Move project to test it's functionality
 
 If there's anything you want to edit on the release(or delete it), you have the ability do it, because the release is still a draft.
 
 #### 5. Publish the release (discard draft)
 
-Go to the releases page, edit your new draft release, click on "Publish release".
+Go to the releases page, click on the edit button, check "Set as the latest release" and then click on "Publish release".
+
+#### 5. Verify the published Release
+1. Install the fresh release on your machine via the Aptos CLI.
+   ```bash
+   aptos update move-mutation-test --target-version v2.0.0
+   move-mutation-test --version
+   ```
+2. Run it on a Move project to test it's functionality
