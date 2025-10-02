@@ -148,7 +148,6 @@ jobs:
           cargo build --release --bin move-mutation-test
           cargo build --release --bin move-mutator
           cargo build --release --bin move-spec-test
-          cargo build --release --bin move-mutation-analyzer
 
       - name: Build all tools (ARM64 Linux cross-compilation)
         if: matrix.target == 'aarch64-unknown-linux-gnu'
@@ -160,7 +159,6 @@ jobs:
           RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
           RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
           RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
-          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-analyzer
 
       - name: Basic smoke test
         if: matrix.target != 'aarch64-unknown-linux-gnu'
@@ -169,7 +167,6 @@ jobs:
           ./target/release/move-mutation-test${{ matrix.binary_ext }} --version
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
-          ./target/release/move-mutation-analyzer${{ matrix.binary_ext }} --version
 
   #     - name: Test move-mutation-test tool on simple_move_2_features (Linux, Mac, Windows)
   #       shell: bash
@@ -244,7 +241,6 @@ jobs:
   #         cp $RELEASE_DIR/move-mutation-test${{ matrix.binary_ext }} package/move-mutation-test${{ matrix.binary_ext }}
   #         cp $RELEASE_DIR/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
   #         cp $RELEASE_DIR/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
-  #         cp $RELEASE_DIR/move-mutation-analyzer${{ matrix.binary_ext }} package/move-mutation-analyzer${{ matrix.binary_ext }}
   #
   #         cd package
   #         if [ "${{ runner.os }}" = "Windows" ]; then
