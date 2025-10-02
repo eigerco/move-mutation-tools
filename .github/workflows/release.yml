@@ -155,9 +155,9 @@ jobs:
         # env:
         #   CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "--cfg tokio_unstable"
         run: |
-          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
-          RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
 
 
       - name: Basic smoke test
