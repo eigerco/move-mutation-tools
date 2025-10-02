@@ -155,10 +155,10 @@ jobs:
         env:
           CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "--cfg tokio_unstable"
         run: |
-          cross shell --target ${{ matrix.target }} -- bash -c 'echo "CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS=$CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS"; env | grep -i rust'
-          RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-          RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-mutator
-          RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-mutation-test 2>&1 | grep rustflags
+          RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-mutator 2>&1 | grep rustflags
+          RUST_LOG=cargo::core::compiler=trace cross build --release --target ${{ matrix.target }} --bin move-spec-test 2>&1 | grep rustflags
+
 
       - name: Basic smoke test
         if: matrix.target != 'aarch64-unknown-linux-gnu'
