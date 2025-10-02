@@ -4,4 +4,4 @@ pre-build = [
     "apt-get update",
     "apt-get install --assume-yes libssl-dev:arm64"
 ]
-env.passthrough = ["CARGO_BUILD_RUSTFLAGS"]
+env.passthrough = ["CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS"]

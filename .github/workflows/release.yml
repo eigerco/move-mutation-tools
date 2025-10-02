@@ -26,7 +26,7 @@ jobs:
 
           # Linux ARM64 (aarch64) - Cross-compilation
           - target: aarch64-unknown-linux-gnu
-            runner: ubuntu-latest
+            runner: self-hosted
             asset_name: aarch64-unknown-linux-gnu
 
           # # macOS x86_64
@@ -153,12 +153,11 @@ jobs:
         if: matrix.target == 'aarch64-unknown-linux-gnu'
         shell: bash
         # env:
-        #   RUSTFLAGS: "--cfg tokio_unstable"
+        #   CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS: "--cfg tokio_unstable"
         run: |
-          cross --version
-          CARGO_BUILD_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
-          CARGO_BUILD_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
-          CARGO_BUILD_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-mutator
+          CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_RUSTFLAGS="--cfg tokio_unstable" cross build --release --target ${{ matrix.target }} --bin move-spec-test
 
 
       - name: Basic smoke test
