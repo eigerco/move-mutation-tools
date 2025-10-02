@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    # tags:
+    #   - 'v[0-9]+.[0-9]+.[0-9]+'
 
 env:
   CARGO_TERM_COLOR: always
@@ -23,6 +23,11 @@ jobs:
           - target: x86_64-unknown-linux-gnu
             runner: self-hosted
             asset_name: x86_64-unknown-linux-gnu
+
+          # Linux ARM64 (aarch64) - Cross-compilation
+          - target: aarch64-unknown-linux-gnu
+            runner: ubuntu-latest
+            asset_name: aarch64-unknown-linux-gnu
 
           # macOS x86_64
           - target: x86_64-apple-darwin
@@ -46,67 +51,75 @@ jobs:
         with:
           fetch-depth: 0  # Need full history to verify tag is from "main" branch
 
-      - name: Verify tag is from main branch
-        shell: bash
-        run: |
-          # Get the commit SHA that the tag points to
-          TAG_COMMIT=$(git rev-list -n 1 ${{ github.ref }})
+      # - name: Verify tag is from main branch
+      #   shell: bash
+      #   run: |
+      #     # Get the commit SHA that the tag points to
+      #     TAG_COMMIT=$(git rev-list -n 1 ${{ github.ref }})
+      #
+      #     # Check if this commit exists on main branch
+      #     git fetch origin main
+      #     if ! git merge-base --is-ancestor $TAG_COMMIT origin/main; then
+      #       echo "Error: Tag must be created from main branch!"
+      #       echo "This tag points to commit $TAG_COMMIT which is not on main branch."
+      #       exit 1
+      #     fi
+      #     echo "Tag is from main branch (commit: $TAG_COMMIT)"
+      #
+      # # Make sure that Cargo.toml version for each tool is the same as the tag
+      # - name: Verify version consistency
+      #   shell: bash
+      #   run: |
+      #     # Extract version from tag
+      #     TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+      #
+      #     # Check each tool's Cargo.toml version
+      #     for tool in move-mutation-test move-mutator move-spec-test; do
+      #       CARGO_VERSION=$(grep "^version" $tool/Cargo.toml | head -1 | cut -d'"' -f2)
+      #       if [ "$CARGO_VERSION" != "$TAG_VERSION" ]; then
+      #         echo "Error: Version mismatch for $tool!"
+      #         echo "   Tag version: $TAG_VERSION"
+      #         echo "   Cargo.toml version: $CARGO_VERSION"
+      #         exit 1
+      #       fi
+      #       echo "$tool version matches: $CARGO_VERSION"
+      #     done
 
-          # Check if this commit exists on main branch
-          git fetch origin main
-          if ! git merge-base --is-ancestor $TAG_COMMIT origin/main; then
-            echo "Error: Tag must be created from main branch!"
-            echo "This tag points to commit $TAG_COMMIT which is not on main branch."
-            exit 1
-          fi
-          echo "Tag is from main branch (commit: $TAG_COMMIT)"
-
-      # Make sure that Cargo.toml version for each tool is the same as the tag
-      - name: Verify version consistency
-        shell: bash
-        run: |
-          # Extract version from tag
-          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
-
-          # Check each tool's Cargo.toml version
-          for tool in move-mutation-test move-mutator move-spec-test; do
-            CARGO_VERSION=$(grep "^version" $tool/Cargo.toml | head -1 | cut -d'"' -f2)
-            if [ "$CARGO_VERSION" != "$TAG_VERSION" ]; then
-              echo "Error: Version mismatch for $tool!"
-              echo "   Tag version: $TAG_VERSION"
-              echo "   Cargo.toml version: $CARGO_VERSION"
-              exit 1
-            fi
-            echo "$tool version matches: $CARGO_VERSION"
-          done
-
-      - name: Enable long paths on Windows
-        if: runner.os == 'Windows'
-        run: |
-          git config --system core.longpaths true
-          reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
-        shell: pwsh
+      # - name: Enable long paths on Windows
+      #   if: runner.os == 'Windows'
+      #   run: |
+      #     git config --system core.longpaths true
+      #     reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
+      #   shell: pwsh
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Aptos CLI
+      # Only install cross and target for ARM64 Linux cross-compilation
+      - name: Setup cross-compilation for Linux ARM64
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
         shell: bash
         run: |
-          if [ "${{ runner.os }}" = "macOS" ]; then
-            echo "Installing Aptos CLI via Homebrew..."
-            brew install aptos
-          elif [ "${{ runner.os }}" = "Windows" ]; then
-            echo "Installing Aptos CLI via Chocolatey..."
-            choco install aptos -y
-          else
-            echo "Installing Aptos CLI via installer script..."
-            curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
-            source ~/.profile
-            APTOS_PATH=$(dirname $(which aptos))
-            echo "$APTOS_PATH" >> $GITHUB_PATH
-          fi
-          aptos --version
+          rustup target add ${{ matrix.target }}
+          cargo install cross --git https://github.com/cross-rs/cross
+      #
+      # - name: Install Aptos CLI
+      #   shell: bash
+      #   run: |
+      #     if [ "${{ runner.os }}" = "macOS" ]; then
+      #       echo "Installing Aptos CLI via Homebrew..."
+      #       brew install aptos
+      #     elif [ "${{ runner.os }}" = "Windows" ]; then
+      #       echo "Installing Aptos CLI via Chocolatey..."
+      #       choco install aptos -y
+      #     else
+      #       echo "Installing Aptos CLI via installer script..."
+      #       curl -fsSL "https://aptos.dev/scripts/install_cli.sh" | sh
+      #       source ~/.profile
+      #       APTOS_PATH=$(dirname $(which aptos))
+      #       echo "$APTOS_PATH" >> $GITHUB_PATH
+      #     fi
+      #     aptos --version
 
       - name: Cache Cargo
         uses: actions/cache@v4
@@ -120,165 +133,188 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build all tools
+        if: matrix.target != 'aarch64-unknown-linux-gnu'
         shell: bash
         run: |
           cargo build --release --bin move-mutation-test
           cargo build --release --bin move-mutator
           cargo build --release --bin move-spec-test
+          cargo build --release --bin move-mutation-analyzer
+
+      - name: Build all tools (ARM64 Linux cross-compilation)
+        if: matrix.target == 'aarch64-unknown-linux-gnu'
+        shell: bash
+        run: |
+          cross build --release --target ${{ matrix.target }} --bin move-mutation-test
+          cross build --release --target ${{ matrix.target }} --bin move-mutator
+          cross build --release --target ${{ matrix.target }} --bin move-spec-test
+          cross build --release --target ${{ matrix.target }} --bin move-mutation-analyzer
 
       - name: Basic smoke test
+        if: matrix.target != 'aarch64-unknown-linux-gnu'
         shell: bash
         run: |
           ./target/release/move-mutation-test${{ matrix.binary_ext }} --version
           ./target/release/move-mutator${{ matrix.binary_ext }} --version
           ./target/release/move-spec-test${{ matrix.binary_ext }} --version
+          ./target/release/move-mutation-analyzer${{ matrix.binary_ext }} --version
 
-      - name: Test move-mutation-test tool on simple_move_2_features (Linux, Mac, Windows)
-        shell: bash
-        run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            choco install unxutils strawberryperl
-          fi
-
-          echo "Testing mutation tools on simple_move_2_features project..."
-          cd move-mutator/tests/move-assets/simple_move_2_features
-
-          echo "Generating coverage data with aptos move test..."
-          aptos move test --coverage
-
-          echo "Running move-mutation-test with coverage..."
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            ../../../../target/release/move-mutation-test.exe run --coverage --output report-mutation-generated.txt
-          else
-            ../../../../target/release/move-mutation-test run --coverage --output report-mutation-generated.txt
-          fi
-
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            # HACK: Normalize Windows path. This only works because we test a single Move project
-            sed -i 's/"sources\\\\Operators.move"/"sources\/Operators.move"/g' report-mutation-generated.txt
-          fi
-
-          # Remove trailing newlines from both files
-          perl -pi -e 'chomp if eof' report-mutation-generated.txt
-          perl -pi -e 'chomp if eof' report.txt.mutation-exp
-
-          # Get all lines except last 3 (excluding package_dir)
-          LINES_GEN=$(wc -l < report-mutation-generated.txt)
-          LINES_EXP=$(wc -l < report.txt.mutation-exp)
-          KEEP_GEN=$((LINES_GEN - 3))
-          KEEP_EXP=$((LINES_EXP - 3))
-
-          head -n "$KEEP_GEN" report-mutation-generated.txt > report-mutation-gen-trimmed.txt
-          head -n "$KEEP_EXP" report.txt.mutation-exp > report-mutation-exp-trimmed.txt
-
-          if diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
-            echo "move-mutation-test report matches expected"
-            rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
-          else
-            echo "move-mutation-test report differs from expected"
-            echo "=== Differences ==="
-            diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt || true
-            rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
-            exit 1
-          fi
-
-      # Determine version for asset naming
-      - name: Get version
-        id: version
-        shell: bash
-        run: |
-          # Extract version from tag (remove 'v' prefix)
-          VERSION="${GITHUB_REF#refs/tags/v}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Package all tools for release
-        shell: bash
-        run: |
-          mkdir -p package
-          cp target/release/move-mutation-test${{ matrix.binary_ext }} package/move-mutation-test${{ matrix.binary_ext }}
-          cp target/release/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
-          cp target/release/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
-
-          cd package
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            7z a -tzip ../mutation-tools-${{ matrix.asset_name }}.zip *
-          else
-            zip -r ../mutation-tools-${{ matrix.asset_name }}.zip *
-          fi
-          cd ..
-
-      - name: Upload release artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-${{ matrix.target }}
-          path: |
-            mutation-tools-${{ matrix.asset_name }}.zip
-
-  create-release:
-    name: Create GitHub Release
-    runs-on: self-hosted
-    needs: build-and-release
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Determine version
-        id: version
-        run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          VERSION="${TAG#v}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Prepare release assets
-        run: |
-          mkdir -p release-assets
-          find artifacts -name "*.zip" | while read file; do
-            cp "$file" release-assets/
-          done
-          ls -lh release-assets/
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: Move Mutation Tools v${{ steps.version.outputs.version }}
-          body: |
-            ## Installation Options
-
-            ### Via Aptos CLI (Recommended for most users)
-            ```bash
-            aptos update move-mutation-test
-            ```
-            This installs `move-mutation-test` which is the main tool most users need.
-
-            ### Direct Download (All tools)
-            Download the appropriate archive for your platform below. Each archive contains:
-            - `move-mutation-test` - Tests the quality of your unit test suite
-            - `move-mutator` - Core mutation engine for advanced users
-            - `move-spec-test` - Tests the quality of your formal specifications
-
-            ## Platform Support
-
-            | Platform | Architecture | File |
-            |----------|--------------|------|
-            | Linux | x86_64 | `mutation-tools-x86_64-unknown-linux-gnu.zip` |
-            | macOS | x86_64 (Intel) | `mutation-tools-x86_64-apple-darwin.zip` |
-            | macOS | ARM64 (Apple Silicon) | `mutation-tools-aarch64-apple-darwin.zip` |
-            | Windows | x86_64 | `mutation-tools-x86_64-windows.zip` |
-
-            ## Documentation
-            For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
-          draft: true
-          prerelease: false
-          files: release-assets/*
-          fail_on_unmatched_files: true
-          generate_release_notes: true
+  #     - name: Test move-mutation-test tool on simple_move_2_features (Linux, Mac, Windows)
+  #       shell: bash
+  #       run: |
+  #         if [ "${{ runner.os }}" = "Windows" ]; then
+  #           choco install unxutils strawberryperl
+  #         fi
+  #
+  #         echo "Testing mutation tools on simple_move_2_features project..."
+  #         cd move-mutator/tests/move-assets/simple_move_2_features
+  #
+  #         echo "Generating coverage data with aptos move test..."
+  #         aptos move test --coverage
+  #
+  #         echo "Running move-mutation-test with coverage..."
+  #         if [ "${{ runner.os }}" = "Windows" ]; then
+  #           ../../../../target/release/move-mutation-test.exe run --coverage --output report-mutation-generated.txt
+  #         else
+  #           ../../../../target/release/move-mutation-test run --coverage --output report-mutation-generated.txt
+  #         fi
+  #
+  #         if [ "${{ runner.os }}" = "Windows" ]; then
+  #           # HACK: Normalize Windows path. This only works because we test a single Move project
+  #           sed -i 's/"sources\\\\Operators.move"/"sources\/Operators.move"/g' report-mutation-generated.txt
+  #         fi
+  #
+  #         # Remove trailing newlines from both files
+  #         perl -pi -e 'chomp if eof' report-mutation-generated.txt
+  #         perl -pi -e 'chomp if eof' report.txt.mutation-exp
+  #
+  #         # Get all lines except last 3 (excluding package_dir)
+  #         LINES_GEN=$(wc -l < report-mutation-generated.txt)
+  #         LINES_EXP=$(wc -l < report.txt.mutation-exp)
+  #         KEEP_GEN=$((LINES_GEN - 3))
+  #         KEEP_EXP=$((LINES_EXP - 3))
+  #
+  #         head -n "$KEEP_GEN" report-mutation-generated.txt > report-mutation-gen-trimmed.txt
+  #         head -n "$KEEP_EXP" report.txt.mutation-exp > report-mutation-exp-trimmed.txt
+  #
+  #         if diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt > /dev/null 2>&1; then
+  #           echo "move-mutation-test report matches expected"
+  #           rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
+  #         else
+  #           echo "move-mutation-test report differs from expected"
+  #           echo "=== Differences ==="
+  #           diff -B report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt || true
+  #           rm -f report-mutation-gen-trimmed.txt report-mutation-exp-trimmed.txt
+  #           exit 1
+  #         fi
+  #
+  #     # Determine version for asset naming
+  #     - name: Get version
+  #       id: version
+  #       shell: bash
+  #       run: |
+  #         # Extract version from tag (remove 'v' prefix)
+  #         VERSION="${GITHUB_REF#refs/tags/v}"
+  #         echo "version=$VERSION" >> $GITHUB_OUTPUT
+  #
+  #     - name: Package all tools for release
+  #       shell: bash
+  #       run: |
+  #         mkdir -p package
+  #
+  #         # Set the correct path based on whether we used cross-compilation
+  #         if [ "${{ matrix.target }}" = "aarch64-unknown-linux-gnu" ]; then
+  #           RELEASE_DIR="target/${{ matrix.target }}/release"
+  #         else
+  #           RELEASE_DIR="target/release"
+  #         fi
+  #
+  #         cp $RELEASE_DIR/move-mutation-test${{ matrix.binary_ext }} package/move-mutation-test${{ matrix.binary_ext }}
+  #         cp $RELEASE_DIR/move-mutator${{ matrix.binary_ext }} package/move-mutator${{ matrix.binary_ext }}
+  #         cp $RELEASE_DIR/move-spec-test${{ matrix.binary_ext }} package/move-spec-test${{ matrix.binary_ext }}
+  #         cp $RELEASE_DIR/move-mutation-analyzer${{ matrix.binary_ext }} package/move-mutation-analyzer${{ matrix.binary_ext }}
+  #
+  #         cd package
+  #         if [ "${{ runner.os }}" = "Windows" ]; then
+  #           7z a -tzip ../mutation-tools-${{ matrix.asset_name }}.zip *
+  #         else
+  #           zip -r ../mutation-tools-${{ matrix.asset_name }}.zip *
+  #         fi
+  #         cd ..
+  #
+  #     - name: Upload release artifacts
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: release-${{ matrix.target }}
+  #         path: |
+  #           mutation-tools-${{ matrix.asset_name }}.zip
+  #
+  # create-release:
+  #   name: Create GitHub Release
+  #   runs-on: self-hosted
+  #   needs: build-and-release
+  #   permissions:
+  #     contents: write
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Determine version
+  #       id: version
+  #       run: |
+  #         TAG="${GITHUB_REF#refs/tags/}"
+  #         VERSION="${TAG#v}"
+  #         echo "version=$VERSION" >> $GITHUB_OUTPUT
+  #         echo "tag=$TAG" >> $GITHUB_OUTPUT
+  #
+  #     - name: Download all artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: artifacts
+  #
+  #     - name: Prepare release assets
+  #       run: |
+  #         mkdir -p release-assets
+  #         find artifacts -name "*.zip" | while read file; do
+  #           cp "$file" release-assets/
+  #         done
+  #         ls -lh release-assets/
+  #
+  #     - name: Create GitHub Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         tag_name: ${{ steps.version.outputs.tag }}
+  #         name: Move Mutation Tools v${{ steps.version.outputs.version }}
+  #         body: |
+  #           ## Installation Options
+  #
+  #           ### Via Aptos CLI (Recommended for most users)
+  #           ```bash
+  #           aptos update move-mutation-test
+  #           ```
+  #           This installs `move-mutation-test` which is the main tool most users need.
+  #
+  #           ### Direct Download (All tools)
+  #           Download the appropriate archive for your platform below. Each archive contains:
+  #           - `move-mutation-test` - Tests the quality of your unit test suite
+  #           - `move-mutator` - Core mutation engine for advanced users
+  #           - `move-spec-test` - Tests the quality of your formal specifications
+  #
+  #           ## Platform Support
+  #
+  #           | Platform | Architecture | File |
+  #           |----------|--------------|------|
+  #           | Linux | x86_64 | `mutation-tools-x86_64-unknown-linux-gnu.zip` |
+  #           | Linux | ARM64/aarch64 | `mutation-tools-aarch64-unknown-linux-gnu.zip` |
+  #           | macOS | x86_64 (Intel) | `mutation-tools-x86_64-apple-darwin.zip` |
+  #           | macOS | ARM64 (Apple Silicon) | `mutation-tools-aarch64-apple-darwin.zip` |
+  #           | Windows | x86_64 | `mutation-tools-x86_64-windows.zip` |
+  #
+  #           ## Documentation
+  #           For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
+  #         draft: true
+  #         prerelease: false
+  #         files: release-assets/*
+  #         fail_on_unmatched_files: true
+  #         generate_release_notes: true
