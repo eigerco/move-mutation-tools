@@ -128,7 +128,6 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.target }}-cargo-release-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build all tools
-        if: matrix.target != 'aarch64-unknown-linux-gnu'
         shell: bash
         run: |
           cargo build --release --bin move-mutation-test
