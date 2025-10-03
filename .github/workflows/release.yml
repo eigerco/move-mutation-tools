@@ -92,8 +92,8 @@ jobs:
       #     reg add HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v LongPathsEnabled /t REG_DWORD /d 1 /f
       #   shell: pwsh
       #
-      # - name: Install required deps
-      #   run: sudo apt-get install libssl-dev pkg-config libudev-dev
+      - name: Install required deps
+        run: sudo apt-get install libssl-dev pkg-config libudev-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
