@@ -93,7 +93,7 @@ jobs:
       #   shell: pwsh
       #
       - name: Install required deps
-        run: sudo apt-get install libssl-dev pkg-config libudev-dev
+        run: sudo apt-get install libssl-dev pkg-config libudev-dev libdw-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
