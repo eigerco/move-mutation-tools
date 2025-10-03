@@ -26,7 +26,7 @@ jobs:
 
           # Linux ARM64 (aarch64) - Cross-compilation
           - target: aarch64-unknown-linux-gnu
-            runner: self-hosted
+            runner: ubuntu-24.04-arm
             asset_name: aarch64-unknown-linux-gnu
 
           # # macOS x86_64
