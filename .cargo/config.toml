@@ -26,7 +26,11 @@ rustflags = [
   "--cfg",
   "tokio_unstable",
   "-C",
-  "link-arg=/STACK:8000000" # Set stack to 8 MB
+  "link-arg=/STACK:8000000", # Set stack to 8 MB
+  "-C",
+  "link-arg=advapi32.lib",   # Required for libgit2-sys (registry and crypto functions)
+  "-C",
+  "link-arg=userenv.lib"      # Required for libgit2-sys (token functions)
 ]
 
 # macOS x86_64
