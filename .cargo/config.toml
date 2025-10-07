@@ -15,10 +15,10 @@ xclippy = [
 x = "run --package aptos-cargo-cli --bin aptos-cargo-cli --"
 
 [build]
-rustflags = ["--cfg", "tokio_unstable", "-C", "force-frame-pointers=yes", "-C", "force-unwind-tables=yes"]
+rustflags = ["--cfg", "tokio_unstable"]
 
 [target.x86_64-unknown-linux-gnu]
-rustflags = ["--cfg", "tokio_unstable", "-C", "link-arg=-fuse-ld=lld", "-C", "force-frame-pointers=yes", "-C", "force-unwind-tables=yes", "-C", "target-feature=+sse4.2"]
+rustflags = ["--cfg", "tokio_unstable", "-C", "target-feature=+sse4.2"]
 
 # 64 bit MSVC
 [target.x86_64-pc-windows-msvc]
@@ -26,9 +26,18 @@ rustflags = [
   "--cfg",
   "tokio_unstable",
   "-C",
-  "force-frame-pointers=yes",
+  "link-arg=/STACK:8000000", # Set stack to 8 MB
   "-C",
-  "force-unwind-tables=yes",
+  "link-arg=advapi32.lib",   # Required for libgit2-sys (registry and crypto functions)
   "-C",
-  "link-arg=/STACK:8000000" # Set stack to 8 MB
+  "link-arg=userenv.lib"      # Required for libgit2-sys (token functions)
 ]
+
+# macOS x86_64
+[target.x86_64-apple-darwin]
+rustflags = ["--cfg", "tokio_unstable"]
+
+# macOS ARM64
+[target.aarch64-apple-darwin]
+rustflags = ["--cfg", "tokio_unstable"]
+

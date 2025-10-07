@@ -25,11 +25,11 @@ env:
 
 jobs:
   basic-test-run:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     name: Basic ci-check for tests
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Install required deps
         run: sudo apt-get install libudev-dev libdw-dev lld libpq-dev libssl-dev pkg-config lsof build-essential ca-certificates clang curl git --no-install-recommends --assume-yes
 
@@ -62,4 +62,4 @@ jobs:
         uses: taiki-e/install-action@nextest
 
       - name: Run normal tests in the release mode due to test duration speed bump.
-        run: cargo nextest run -r --profile ci
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo nextest run -r --profile ci

@@ -5,7 +5,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::{
-    io::{Error, ErrorKind, Result, Write},
+    io::{Error, Result, Write},
     path::{Path, PathBuf},
 };
 
@@ -42,7 +42,7 @@ impl Report {
 
         info!("Saving report to {}", path.display());
 
-        serde_json::to_writer_pretty(file, &self).map_err(|e| Error::new(ErrorKind::Other, e))
+        serde_json::to_writer_pretty(file, &self).map_err(Error::other)
     }
 
     /// Loads the `Report` from a JSON file.
@@ -55,7 +55,7 @@ impl Report {
 
         let file = std::fs::File::open(path)?;
 
-        serde_json::from_reader(file).map_err(|e| Error::new(ErrorKind::Other, e))
+        serde_json::from_reader(file).map_err(Error::other)
     }
 
     /// Saves the `Report` as a text file.

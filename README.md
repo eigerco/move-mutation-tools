@@ -21,13 +21,31 @@ If some mutants are not killed, it means that the specification has issues and i
 
 [**`move-mutator`**](move-mutator/README.md) is a helper tool that mutates Move source code. Every modification / mutation is called a mutant. _Note that the tool mutates only the source code; tests and spec blocks are unaffected and are not mutated by this tool._
 
+## Installation
+
+### Via Aptos CLI (Recommended)
+
+The easiest way to install and update `move-mutation-test` is through the Aptos CLI:
+
+```bash
+# Install the latest version
+aptos update move-mutation-test
+
+# Install/Update a specific version (e.g., v2.0.0)
+aptos update move-mutation-test --target-version v2.0.0
+```
+
+### From Source
+
+Alternatively, you can build from source:
+
+```bash
+RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-mutation-tools.git --locked move-mutation-test
+```
+
 ## Quick introduction to mutation tools
 
-This is a quick tutorial on how the `move-mutation-test` tool should be used. Install the tool with:
-
-```
-$ RUSTFLAGS="--cfg tokio_unstable" cargo install --git https://github.com/eigerco/move-mutation-tools.git --locked move-mutation-test
-```
+This is a quick tutorial on how the `move-mutation-test` tool should be used.
 
 ### Example usage for the `aptos-stdlib` project
 
