@@ -120,6 +120,10 @@ pub struct TestBuildConfig {
     /// Whether to stop testing upon the first failure.
     #[clap(long, default_value_t = true, action = clap::ArgAction::Set)]
     pub fail_fast: bool,
+
+    /// Whether to test the mutant module first. This takes precedence over the `filter` option.
+    #[clap(long, default_value_t = false, action = clap::ArgAction::Set)]
+    pub mutant_module_first: bool,
 }
 
 impl TestBuildConfig {
@@ -142,6 +146,7 @@ impl TestBuildConfig {
                 .language_version
                 .or_else(|| Some(LanguageVersion::latest_stable())),
             experiments: self.move_options.compute_experiments(),
+            print_errors: false,
         }
     }
 }

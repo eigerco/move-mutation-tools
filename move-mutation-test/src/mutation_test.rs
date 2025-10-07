@@ -20,6 +20,7 @@ use termcolor::WriteColor;
 ///
 /// * `cfg` - A `TestBuildConfig` representing the test configuration.
 /// * `package_path` - A `Path` to the package.
+/// * `filter_override` - Overrides the configured filter for targeted runs.
 ///
 /// # Returns
 ///
@@ -76,7 +77,13 @@ pub(crate) fn run_tests_on_original_code(
 pub(crate) fn run_tests_on_mutated_code(
     cfg: &TestBuildConfig,
     package_path: &Path,
+    filter_override: Option<&str>,
 ) -> anyhow::Result<()> {
+    warn!(
+        "Running tests on mutated code at {} with filter {}",
+        package_path.display(),
+        filter_override.unwrap_or("none")
+    );
     // Ignore statistics on mutants.
     let report_statistics = false;
 
@@ -91,6 +98,9 @@ pub(crate) fn run_tests_on_mutated_code(
     test_config.compute_coverage = false;
     test_config.ignore_compile_warnings = true;
     test_config.move_options.skip_attribute_checks = true;
+    if let Some(filter) = filter_override {
+        test_config.filter = Some(filter.to_owned());
+    }
 
     // Rayon pool will utilize all CPU threads anyway, so one test thread per the bigger rayon
     // thread should be more than enough. Using more threads here slows the overall time.
