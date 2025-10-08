@@ -94,6 +94,10 @@ fn analyze_projects(root: &Path, max_projects: Option<usize>, skip_no_tests: boo
 
     println!("Found {} Move projects", move_projects.len());
 
+    move_projects
+        .iter()
+        .for_each(|p| println!("{}", p.display()));
+
     let mut aggregated_stats = AggregatedStats::new();
     let mut successful_projects = 0;
     let mut failed_projects = Vec::new();
@@ -239,16 +243,16 @@ fn run_coverage_for_project(project: &Path) -> Result<()> {
 fn run_mutation_test_for_project(project: &Path) -> Result<Report> {
     let output_file = project.join("mutation-report.json");
 
-    let output = Command::new("move-mutation-test")
+    let output = Command::new("cargo")
         .args(&[
             "run",
+            "--release",
+            "--bin",
+            "move-mutation-test",
+            "--",
             "--coverage",
-            "--language-version",
-            "2.2",
             "--output",
             output_file.to_str().unwrap(),
-            "--show-operator-stats",
-            "--ignore-compile-warnings",
         ])
         .current_dir(project)
         .output()?;
@@ -480,4 +484,3 @@ fn display_saved_analysis(path: &Path) -> Result<()> {
 
     Ok(())
 }
-
