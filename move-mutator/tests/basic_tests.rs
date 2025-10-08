@@ -37,7 +37,6 @@ const PACKAGE_PATHS: &[&str] = &[
     "tests/move-assets/skip_mutation_examples",
     "tests/move-assets/check_swap_operator",
     "tests/move-assets/simple_move_2_features",
-    "tests/move-assets/function_values",
 ];
 
 // Check if the mutator works correctly on the basic packages.
