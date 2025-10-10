@@ -4,6 +4,11 @@
 
 #![forbid(unsafe_code)]
 
+use mimalloc::MiMalloc;
+
+#[global_allocator]
+static GLOBAL: MiMalloc = MiMalloc;
+
 use clap::{Parser, Subcommand};
 use move_mutation_test::{
     cli::{CLIOptions, TestBuildConfig},

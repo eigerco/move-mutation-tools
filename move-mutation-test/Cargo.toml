@@ -38,6 +38,7 @@ pretty_env_logger = { workspace = true }
 rayon = { workspace = true }
 serde = { workspace = true }
 termcolor = { workspace = true }
+mimalloc = { version = "0.1" }
 
 [dev-dependencies]
 datatest-stable = { workspace = true }
