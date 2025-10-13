@@ -123,6 +123,29 @@ fn analyze_projects(root: &Path, max_projects: Option<usize>, skip_no_tests: boo
             continue;
         }
 
+        // Check if mutation report already exists
+        let report_file = project.join("mutation-report.json");
+        if report_file.exists() {
+            println!("  Found existing mutation report, loading...");
+            match Report::load_from_json_file(&report_file) {
+                Ok(report) => {
+                    let stats = extract_project_stats(&report);
+                    println!(
+                        "    Mutants: {} tested, {} killed",
+                        stats.total_tested, stats.total_killed
+                    );
+                    aggregated_stats.add_report(report);
+                    successful_projects += 1;
+                },
+                Err(e) => {
+                    println!("  FAILED to load existing report: {}", e);
+                    failed_projects
+                        .push((project.clone(), format!("Failed to load report: {}", e)));
+                },
+            }
+            continue;
+        }
+
         // Run coverage
         print!("  Running coverage generation... ");
         if let Err(e) = run_coverage_for_project(project) {
@@ -198,8 +221,8 @@ fn find_move_projects(root: &Path) -> Result<Vec<PathBuf>> {
     Ok(projects)
 }
 
+// Check if there are any test files in the project
 fn has_tests(project: &Path) -> bool {
-    // Check if there are any test files in the project
     WalkDir::new(project)
         .max_depth(50)
         .into_iter()
@@ -243,16 +266,14 @@ fn run_coverage_for_project(project: &Path) -> Result<()> {
 fn run_mutation_test_for_project(project: &Path) -> Result<Report> {
     let output_file = project.join("mutation-report.json");
 
-    let output = Command::new("cargo")
+    let output = Command::new("move-mutation-test")
         .args(&[
             "run",
-            "--release",
-            "--bin",
-            "move-mutation-test",
-            "--",
             "--coverage",
             "--output",
             output_file.to_str().unwrap(),
+            "--language-version",
+            "2.2",
         ])
         .current_dir(project)
         .output()?;
