@@ -52,5 +52,5 @@ pub(crate) fn prove<W: WriteColor>(
 
     let now = Instant::now();
 
-    move_prover::run_move_prover_with_model(&mut model, &mut error_writer, prover_conf, Some(now))
+    move_prover::run_move_prover_with_model_v2(&mut model, &mut error_writer, prover_conf, now)
 }

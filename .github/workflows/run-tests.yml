@@ -29,13 +29,15 @@ jobs:
     name: Basic ci-check for tests
     steps:
       - uses: actions/checkout@v4
-
+      
       - name: Install required deps
         run: sudo apt-get install libudev-dev libdw-dev lld libpq-dev libssl-dev pkg-config lsof build-essential ca-certificates clang curl git --no-install-recommends --assume-yes
 
       - name: Get aptos-core
-        shell: bash
-        run: git clone https://github.com/aptos-labs/aptos-core.git
+        uses: actions/checkout@v4
+        with:
+          repository: aptos-labs/aptos-core
+          path: aptos-core
 
       - name: Install related tools and prover dependencies
         shell: bash
@@ -54,13 +56,10 @@ jobs:
           echo "/home/$USER/.dotnet/tools" | tee -a $GITHUB_PATH
 
       - name: Setup Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: default
-          toolchain: stable
+        uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Install nextest
         uses: taiki-e/install-action@nextest
 
       - name: Run normal tests in the release mode due to test duration speed bump.
-        run: cargo nextest run -r --profile ci
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo nextest run -r --profile ci

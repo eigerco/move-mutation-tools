@@ -23,6 +23,7 @@ aptos-types = { workspace = true }
 aptos-vm = { workspace = true }
 clap = { workspace = true }
 fs_extra = { workspace = true }
+indicatif = { version = "0.18", features = ["rayon"] }
 log = { workspace = true }
 move-cli = { workspace = true }
 move-command-line-common = { workspace = true }

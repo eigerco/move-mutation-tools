@@ -445,7 +445,7 @@ mod tests {
 
     #[test]
     fn reading_report_from_file_works() {
-        let package_dir = tempfile::tempdir().unwrap().into_path();
+        let package_dir = tempfile::tempdir().unwrap().keep();
 
         let mut report = Report::new(package_dir.clone());
         let path1 = package_dir.join("src_file1");

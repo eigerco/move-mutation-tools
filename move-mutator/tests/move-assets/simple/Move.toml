@@ -3,7 +3,7 @@ name = "simple"
 version = "0.0.0"
 
 [dependencies]
-AptosStdlib = { git = "https://github.com/aptos-labs/aptos-framework.git", subdir = "aptos-stdlib", rev = "main" }
+AptosStdlib = { git = "https://github.com/aptos-labs/aptos-framework.git", subdir = "aptos-stdlib", rev = "aptos-release-v1.35" }
 
 [addresses]
 TestAccount = "0xCAFE"

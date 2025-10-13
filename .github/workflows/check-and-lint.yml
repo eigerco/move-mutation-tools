@@ -34,16 +34,15 @@ jobs:
         run: sudo apt-get install libudev-dev libdw-dev lld
 
       - name: Setup Rust toolchain
-        uses: actions-rs/toolchain@v1
+        uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          profile: default
-          toolchain: stable
+          components: rustfmt
 
-      - name: Run check
-        run: cargo check --all-targets
-
-      - name: Run fmt
-        run: cargo fmt --all -- --check
+      - name: Rustfmt Check
+        uses: actions-rust-lang/rustfmt@v1
 
       - name: Run clippy
-        run: cargo clippy --all-targets -- -D warnings
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo clippy --all-targets -- -D warnings
+
+      - name: Run check
+        run: RUSTFLAGS="--cfg tokio_unstable" cargo check --all-targets

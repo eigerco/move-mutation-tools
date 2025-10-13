@@ -12,6 +12,7 @@ extern crate log;
 use crate::mutation_test::{run_tests_on_mutated_code, run_tests_on_original_code};
 use cli::TestBuildConfig;
 use fs_extra::dir::CopyOptions;
+use indicatif::{ProgressBar, ProgressStyle};
 use move_package::BuildConfig;
 use mutator_common::{
     benchmark::{Benchmark, Benchmarks},
@@ -52,7 +53,10 @@ pub fn run_mutation_test(
     let _ = pretty_env_logger::try_init();
 
     // Setup output dir and clone package path there.
-    let original_package_path = test_config.move_pkg.get_package_path()?.canonicalize()?;
+    let original_package_path = test_config
+        .move_options
+        .get_package_path()?
+        .canonicalize()?;
     let (outdir, package_path) = setup_outdir_and_package_path(&original_package_path)?;
 
     info!("Running tool the following options: {options:?} and test config: {test_config:?}");
@@ -74,9 +78,9 @@ pub fn run_mutation_test(
     } else {
         benchmarks.mutator.start();
         let mutator_config = BuildConfig {
-            dev_mode: test_config.move_pkg.dev,
-            additional_named_addresses: test_config.move_pkg.named_addresses(),
-            full_model_generation: test_config.move_pkg.check_test_code,
+            dev_mode: test_config.move_options.dev,
+            additional_named_addresses: test_config.move_options.named_addresses(),
+            full_model_generation: test_config.move_options.skip_checks_on_test_code,
             // No need to fetch latest deps again.
             skip_fetch_latest_git_deps: true,
             compiler_config: test_config.compiler_config(),
@@ -84,7 +88,7 @@ pub fn run_mutation_test(
         };
         let outdir_mutant = run_mutator(
             options,
-            test_config.apply_coverage,
+            test_config.compute_coverage,
             &mutator_config,
             &package_path,
             &outdir,
@@ -101,7 +105,19 @@ pub fn run_mutation_test(
     let cp_opts = CopyOptions::new().content_only(true);
 
     let mutants = report.get_mutants();
-    info!("Running the tool on {} mutants", mutants.len());
+    println!("\nRunning tests on {} mutants\n", mutants.len());
+
+    let total = mutants.len() as u64;
+    let pb = ProgressBar::new(total);
+    pb.set_draw_target(indicatif::ProgressDrawTarget::stdout());
+    pb.set_style(
+        ProgressStyle::with_template(
+            "{spinner} [{elapsed_precise}] [{bar:40}] {pos}/{len} ({percent}%) ETA {eta_precise}",
+        )
+        .expect("Failed to create ProgressBar style: invalid template string")
+        .progress_chars("#>-"),
+    );
+    pb.enable_steady_tick(std::time::Duration::from_millis(100));
 
     let mut mutation_test_benchmarks = Vec::<Benchmark>::with_capacity(mutants.len());
     let mut mini_reports = Vec::<MiniReport>::with_capacity(mutants.len());
@@ -113,6 +129,7 @@ pub fn run_mutation_test(
         let (mut benchmarks, mut reports) = mutant_set
             .into_par_iter()
             .map(|elem| {
+                let pb_handle = pb.clone();
                 let mut benchmark = Benchmark::new();
 
                 let mutant_file = elem.mutant_path();
@@ -161,6 +178,8 @@ pub fn run_mutation_test(
                 qname.push_str("::");
                 qname.push_str(elem.get_function_name());
 
+                pb_handle.inc(1);
+
                 (
                     benchmark,
                     MiniReport::new(original_file.to_path_buf(), qname, mutant_status, diff),
@@ -179,6 +198,8 @@ pub fn run_mutation_test(
         mutation_test_benchmarks.append(&mut benchmarks);
         mini_reports.append(&mut reports);
     });
+
+    pb.finish_with_message("Mutation testing done");
 
     benchmarks.executing_tests_on_mutants.stop();
     benchmarks.mutant_results = mutation_test_benchmarks;
