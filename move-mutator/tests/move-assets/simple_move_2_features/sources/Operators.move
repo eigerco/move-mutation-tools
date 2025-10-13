@@ -226,6 +226,32 @@ module TestAccount::Operators {
         assert!(rsh(18, 2) == 4, 0);
     }
 
+    struct Foo has drop{
+        a: u64,
+    }
+
+    fun sum_struct_field(self: &mut Foo) {
+		self.a += 1;
+    }
+
+    #[test]
+    fun op_on_struct_valid_usage_test() {
+		let s = Foo {a: 42};
+		sum_struct_field(&mut s);
+        assert!(s.a== 43);
+    }
+
+    fun sum_deref(a: &mut u64) {
+		*a += 1;
+    }
+
+    #[test]
+    fun sum_deref_valid_usage_test() {
+		let a = 42;
+		sum_deref(&mut a);
+        assert!(a==43);
+    }
+
     spec sum {
         ensures result == x+y;
     }
