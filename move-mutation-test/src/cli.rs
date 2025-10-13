@@ -42,6 +42,10 @@ pub struct CLIOptions {
     /// Remove averagely given percentage of mutants. See the doc for more details.
     #[clap(long, conflicts_with = "use_generated_mutants")]
     pub downsampling_ratio_percentage: Option<usize>,
+
+    /// Show operator effectiveness statistics.
+    #[clap(long)]
+    pub show_operator_stats: bool,
 }
 
 /// This function creates a mutator CLI options from the given mutation-test options.
@@ -133,6 +137,7 @@ mod tests {
         assert_eq!(ModuleFilter::All, options.mutate_modules);
         assert_eq!(FunctionFilter::All, options.mutate_functions);
         assert!(options.output.is_none());
+        assert!(!options.show_operator_stats);
     }
 
     #[test]

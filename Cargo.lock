@@ -8925,6 +8925,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "move-mutation-analyzer"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "clap 4.5.48",
+ "home",
+ "log",
+ "mutator-common",
+ "pretty_env_logger",
+ "serde",
+ "serde_json",
+ "tabled",
+ "walkdir",
+]
+
+[[package]]
 name = "move-mutation-test"
 version = "1.0.0"
 dependencies = [
