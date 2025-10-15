@@ -220,7 +220,7 @@ mod tests {
             no_overwrite: false,
             ..Default::default()
         };
-        let config = Configuration::new(options, None);
+        let config = Configuration::new(options, None).unwrap();
         assert!(setup_output_dir(&config).is_ok());
         assert!(output_dir.exists());
     }
@@ -235,7 +235,7 @@ mod tests {
             no_overwrite: false,
             ..Default::default()
         };
-        let config = Configuration::new(options, None);
+        let config = Configuration::new(options, None).unwrap();
         assert!(setup_output_dir(&config).is_ok());
         assert!(output_dir.exists());
     }
@@ -250,7 +250,7 @@ mod tests {
             no_overwrite: true,
             ..Default::default()
         };
-        let config = Configuration::new(options, None);
+        let config = Configuration::new(options, None).unwrap();
         assert!(setup_output_dir(&config).is_err());
     }
 }
