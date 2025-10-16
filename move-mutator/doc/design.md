@@ -205,6 +205,59 @@ inefficient. Once mutation places are identified, mutants are generated in
 reversed order (based on localization) to avoid that. Tools are ready to be
 extended to support the operator mixing, if needed.
 
+### Operator filtering
+
+The Move mutator tool supports operator filtering to control which mutation
+operators are applied during the mutation process. This feature allows users to
+focus on specific operators or use predefined modes based on [operator
+effectiveness](#operator-effectiveness-analysis).
+
+Three predefined modes are available:
+- **Light mode**: Uses the top 3 most effective operators (approximately 95% faster than heavy mode)
+- **Medium mode**: Uses the top 5 most effective operators (approximately 40% faster than heavy mode)
+- **Heavy mode** (default): Uses all 7 available operators
+
+Users can also specify custom operator sets using the `--operators` CLI option,
+providing a comma-separated list of operator names. This allows for fine-grained
+control over which operators are applied.
+
+Operator filtering is performed during AST traversal in the `mutate.rs` module.
+When a potential mutation site is found, the tool checks if the corresponding
+operator is enabled in the current mode before creating the mutant. This approach
+prevents unnecessary mutant generation, making the process more efficient.
+
+#### Operator effectiveness analysis
+
+The effectiveness rankings were calculated by running the tool on the largest
+projects in [Aptos' Move Framework](https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/framework), testing 22,597 mutants with an overall kill
+rate of 82.02%. Operators are ranked by their effectiveness (percentage of
+mutants killed by tests):
+
+```
+╭──────┬─────────────────────────────┬────────┬────────┬───────────────┬───────────╮
+│ Rank │ Operator                    │ Tested │ Killed │ Effectiveness │ Kill Rate │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #1   │ unary_operator_replacement  │ 219    │ 219    │ 100.00%       │ 219/219   │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #2   │ delete_statement            │ 909    │ 895    │ 98.46%        │ 895/909   │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #3   │ break_continue_replacement  │ 26     │ 23     │ 88.46%        │ 23/26     │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #4   │ binary_operator_replacement │ 7081   │ 6207   │ 87.66%        │ 6207/7081 │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #5   │ if_else_replacement         │ 5310   │ 4579   │ 86.23%        │ 4579/5310 │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #6   │ literal_replacement         │ 8781   │ 6498   │ 74.00%        │ 6498/8781 │
+├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
+│ #7   │ binary_operator_swap        │ 271    │ 114    │ 42.07%        │ 114/271   │
+╰──────┴─────────────────────────────┴────────┴────────┴───────────────┴───────────╯
+```
+
+The predefined operator modes are based on this analysis:
+- **Light mode** includes operators #1-3 (effectiveness ≥88%)
+- **Medium mode** includes operators #1-5 (effectiveness ≥86%)
+- **Heavy mode** includes all operators #1-7
+
 The Move mutator tool implements the following mutation operators.
 
 ### Binary operator replacement

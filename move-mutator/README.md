@@ -107,3 +107,34 @@ directory. They can be used to check the mutator tool as well.
 To check possible options, use the `--help` option.
 
 [nextest]: https://github.com/nextest-rs/nextest
+
+### Operator modes
+
+The mutator tool supports different operator modes to control which mutation operators are applied. This can significantly reduce mutation testing time by focusing on the most effective operators.
+
+Use the `--mode` option to select a predefined operator set:
+```bash
+# Light mode: fastest, uses only the top 3 most effective operators
+./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode light
+
+# Medium mode: balanced, uses the top 5 most effective operators
+./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode medium
+
+# Heavy mode (default): uses all 7 available operators
+./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode heavy
+```
+
+The operator modes are based on [effectiveness analysis](doc/design.md#operator-effectiveness-analysis) where:
+- **light**: `unary_operator_replacement`, `delete_statement`, `break_continue_replacement`
+- **medium**: light + `binary_operator_replacement`, `if_else_replacement`
+- **heavy**: medium + `literal_replacement`, `binary_operator_swap`
+
+For fine-grained control, use the `--operators` option to specify exactly which operators to apply:
+```bash
+# Apply only specific operators
+./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --operators delete_statement,binary_operator_replacement,if_else_replacement
+```
+
+Available operators: `unary_operator_replacement`, `delete_statement`, `break_continue_replacement`, `binary_operator_replacement`, `if_else_replacement`, `literal_replacement`, `binary_operator_swap`.
+
+**Note:** The `--mode` and `--operators` options are mutually exclusive.

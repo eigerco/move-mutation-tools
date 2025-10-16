@@ -2,10 +2,18 @@
 // Copyright © Aptos Foundation
 // SPDX-License-Identifier: Apache-2.0
 
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use std::{path::PathBuf, str::FromStr};
 
 pub const DEFAULT_OUTPUT_DIR: &str = "mutants_output";
+
+/// Mutation operator mode
+#[derive(Debug, Clone, Copy, PartialEq, Eq, ValueEnum)]
+pub enum OperatorModeArg {
+    Light,
+    Medium,
+    Heavy,
+}
 
 /// Command line options for mutator
 #[derive(Parser, Debug, Clone)]
@@ -41,6 +49,20 @@ pub struct CLIOptions {
     /// Use the unit test coverage report to generate mutants for source code with unit test coverage.
     #[clap(long = "coverage", conflicts_with = "move_sources")]
     pub apply_coverage: bool,
+
+    /// Mutation operator mode: light (fastest), medium (balanced), or heavy (full coverage, default).
+    ///
+    /// - light: unary_operator_replacement, delete_statement, break_continue_replacement
+    /// - medium: light + binary_operator_replacement, if_else_replacement
+    /// - heavy (default): medium + literal_replacement, binary_operator_swap
+    #[clap(long, value_enum, conflicts_with = "operators")]
+    pub mode: Option<OperatorModeArg>,
+
+    /// Custom operator selection to run mutations on (comma-separated).
+    ///
+    /// Available operators: unary_operator_replacement, delete_statement, break_continue_replacement, binary_operator_replacement, if_else_replacement,w literal_replacement, binary_operator_swap
+    #[clap(long, value_parser, value_delimiter = ',', conflicts_with = "mode")]
+    pub operators: Option<Vec<String>>,
 }
 
 /// Checker for conflicts with CLI arguments.
@@ -82,6 +104,8 @@ impl Default for CLIOptions {
             no_overwrite: false,
             apply_coverage: false,
             downsampling_ratio_percentage: None,
+            mode: None,
+            operators: None,
         }
     }
 }
