@@ -10,7 +10,7 @@ use crate::{
 use std::path::PathBuf;
 
 /// Mutator configuration for the Move project.
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct Configuration {
     /// Main project options. It's the same as the CLI options.
     pub project: CLIOptions,
@@ -61,17 +61,6 @@ impl Configuration {
             (Some(_), Some(_)) => {
                 unreachable!("Both --mode and --operators specified")
             },
-        }
-    }
-}
-
-impl Default for Configuration {
-    fn default() -> Self {
-        Self {
-            project: CLIOptions::default(),
-            project_path: None,
-            coverage: Coverage::default(),
-            operator_mode: OperatorMode::default(),
         }
     }
 }

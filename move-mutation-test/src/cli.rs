@@ -84,7 +84,7 @@ pub fn create_mutator_options(
         apply_coverage,
         // To run tests, compilation must succeed
         verify_mutants: true,
-        mode: options.mode.clone(),
+        mode: options.mode,
         operators: options.operators.clone(),
         ..Default::default()
     }

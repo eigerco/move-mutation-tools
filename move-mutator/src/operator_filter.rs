@@ -111,7 +111,7 @@ impl FromStr for Operator {
 /// - Medium-only: literal_replacement (1 operator - only what's added in medium)
 /// - Heavy: All 7 operators
 /// - Heavy-only: unary_operator_replacement, binary_operator_replacement, if_else_replacement (3 operators - only what's added in heavy)
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Default)]
 pub enum OperatorMode {
     /// Light mode: Operators optimized for detecting test gaps with fewest mutants.
     /// Includes: binary_operator_swap, break_continue_replacement, delete_statement
@@ -127,6 +127,7 @@ pub enum OperatorMode {
 
     /// Heavy mode: All available operators for maximum test gap detection.
     /// Includes all 7 operators, default mode.
+    #[default]
     Heavy,
 
     /// Heavy-only mode: Only the operators added in heavy (not including light/medium operators).
@@ -262,13 +263,6 @@ impl OperatorMode {
             .map(|op| format!("  - {}", op.as_str()))
             .collect::<Vec<_>>()
             .join("\n")
-    }
-}
-
-impl Default for OperatorMode {
-    fn default() -> Self {
-        // Default to Heavy mode for backward compatibility
-        OperatorMode::Heavy
     }
 }
 
