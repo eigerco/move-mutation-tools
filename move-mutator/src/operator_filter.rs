@@ -101,23 +101,37 @@ impl FromStr for Operator {
 
 /// Mutation operator mode that determines which operators are enabled.
 ///
-/// Based on effectiveness analysis:
-/// - Light: Top 3 operators
-/// - Medium: Top 5 operators
+/// Modes are designed to balance speed and ability to detect test gaps.
+/// Operators that produce more surviving mutants are more effective at revealing
+/// gaps in test coverage, as surviving mutants indicate untested code paths.
+///
+/// Mode breakdown:
+/// - Light: binary_operator_swap, break_continue_replacement, delete_statement (3 operators)
+/// - Medium: Light + literal_replacement (4 operators)
+/// - Medium-only: literal_replacement (1 operator - only what's added in medium)
 /// - Heavy: All 7 operators
+/// - Heavy-only: unary_operator_replacement, binary_operator_replacement, if_else_replacement (3 operators - only what's added in heavy)
 #[derive(Debug, Clone, PartialEq)]
 pub enum OperatorMode {
-    /// Light mode: Only the most effective operators (fastest execution).
-    /// Uses 3 operators, approximately 95% faster than heavy mode.
+    /// Light mode: Operators optimized for detecting test gaps with fewest mutants.
+    /// Includes: binary_operator_swap, break_continue_replacement, delete_statement
     Light,
 
-    /// Medium mode: Balanced selection of effective operators.
-    /// Uses 5 operators, approximately 40% faster than heavy mode.
+    /// Medium mode: Light operators + literal_replacement for broader test gap detection.
+    /// Includes: binary_operator_swap, break_continue_replacement, delete_statement, literal_replacement
     Medium,
 
-    /// Heavy mode: All available operators (maximum coverage).
-    /// Uses all 7 operators, default mode.
+    /// Medium-only mode: Only the operator added in medium (not including light operators).
+    /// Includes: literal_replacement
+    MediumOnly,
+
+    /// Heavy mode: All available operators for maximum test gap detection.
+    /// Includes all 7 operators, default mode.
     Heavy,
+
+    /// Heavy-only mode: Only the operators added in heavy (not including light/medium operators).
+    /// Includes: unary_operator_replacement, binary_operator_replacement, if_else_replacement
+    HeavyOnly,
 
     /// Custom mode: User-specified set of operators.
     /// The vector contains validated operators.
@@ -135,37 +149,51 @@ impl OperatorMode {
         match self {
             OperatorMode::Light => Self::light_operators(),
             OperatorMode::Medium => Self::medium_operators(),
+            OperatorMode::MediumOnly => Self::medium_only_operators(),
             OperatorMode::Heavy => Self::heavy_operators(),
+            OperatorMode::HeavyOnly => Self::heavy_only_operators(),
             OperatorMode::Custom(ops) => ops.clone(),
         }
     }
 
     /// Returns operators for Light mode.
-    /// Top 3 most effective operators based on effectiveness analysis.
+    /// Operators with lower kill rates that are effective at detecting test gaps.
     fn light_operators() -> Vec<Operator> {
         vec![
-            Operator::UnaryOperatorReplacement,
-            Operator::DeleteStatement,
+            Operator::BinaryOperatorSwap,
             Operator::BreakContinueReplacement,
+            Operator::DeleteStatement,
         ]
     }
 
     /// Returns operators for Medium mode.
-    /// Top 5 most effective operators based on effectiveness analysis.
+    /// Light operators + literal_replacement.
     fn medium_operators() -> Vec<Operator> {
-        vec![
-            Operator::UnaryOperatorReplacement,
-            Operator::DeleteStatement,
-            Operator::BreakContinueReplacement,
-            Operator::BinaryOperatorReplacement,
-            Operator::IfElseReplacement,
-        ]
+        let mut ops = Self::light_operators();
+        ops.push(Operator::LiteralReplacement);
+        ops
+    }
+
+    /// Returns operators for Medium-only mode.
+    /// Only the operator added in medium (not including light).
+    fn medium_only_operators() -> Vec<Operator> {
+        vec![Operator::LiteralReplacement]
     }
 
     /// Returns operators for Heavy mode.
     /// All available operators.
     fn heavy_operators() -> Vec<Operator> {
         Operator::all().to_vec()
+    }
+
+    /// Returns operators for Heavy-only mode.
+    /// Only the operators added in heavy (not including light/medium).
+    fn heavy_only_operators() -> Vec<Operator> {
+        vec![
+            Operator::UnaryOperatorReplacement,
+            Operator::BinaryOperatorReplacement,
+            Operator::IfElseReplacement,
+        ]
     }
 
     /// Checks if the specified operator should be applied in this mode.
@@ -179,16 +207,6 @@ impl OperatorMode {
     /// `true` if the operator is enabled in this mode, `false` otherwise.
     pub fn should_apply(&self, operator: Operator) -> bool {
         self.operators_enum().contains(&operator)
-    }
-
-    /// Gets a display-friendly name for this mode.
-    pub fn display_name(&self) -> String {
-        match self {
-            OperatorMode::Light => "LIGHT".to_string(),
-            OperatorMode::Medium => "MEDIUM".to_string(),
-            OperatorMode::Heavy => "HEAVY".to_string(),
-            OperatorMode::Custom(_) => "CUSTOM".to_string(),
-        }
     }
 
     /// Validates a list of operator names and returns an error if any are invalid.
@@ -295,19 +313,36 @@ mod tests {
         let mode = OperatorMode::Light;
         let ops = mode.get_operators();
         assert_eq!(ops.len(), 3);
-        assert!(ops.contains(&Operator::UnaryOperatorReplacement.as_str()));
-        assert!(ops.contains(&Operator::DeleteStatement.as_str()));
+        assert!(ops.contains(&Operator::BinaryOperatorSwap.as_str()));
         assert!(ops.contains(&Operator::BreakContinueReplacement.as_str()));
+        assert!(ops.contains(&Operator::DeleteStatement.as_str()));
     }
 
     #[test]
     fn test_medium_mode_operators() {
         let mode = OperatorMode::Medium;
         let ops = mode.get_operators();
-        assert_eq!(ops.len(), 5);
-        assert!(ops.contains(&Operator::UnaryOperatorReplacement.as_str()));
-        assert!(ops.contains(&Operator::DeleteStatement.as_str()));
+        assert_eq!(ops.len(), 4);
+        assert!(ops.contains(&Operator::BinaryOperatorSwap.as_str()));
         assert!(ops.contains(&Operator::BreakContinueReplacement.as_str()));
+        assert!(ops.contains(&Operator::DeleteStatement.as_str()));
+        assert!(ops.contains(&Operator::LiteralReplacement.as_str()));
+    }
+
+    #[test]
+    fn test_medium_only_mode_operators() {
+        let mode = OperatorMode::MediumOnly;
+        let ops = mode.get_operators();
+        assert_eq!(ops.len(), 1);
+        assert!(ops.contains(&Operator::LiteralReplacement.as_str()));
+    }
+
+    #[test]
+    fn test_heavy_only_mode_operators() {
+        let mode = OperatorMode::HeavyOnly;
+        let ops = mode.get_operators();
+        assert_eq!(ops.len(), 3);
+        assert!(ops.contains(&Operator::UnaryOperatorReplacement.as_str()));
         assert!(ops.contains(&Operator::BinaryOperatorReplacement.as_str()));
         assert!(ops.contains(&Operator::IfElseReplacement.as_str()));
     }
@@ -342,10 +377,12 @@ mod tests {
     #[test]
     fn test_should_apply() {
         let mode = OperatorMode::Light;
-        assert!(mode.should_apply(Operator::UnaryOperatorReplacement));
+        assert!(mode.should_apply(Operator::BinaryOperatorSwap));
+        assert!(mode.should_apply(Operator::BreakContinueReplacement));
         assert!(mode.should_apply(Operator::DeleteStatement));
         assert!(!mode.should_apply(Operator::LiteralReplacement));
-        assert!(!mode.should_apply(Operator::BinaryOperatorSwap));
+        assert!(!mode.should_apply(Operator::UnaryOperatorReplacement));
+        assert!(!mode.should_apply(Operator::BinaryOperatorReplacement));
     }
 
     #[test]
@@ -403,13 +440,5 @@ mod tests {
     fn test_default_mode() {
         let mode = OperatorMode::default();
         assert_eq!(mode, OperatorMode::Heavy);
-    }
-
-    #[test]
-    fn test_display_name() {
-        assert_eq!(OperatorMode::Light.display_name(), "LIGHT");
-        assert_eq!(OperatorMode::Medium.display_name(), "MEDIUM");
-        assert_eq!(OperatorMode::Heavy.display_name(), "HEAVY");
-        assert_eq!(OperatorMode::Custom(vec![]).display_name(), "CUSTOM");
     }
 }

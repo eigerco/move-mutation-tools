@@ -110,24 +110,32 @@ To check possible options, use the `--help` option.
 
 ### Operator modes
 
-The mutator tool supports different operator modes to control which mutation operators are applied. This can significantly reduce mutation testing time by focusing on the most effective operators.
+The mutator tool supports different operator modes to control which mutation operators are applied. Modes are designed to balance speed and the ability to detect test gaps. Operators that produce more surviving mutants are more effective at revealing gaps in test coverage, as surviving mutants indicate untested code paths.
 
 Use the `--mode` option to select a predefined operator set:
 ```bash
-# Light mode: fastest, uses only the top 3 most effective operators
+# Light mode: operators optimized for detecting test gaps with fewest mutants
 ./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode light
 
-# Medium mode: balanced, uses the top 5 most effective operators
+# Medium mode: light + additional operators for broader test gap detection
 ./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode medium
 
-# Heavy mode (default): uses all 7 available operators
+# Medium-only mode: only the operator added in medium (not including light)
+./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode medium-only
+
+# Heavy mode (default): all available operators for maximum test gap detection
 ./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode heavy
+
+# Heavy-only mode: only the operators added in heavy (not including light/medium)
+./target/release/move-mutator --package-dir move-mutator/tests/move-assets/simple/ --mode heavy-only
 ```
 
-The operator modes are based on [effectiveness analysis](doc/design.md#operator-effectiveness-analysis) where:
-- **light**: `unary_operator_replacement`, `delete_statement`, `break_continue_replacement`
-- **medium**: light + `binary_operator_replacement`, `if_else_replacement`
-- **heavy**: medium + `literal_replacement`, `binary_operator_swap`
+The operator modes are based on [effectiveness analysis](doc/design.md#operator-effectiveness-analysis) where effectiveness measures the ability to detect test coverage gaps:
+- **light**: `binary_operator_swap`, `break_continue_replacement`, `delete_statement` (3 operators)
+- **medium**: light + `literal_replacement` (4 operators)
+- **medium-only**: `literal_replacement` (1 operator - only what's added in medium)
+- **heavy**: all 7 operators
+- **heavy-only**: `unary_operator_replacement`, `binary_operator_replacement`, `if_else_replacement` (3 operators - only what's added in heavy)
 
 For fine-grained control, use the `--operators` option to specify exactly which operators to apply:
 ```bash
