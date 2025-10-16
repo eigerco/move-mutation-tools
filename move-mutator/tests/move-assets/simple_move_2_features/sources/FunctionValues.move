@@ -71,22 +71,22 @@ module TestAccount::FunctionValues {
 
     // Test greater than operator mutation (mutates to <, >=, <=, ==, !=)
     fun gt_with_lambda(a: u64, b: u64): bool {
-        if (apply2_bool(|x, y| x > y, a, b)) true else false
+        if (apply2_bool(|x: u64, y: u64| x > y, a, b)) true else false
     }
 
     // Test greater than or equal operator mutation
     fun gte_with_lambda(a: u64, b: u64): bool {
-        if (apply2_bool(|x, y| x >= y, a, b)) true else false
+        if (apply2_bool(|x: u64, y: u64| x >= y, a, b)) true else false
     }
 
     // Test less than operator mutation
     fun lt_with_lambda(a: u64, b: u64): bool {
-        if (apply2_bool(|x, y| x < y, a, b)) true else false
+        if (apply2_bool(|x: u64, y: u64| x < y, a, b)) true else false
     }
 
     // Test less than or equal operator mutation
     fun lte_with_lambda(a: u64, b: u64): bool {
-        if (apply2_bool(|x, y| x <= y, a, b)) true else false
+        if (apply2_bool(|x: u64, y: u64| x <= y, a, b)) true else false
     }
 
     // Test equality operator mutation (requires references)
