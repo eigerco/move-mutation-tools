@@ -43,11 +43,13 @@ pub struct CLIOptions {
     #[clap(long, conflicts_with = "use_generated_mutants")]
     pub downsampling_ratio_percentage: Option<usize>,
 
-    /// Mutation operator mode: light (fastest), medium (balanced), or heavy (full coverage, default).
+    /// Mutation operator mode to balance speed and test gap detection.
     ///
-    /// - light: unary_operator_replacement, delete_statement, break_continue_replacement
-    /// - medium: light + binary_operator_replacement, if_else_replacement
-    /// - heavy (default): medium + literal_replacement, binary_operator_swap
+    /// - light: binary_operator_swap, break_continue_replacement, delete_statement
+    /// - medium: light + literal_replacement
+    /// - medium-only: literal_replacement (only what's added in medium)
+    /// - heavy (default): all 7 operators
+    /// - heavy-only: unary_operator_replacement, binary_operator_replacement, if_else_replacement (only what's added in heavy)
     #[clap(
         long,
         value_enum,
@@ -58,7 +60,7 @@ pub struct CLIOptions {
 
     /// Custom operator selection to run mutations on (comma-separated).
     ///
-    /// Available operators: unary_operator_replacement, delete_statement, break_continue_replacement, binary_operator_replacement, if_else_replacement,w literal_replacement, binary_operator_swap
+    /// Available operators: unary_operator_replacement, delete_statement, break_continue_replacement, binary_operator_replacement, if_else_replacement, literal_replacement, binary_operator_swap
     #[clap(
         long,
         value_parser,

@@ -212,10 +212,16 @@ operators are applied during the mutation process. This feature allows users to
 focus on specific operators or use predefined modes based on [operator
 effectiveness](#operator-effectiveness-analysis).
 
-Three predefined modes are available:
-- **Light mode**: Uses the top 3 most effective operators (approximately 95% faster than heavy mode)
-- **Medium mode**: Uses the top 5 most effective operators (approximately 40% faster than heavy mode)
-- **Heavy mode** (default): Uses all 7 available operators
+Modes are designed to balance speed and the ability to detect test gaps. Operators
+that produce more surviving mutants are more effective at revealing gaps in test
+coverage, as surviving mutants indicate untested code paths.
+
+Five predefined modes are available:
+- **Light mode**: `binary_operator_swap`, `break_continue_replacement`, `delete_statement` (3 operators)
+- **Medium mode**: Light + `literal_replacement` (4 operators)
+- **Medium-only mode**: `literal_replacement` (1 operator - only what's added in medium)
+- **Heavy mode** (default): All 7 available operators
+- **Heavy-only mode**: `unary_operator_replacement`, `binary_operator_replacement`, `if_else_replacement` (3 operators - only what's added in heavy)
 
 Users can also specify custom operator sets using the `--operators` CLI option,
 providing a comma-separated list of operator names. This allows for fine-grained
@@ -228,35 +234,40 @@ prevents unnecessary mutant generation, making the process more efficient.
 
 #### Operator effectiveness analysis
 
-The effectiveness rankings were calculated by running the tool on the largest
-projects in [Aptos' Move Framework](https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/framework), testing 22,597 mutants with an overall kill
-rate of 82.02%. Operators are ranked by their effectiveness (percentage of
-mutants killed by tests):
+The data below was calculated by running the tool on the largest projects in
+[Aptos' Move Framework](https://github.com/aptos-labs/aptos-core/tree/main/aptos-move/framework),
+testing 22,597 mutants with an overall kill rate of 82.02%.
+
+The "Kill Rate" column shows the percentage of mutants killed by tests. While a
+high kill rate indicates good test coverage, operators with **lower kill rates**
+(more surviving mutants) are often **more effective at detecting test gaps**, as
+surviving mutants reveal untested code paths. This is valuable for identifying
+weaknesses in test suites.
 
 ```
 ╭──────┬─────────────────────────────┬────────┬────────┬───────────────┬───────────╮
-│ Rank │ Operator                    │ Tested │ Killed │ Effectiveness │ Kill Rate │
+│ Rank │ Operator                    │ Tested │ Killed │ Kill Rate     │ Survived  │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #1   │ unary_operator_replacement  │ 219    │ 219    │ 100.00%       │ 219/219   │
+│ #1   │ unary_operator_replacement  │ 219    │ 219    │ 100.00%       │ 0/219     │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #2   │ delete_statement            │ 909    │ 895    │ 98.46%        │ 895/909   │
+│ #2   │ delete_statement            │ 909    │ 895    │ 98.46%        │ 14/909    │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #3   │ break_continue_replacement  │ 26     │ 23     │ 88.46%        │ 23/26     │
+│ #3   │ break_continue_replacement  │ 26     │ 23     │ 88.46%        │ 3/26      │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #4   │ binary_operator_replacement │ 7081   │ 6207   │ 87.66%        │ 6207/7081 │
+│ #4   │ binary_operator_replacement │ 7081   │ 6207   │ 87.66%        │ 874/7081  │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #5   │ if_else_replacement         │ 5310   │ 4579   │ 86.23%        │ 4579/5310 │
+│ #5   │ if_else_replacement         │ 5310   │ 4579   │ 86.23%        │ 731/5310  │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #6   │ literal_replacement         │ 8781   │ 6498   │ 74.00%        │ 6498/8781 │
+│ #6   │ literal_replacement         │ 8781   │ 6498   │ 74.00%        │ 2283/8781 │
 ├──────┼─────────────────────────────┼────────┼────────┼───────────────┼───────────┤
-│ #7   │ binary_operator_swap        │ 271    │ 114    │ 42.07%        │ 114/271   │
+│ #7   │ binary_operator_swap        │ 271    │ 114    │ 42.07%        │ 157/271   │
 ╰──────┴─────────────────────────────┴────────┴────────┴───────────────┴───────────╯
 ```
 
-The predefined operator modes are based on this analysis:
-- **Light mode** includes operators #1-3 (effectiveness ≥88%)
-- **Medium mode** includes operators #1-5 (effectiveness ≥86%)
-- **Heavy mode** includes all operators #1-7
+The predefined operator modes balance speed with test gap detection capability:
+- **Light mode**: Operators with lower kill rates that efficiently reveal test gaps (3 operators)
+- **Medium mode**: Light + operators that generate more comprehensive test coverage analysis (4 operators)
+- **Heavy mode**: All operators for maximum test gap detection (7 operators)
 
 The Move mutator tool implements the following mutation operators.
 

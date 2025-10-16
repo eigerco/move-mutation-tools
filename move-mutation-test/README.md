@@ -162,17 +162,32 @@ RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator
 ./target/release/move-mutation-test display-report coverage --path-to-report report.txt --modules Sum
 ```
 ------------------------------------------------------------------------------------------------------------
-To speed up mutation testing by using only the [most effective operators](../move-mutator/doc/design.md#operator-effectiveness-analysis), use the `--mode` option:
+To optimize mutation testing by selecting operators based on their ability to [detect test coverage gaps](../move-mutator/doc/design.md#operator-effectiveness-analysis), use the `--mode` option. Operators that produce more surviving mutants are more effective at revealing gaps in test coverage, as surviving mutants indicate untested code paths.
+
 ```bash
-# Light mode - fastest, uses only top 3 most effective operators
+# Light mode - operators optimized for detecting test gaps with fewest mutants
 RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode light
 
-# Medium mode - balanced, uses top 5 most effective operators
+# Medium mode - light + additional operators for broader test gap detection
 RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode medium
 
-# Heavy mode - default, uses all operators
+# Medium-only mode - only the operator added in medium (not including light)
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode medium-only
+
+# Heavy mode - default, all operators for maximum test gap detection
 RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode heavy
+
+# Heavy-only mode - only the operators added in heavy (not including light/medium)
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode heavy-only
 ```
+
+The modes include:
+- **light**: `binary_operator_swap`, `break_continue_replacement`, `delete_statement` (3 operators)
+- **medium**: light + `literal_replacement` (4 operators)
+- **medium-only**: `literal_replacement` (1 operator - only what's added in medium)
+- **heavy**: all 7 operators
+- **heavy-only**: `unary_operator_replacement`, `binary_operator_replacement`, `if_else_replacement` (3 operators - only what's added in heavy)
+
 ------------------------------------------------------------------------------------------------------------
 For fine-grained control over which operators to apply, use the `--operators` option with a comma-separated list:
 ```bash

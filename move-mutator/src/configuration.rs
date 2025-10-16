@@ -49,7 +49,9 @@ impl Configuration {
                 let mode = match mode_arg {
                     OperatorModeArg::Light => OperatorMode::Light,
                     OperatorModeArg::Medium => OperatorMode::Medium,
+                    OperatorModeArg::MediumOnly => OperatorMode::MediumOnly,
                     OperatorModeArg::Heavy => OperatorMode::Heavy,
+                    OperatorModeArg::HeavyOnly => OperatorMode::HeavyOnly,
                 };
                 Ok(mode)
             },
