@@ -6,7 +6,7 @@ use aptos::common::types::MovePackageOptions;
 use aptos_framework::extended_checks;
 use clap::Parser;
 use move_model::metadata::{CompilerVersion, LanguageVersion};
-use move_mutator::cli::{FunctionFilter, ModuleFilter};
+use move_mutator::cli::{FunctionFilter, ModuleFilter, OperatorModeArg};
 use move_package::CompilerConfig;
 use std::path::PathBuf;
 
@@ -42,6 +42,31 @@ pub struct CLIOptions {
     /// Remove averagely given percentage of mutants. See the doc for more details.
     #[clap(long, conflicts_with = "use_generated_mutants")]
     pub downsampling_ratio_percentage: Option<usize>,
+
+    /// Mutation operator mode: light (fastest), medium (balanced), or heavy (full coverage, default).
+    ///
+    /// - light: unary_operator_replacement, delete_statement, break_continue_replacement
+    /// - medium: light + binary_operator_replacement, if_else_replacement
+    /// - heavy (default): medium + literal_replacement, binary_operator_swap
+    #[clap(
+        long,
+        value_enum,
+        conflicts_with = "operators",
+        conflicts_with = "use_generated_mutants"
+    )]
+    pub mode: Option<OperatorModeArg>,
+
+    /// Custom operator selection to run mutations on (comma-separated).
+    ///
+    /// Available operators: unary_operator_replacement, delete_statement, break_continue_replacement, binary_operator_replacement, if_else_replacement,w literal_replacement, binary_operator_swap
+    #[clap(
+        long,
+        value_parser,
+        value_delimiter = ',',
+        conflicts_with = "mode",
+        conflicts_with = "use_generated_mutants"
+    )]
+    pub operators: Option<Vec<String>>,
 }
 
 /// This function creates a mutator CLI options from the given mutation-test options.
@@ -57,6 +82,8 @@ pub fn create_mutator_options(
         apply_coverage,
         // To run tests, compilation must succeed
         verify_mutants: true,
+        mode: options.mode.clone(),
+        operators: options.operators.clone(),
         ..Default::default()
     }
 }

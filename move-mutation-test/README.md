@@ -161,5 +161,26 @@ If the user wants to mutate only the `sum` function in the `Sum` module, the use
 RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --move-2 --mutate-functions sum --mutate-modules Sum
 ./target/release/move-mutation-test display-report coverage --path-to-report report.txt --modules Sum
 ```
+------------------------------------------------------------------------------------------------------------
+To speed up mutation testing by using only the [most effective operators](../move-mutator/doc/design.md#operator-effectiveness-analysis), use the `--mode` option:
+```bash
+# Light mode - fastest, uses only top 3 most effective operators
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode light
+
+# Medium mode - balanced, uses top 5 most effective operators
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode medium
+
+# Heavy mode - default, uses all operators
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --mode heavy
+```
+------------------------------------------------------------------------------------------------------------
+For fine-grained control over which operators to apply, use the `--operators` option with a comma-separated list:
+```bash
+RUST_LOG=info ./target/release/move-mutation-test run --package-dir move-mutator/tests/move-assets/simple --output report.txt --operators delete_statement,binary_operator_replacement,if_else_replacement
+```
+
+Available operators: `unary_operator_replacement`, `delete_statement`, `break_continue_replacement`, `binary_operator_replacement`, `if_else_replacement`, `literal_replacement`, `binary_operator_swap`.
+
+**Note:** The `--mode` and `--operators` options are mutually exclusive.
 
 [nextest]: https://github.com/nextest-rs/nextest
