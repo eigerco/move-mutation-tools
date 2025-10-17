@@ -187,9 +187,29 @@ fn traverse_function(
 fn parse_expression_and_find_mutants(function: &FunctionEnv<'_>, exp: &ExpData) -> Vec<Mutant> {
     let convert_exps_to_explocs = |exps: &[Exp]| -> Vec<ExpLoc> {
         exps.iter()
-            .map(|e| ExpLoc {
-                exp: e.clone(),
-                loc: function.module_env.env.get_node_loc(e.node_id()),
+            .map(|e| {
+                // NOTE: This is a workaround for a compiler bug.
+                // For Deref operations in compound assignments, the Move compiler seems to
+                // assign the span of the entire compound assignment to the Deref node.
+                // We use the inner expression's location instead to get the correct span.
+                //
+                // TODO: When https://github.com/aptos-labs/aptos-core/pull/17841 is in a release branch,
+                // we can remove the loc var and only leave "function.module_env.env.get_node_loc(e.node_id())"
+                // for the "loc" field. Then update the deps to use the new release branch.
+                let loc = if let ExpData::Call(_, Operation::Deref, inner_exps) = e.as_ref() {
+                    if let Some(inner_exp) = inner_exps.first() {
+                        function.module_env.env.get_node_loc(inner_exp.node_id())
+                    } else {
+                        function.module_env.env.get_node_loc(e.node_id())
+                    }
+                } else {
+                    function.module_env.env.get_node_loc(e.node_id())
+                };
+
+                ExpLoc {
+                    exp: e.clone(),
+                    loc,
+                }
             })
             .collect::<Vec<ExpLoc>>()
     };
