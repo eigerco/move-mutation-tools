@@ -128,17 +128,6 @@
         ]
       }
     ],
-    "sources/Negation.move": [
-      {
-        "module_func": "Negation::neg_log",
-        "tested": 1,
-        "killed": 1,
-        "mutants_alive_diffs": [],
-        "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::Negation {\n     fun neg_log(x: bool): bool {\n-        !x\n+         \n     }\n\n     #[test]\n"
-        ]
-      }
-    ],
     "sources/Operators.move": [
       {
         "module_func": "Operators::div",
@@ -232,15 +221,6 @@
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -219,7 +219,7 @@\n     }\n\n     fun logical_and(x: bool, y: bool): bool {\n-        x && y\n+        x || y\n     }\n\n     #[test]\n"
-        ]
-      },
-      {
-        "module_func": "Operators::logical_not",
-        "tested": 1,
-        "killed": 1,
-        "mutants_alive_diffs": [],
-        "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -231,7 +231,7 @@\n     }\n\n     fun logical_not(x: bool): bool {\n-        !x\n+         \n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -569,5 +549,5 @@
       }
     ]
   },
-  "package_dir": "move-mutation-tools/move-mutator/tests/move-assets/simple"
+  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/simple"
 }

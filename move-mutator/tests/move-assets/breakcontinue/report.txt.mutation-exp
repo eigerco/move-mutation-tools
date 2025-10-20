@@ -156,8 +156,8 @@
       },
       {
         "module_func": "Continue::sum_intermediate_in_for",
-        "tested": 54,
-        "killed": 53,
+        "tested": 49,
+        "killed": 48,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -18,7 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        for (i in 1..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n         };\n"
         ],
@@ -177,21 +177,16 @@
           "--- original\n+++ modified\n@@ -18,7 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        for (i in 0..(n + 0)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        true;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        false;\n\n         sum\n     }\n",
-          "--- original\n+++ modified\n@@ -18,10 +18,10 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        !(for (i in 0..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n-        };\n+        });\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        true;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        false;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        true;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        false;\n\n         sum\n     }\n",
-          "--- original\n+++ modified\n@@ -18,10 +18,10 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        !(for (i in 0..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n-        };\n+        });\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        0;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        18446744073709551615;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        2;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        0;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        true;\n\n         sum\n     }\n",
           "--- original\n+++ modified\n@@ -18,10 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n-            sum = sum + i\n-        };\n+        false;\n\n         sum\n     }\n",
-          "--- original\n+++ modified\n@@ -18,7 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        for (true in 0..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n         };\n",
-          "--- original\n+++ modified\n@@ -18,7 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        for (false in 0..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n         };\n",
-          "--- original\n+++ modified\n@@ -18,7 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        for (!(i) in 0..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (true) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (false) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (!(i % 10 == 0)) continue;\n             sum = sum + i\n         };\n\n",
@@ -219,5 +214,5 @@
       }
     ]
   },
-  "package_dir": "move-spec-testing/move-mutator/tests/move-assets/breakcontinue"
+  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/breakcontinue"
 }
