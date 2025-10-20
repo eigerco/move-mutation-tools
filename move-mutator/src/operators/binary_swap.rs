@@ -44,8 +44,6 @@ impl BinarySwap {
             | Operation::Neq
             | Operation::BitOr
             | Operation::BitAnd
-            | Operation::Or
-            | Operation::And
             | Operation::Xor => {
                 for ExpLoc { exp, loc: _ } in self.exps.iter() {
                     let mut calls_function = |e: &ExpData| {
@@ -64,11 +62,10 @@ impl BinarySwap {
                         return false;
                     }
                 }
+                true
             },
-            _ => (),
+            _ => false,
         }
-
-        true
     }
 }
 
@@ -102,6 +99,9 @@ impl MutationOperator for BinarySwap {
         let end = source[..end]
             .rfind(|c: char| !c.is_whitespace())
             .map_or(end, |i| i + 1);
+        if start >= end || end > source.len() {
+            return vec![];
+        }
         let binop_str = &source[start..end];
 
         let start = left.span().start().to_usize();
@@ -159,6 +159,8 @@ impl fmt::Display for BinarySwap {
 mod tests {
     use super::*;
     use codespan::Files;
+    use move_model::model::{FunId, ModuleId, NodeId};
+    use move_model::symbol::Symbol;
 
     #[test]
     fn test_get_file_id() {
@@ -167,5 +169,29 @@ mod tests {
         let loc = Loc::new(fid, codespan::Span::new(0, 0));
         let operator = BinarySwap::new(Operation::Add, loc, vec![]);
         assert_eq!(operator.get_file_id(), fid);
+    }
+
+    #[test]
+    fn test_is_commutative() {
+        let mut files = Files::new();
+        let fid = files.add("test", "test");
+        let loc = Loc::new(fid, codespan::Span::new(0, 0));
+        let operator = BinarySwap::new(Operation::Add, loc, vec![]);
+        assert!(operator.is_commutative());
+        let loc = Loc::new(fid, codespan::Span::new(0, 0));
+        let exps = vec![ExpLoc {
+            exp: ExpData::Call(
+                NodeId::new(1),
+                Operation::MoveFunction(ModuleId::new(1), FunId::new(Symbol::new(1))),
+                vec![],
+            )
+            .into(),
+            loc: Loc::new(fid, codespan::Span::new(0, 1)),
+        }];
+        let operator = BinarySwap::new(Operation::Add, loc, exps);
+        assert!(!operator.is_commutative());
+        let loc = Loc::new(fid, codespan::Span::new(0, 0));
+        let operator = BinarySwap::new(Operation::Lt, loc, vec![]);
+        assert!(!operator.is_commutative());
     }
 }
