@@ -3,8 +3,8 @@
     "sources/Enums.move": [
       {
         "module_func": "Enums::rectangle_area",
-        "tested": 12,
-        "killed": 5,
+        "tested": 7,
+        "killed": 0,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\tassert!(true);\n \t\tshape.width*shape.height\n     }\n\n",
           "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\tassert!(false);\n \t\tshape.width*shape.height\n     }\n\n",
@@ -14,13 +14,7 @@
           "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n\n     fun rectangle_area(shape: Shape): u64 {\n \t\tassert!(shape is Shape::Rectangle);\n-\t\tshape.width*shape.height\n+\t\tshape.width/shape.height\n     }\n\n \tenum Colour { Red, Green, Blue }\n",
           "--- original\n+++ modified\n@@ -7,7 +7,7 @@\n\n     fun rectangle_area(shape: Shape): u64 {\n \t\tassert!(shape is Shape::Rectangle);\n-\t\tshape.width*shape.height\n+\t\tshape.width%shape.height\n     }\n\n \tenum Colour { Red, Green, Blue }\n"
         ],
-        "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\t{}!(shape is Shape::Rectangle);\n \t\tshape.width*shape.height\n     }\n\n",
-          "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\t0!(shape is Shape::Rectangle);\n \t\tshape.width*shape.height\n     }\n\n",
-          "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\t18446744073709551615!(shape is Shape::Rectangle);\n \t\tshape.width*shape.height\n     }\n\n",
-          "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\t14566554180833181697!(shape is Shape::Rectangle);\n \t\tshape.width*shape.height\n     }\n\n",
-          "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n     }\n\n     fun rectangle_area(shape: Shape): u64 {\n-\t\tassert!(shape is Shape::Rectangle);\n+\t\t14566554180833181695!(shape is Shape::Rectangle);\n \t\tshape.width*shape.height\n     }\n\n"
-        ]
+        "mutants_killed_diff": []
       }
     ],
     "sources/FriendVisibility.move": [
