@@ -94,7 +94,9 @@ jobs:
 
       - name: Install required deps
         if: runner.os == 'Linux'
-        run: sudo apt-get install libssl-dev pkg-config libudev-dev libdw-dev
+        run: |
+          sudo apt-get update
+          sudo apt-get install libssl-dev pkg-config libudev-dev libdw-dev
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
