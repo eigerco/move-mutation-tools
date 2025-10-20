@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+    # tags:
+    #   - 'v[0-9]+.[0-9]+.[0-9]+'
 
 env:
   CARGO_TERM_COLOR: always
@@ -224,72 +224,72 @@ jobs:
           path: |
             mutation-tools-${{ matrix.asset_name }}.zip
 
-  create-release:
-    name: Create GitHub Release
-    runs-on: self-hosted
-    needs: build-and-release
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Determine version
-        id: version
-        run: |
-          TAG="${GITHUB_REF#refs/tags/}"
-          VERSION="${TAG#v}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-
-      - name: Prepare release assets
-        run: |
-          mkdir -p release-assets
-          find artifacts -name "*.zip" | while read file; do
-            cp "$file" release-assets/
-          done
-          ls -lh release-assets/
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: Move Mutation Tools v${{ steps.version.outputs.version }}
-          body: |
-            ## Installation Options
-
-            ### Via Aptos CLI (Recommended for most users)
-            ```bash
-            aptos update move-mutation-test
-            ```
-            This installs `move-mutation-test` which is the main tool most users need.
-
-            ### Direct Download (All tools)
-            Download the appropriate archive for your platform below. Each archive contains:
-            - `move-mutation-test` - Tests the quality of your unit test suite
-            - `move-mutator` - Core mutation engine for advanced users
-            - `move-spec-test` - Tests the quality of your formal specifications
-
-            ## Platform Support
-
-            | Platform | Architecture | File |
-            |----------|--------------|------|
-            | Linux | x86_64 | `mutation-tools-x86_64-unknown-linux-gnu.zip` |
-            | Linux | ARM64/aarch64 | `mutation-tools-aarch64-unknown-linux-gnu.zip` |
-            | macOS | x86_64 (Intel) | `mutation-tools-x86_64-apple-darwin.zip` |
-            | macOS | ARM64 (Apple Silicon) | `mutation-tools-aarch64-apple-darwin.zip` |
-            | Windows | x86_64 | `mutation-tools-x86_64-windows.zip` |
-
-            ## Documentation
-            For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
-          draft: true
-          prerelease: false
-          files: release-assets/*
-          fail_on_unmatched_files: true
-          generate_release_notes: true
+  # create-release:
+  #   name: Create GitHub Release
+  #   runs-on: self-hosted
+  #   needs: build-and-release
+  #   permissions:
+  #     contents: write
+  #
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Determine version
+  #       id: version
+  #       run: |
+  #         TAG="${GITHUB_REF#refs/tags/}"
+  #         VERSION="${TAG#v}"
+  #         echo "version=$VERSION" >> $GITHUB_OUTPUT
+  #         echo "tag=$TAG" >> $GITHUB_OUTPUT
+  #
+  #     - name: Download all artifacts
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         path: artifacts
+  #
+  #     - name: Prepare release assets
+  #       run: |
+  #         mkdir -p release-assets
+  #         find artifacts -name "*.zip" | while read file; do
+  #           cp "$file" release-assets/
+  #         done
+  #         ls -lh release-assets/
+  #
+  #     - name: Create GitHub Release
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         tag_name: ${{ steps.version.outputs.tag }}
+  #         name: Move Mutation Tools v${{ steps.version.outputs.version }}
+  #         body: |
+  #           ## Installation Options
+  #
+  #           ### Via Aptos CLI (Recommended for most users)
+  #           ```bash
+  #           aptos update move-mutation-test
+  #           ```
+  #           This installs `move-mutation-test` which is the main tool most users need.
+  #
+  #           ### Direct Download (All tools)
+  #           Download the appropriate archive for your platform below. Each archive contains:
+  #           - `move-mutation-test` - Tests the quality of your unit test suite
+  #           - `move-mutator` - Core mutation engine for advanced users
+  #           - `move-spec-test` - Tests the quality of your formal specifications
+  #
+  #           ## Platform Support
+  #
+  #           | Platform | Architecture | File |
+  #           |----------|--------------|------|
+  #           | Linux | x86_64 | `mutation-tools-x86_64-unknown-linux-gnu.zip` |
+  #           | Linux | ARM64/aarch64 | `mutation-tools-aarch64-unknown-linux-gnu.zip` |
+  #           | macOS | x86_64 (Intel) | `mutation-tools-x86_64-apple-darwin.zip` |
+  #           | macOS | ARM64 (Apple Silicon) | `mutation-tools-aarch64-apple-darwin.zip` |
+  #           | Windows | x86_64 | `mutation-tools-x86_64-windows.zip` |
+  #
+  #           ## Documentation
+  #           For usage instructions and examples, visit: https://github.com/eigerco/move-mutation-tools
+  #         draft: true
+  #         prerelease: false
+  #         files: release-assets/*
+  #         fail_on_unmatched_files: true
+  #         generate_release_notes: true
