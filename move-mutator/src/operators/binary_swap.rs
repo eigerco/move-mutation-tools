@@ -152,27 +152,20 @@ mod tests {
         let mut files = Files::new();
         let fid = files.add("test", "test");
 
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Add, loc, vec![]);
-        assert!(operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Mul, loc, vec![]);
-        assert!(operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Eq, loc, vec![]);
-        assert!(operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Neq, loc, vec![]);
-        assert!(operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::BitOr, loc, vec![]);
-        assert!(operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::BitAnd, loc, vec![]);
-        assert!(operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Xor, loc, vec![]);
-        assert!(operator.is_commutative());
+        let span = codespan::Span::new(0, 0);
+        for operation in [
+            Operation::Add,
+            Operation::Mul,
+            Operation::Eq,
+            Operation::Neq,
+            Operation::BitOr,
+            Operation::BitAnd,
+            Operation::Xor,
+        ] {
+            let loc = Loc::new(fid, span);
+            let operator = BinarySwap::new(operation, loc, vec![]);
+            assert!(operator.is_commutative());
+        }
     }
 
     #[test]
@@ -180,36 +173,23 @@ mod tests {
         let mut files = Files::new();
         let fid = files.add("test", "test");
 
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Lt, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Gt, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Le, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Ge, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Div, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Sub, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Shl, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Shr, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        // Logical operations could be not commutative due to short-circuit evaluation.
-        let operator = BinarySwap::new(Operation::And, loc, vec![]);
-        assert!(!operator.is_commutative());
-        let loc = Loc::new(fid, codespan::Span::new(0, 0));
-        let operator = BinarySwap::new(Operation::Or, loc, vec![]);
-        assert!(!operator.is_commutative());
+        let span = codespan::Span::new(0, 0);
+        for operation in [
+            Operation::Lt,
+            Operation::Gt,
+            Operation::Le,
+            Operation::Ge,
+            Operation::Div,
+            Operation::Sub,
+            Operation::Shl,
+            Operation::Shr,
+            // Logical operations could be not commutative due to short-circuit evaluation.
+            Operation::And,
+            Operation::Or,
+        ] {
+            let loc = Loc::new(fid, span);
+            let operator = BinarySwap::new(operation, loc, vec![]);
+            assert!(!operator.is_commutative());
+        }
     }
 }
