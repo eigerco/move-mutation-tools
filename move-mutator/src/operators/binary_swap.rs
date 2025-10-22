@@ -8,10 +8,7 @@ use crate::{
     report::{Mutation, Range},
 };
 use codespan::FileId;
-use move_model::{
-    ast::{ExpData, Operation},
-    model::Loc,
-};
+use move_model::{ast::Operation, model::Loc};
 use std::fmt;
 
 pub const OPERATOR_NAME: &str = "binary_operator_swap";
