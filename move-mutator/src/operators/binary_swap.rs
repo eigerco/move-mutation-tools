@@ -77,6 +77,10 @@ impl MutationOperator for BinarySwap {
         let end = source[..end]
             .rfind(|c: char| !c.is_whitespace())
             .map_or(end, |i| i + 1);
+        if start >= end {
+            warn!("BinarySwapOperator: Could not locate operator between expressions.");
+            return vec![];
+        }
         let binop_str = &source[start..end];
 
         let start = left.span().start().to_usize();
