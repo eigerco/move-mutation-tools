@@ -74,7 +74,7 @@ jobs:
           TAG_VERSION="${GITHUB_REF#refs/tags/v}"
 
           # Check each tool's Cargo.toml version
-          for tool in move-mutation-test move-mutator move-spec-test; do
+          for tool in move-mutation-test move-mutator move-spec-test mutator-common; do
             CARGO_VERSION=$(grep "^version" $tool/Cargo.toml | head -1 | cut -d'"' -f2)
             if [ "$CARGO_VERSION" != "$TAG_VERSION" ]; then
               echo "Error: Version mismatch for $tool!"
