@@ -8,10 +8,7 @@ use crate::{
     report::{Mutation, Range},
 };
 use codespan::FileId;
-use move_model::{
-    ast::{ExpData, Operation},
-    model::Loc,
-};
+use move_model::{ast::Operation, model::Loc};
 use std::fmt;
 
 pub const OPERATOR_NAME: &str = "binary_operator_swap";
@@ -37,38 +34,16 @@ impl BinarySwap {
 
     // Check whether the binary operation is commutative.
     fn is_commutative(&self) -> bool {
-        match self.operation {
+        matches!(
+            self.operation,
             Operation::Add
-            | Operation::Mul
-            | Operation::Eq
-            | Operation::Neq
-            | Operation::BitOr
-            | Operation::BitAnd
-            | Operation::Or
-            | Operation::And
-            | Operation::Xor => {
-                for ExpLoc { exp, loc: _ } in self.exps.iter() {
-                    let mut calls_function = |e: &ExpData| {
-                        matches!(
-                            e,
-                            ExpData::Call(_, Operation::MoveFunction(..), _)
-                                | ExpData::Lambda(..)
-                                | ExpData::Invoke(..)
-                        )
-                    };
-
-                    if exp.any(&mut calls_function) {
-                        // If any expression around the operator is a closure or a function,
-                        // it's not possible to guarantee that the operation is commutative,
-                        // since the operand order might matter in that case.
-                        return false;
-                    }
-                }
-            },
-            _ => (),
-        }
-
-        true
+                | Operation::Mul
+                | Operation::Eq
+                | Operation::Neq
+                | Operation::BitOr
+                | Operation::BitAnd
+                | Operation::Xor
+        )
     }
 }
 
@@ -102,6 +77,10 @@ impl MutationOperator for BinarySwap {
         let end = source[..end]
             .rfind(|c: char| !c.is_whitespace())
             .map_or(end, |i| i + 1);
+        if start >= end {
+            warn!("BinarySwapOperator: Could not locate operator between expressions.");
+            return vec![];
+        }
         let binop_str = &source[start..end];
 
         let start = left.span().start().to_usize();
@@ -167,5 +146,51 @@ mod tests {
         let loc = Loc::new(fid, codespan::Span::new(0, 0));
         let operator = BinarySwap::new(Operation::Add, loc, vec![]);
         assert_eq!(operator.get_file_id(), fid);
+    }
+
+    #[test]
+    fn test_is_commutative() {
+        let mut files = Files::new();
+        let fid = files.add("test", "test");
+
+        let span = codespan::Span::new(0, 0);
+        for operation in [
+            Operation::Add,
+            Operation::Mul,
+            Operation::Eq,
+            Operation::Neq,
+            Operation::BitOr,
+            Operation::BitAnd,
+            Operation::Xor,
+        ] {
+            let loc = Loc::new(fid, span);
+            let operator = BinarySwap::new(operation, loc, vec![]);
+            assert!(operator.is_commutative());
+        }
+    }
+
+    #[test]
+    fn test_is_not_commutative() {
+        let mut files = Files::new();
+        let fid = files.add("test", "test");
+
+        let span = codespan::Span::new(0, 0);
+        for operation in [
+            Operation::Lt,
+            Operation::Gt,
+            Operation::Le,
+            Operation::Ge,
+            Operation::Div,
+            Operation::Sub,
+            Operation::Shl,
+            Operation::Shr,
+            // Logical operations could be not commutative due to short-circuit evaluation.
+            Operation::And,
+            Operation::Or,
+        ] {
+            let loc = Loc::new(fid, span);
+            let operator = BinarySwap::new(operation, loc, vec![]);
+            assert!(!operator.is_commutative());
+        }
     }
 }

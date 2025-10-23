@@ -22,8 +22,8 @@
       },
       {
         "module_func": "BinaryReplacement::is_x_gt_zero",
-        "tested": 6,
-        "killed": 5,
+        "tested": 7,
+        "killed": 6,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x > 1\n     }\n\n     #[test]\n"
         ],
@@ -32,6 +32,7 @@
           "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x < 0\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x <= 0\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x >= 0\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        0 > x\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -65,7 +65,7 @@\n     }\n\n     fun is_x_gt_zero(x: u64): bool {\n-        x > 0\n+        x > 18446744073709551615\n     }\n\n     #[test]\n"
         ]
       },
@@ -70,8 +71,8 @@
       },
       {
         "module_func": "BinaryReplacement::is_zero_lt_x",
-        "tested": 6,
-        "killed": 5,
+        "tested": 7,
+        "killed": 6,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        1 < x\n     }\n\n     #[test]\n"
         ],
@@ -80,6 +81,7 @@
           "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 > x\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 <= x\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        0 >= x\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        x < 0\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -75,7 +75,7 @@\n     }\n\n     fun is_zero_lt_x(x: u64): bool {\n-        0 < x\n+        18446744073709551615 < x\n     }\n\n     #[test]\n"
         ]
       },
@@ -131,14 +133,15 @@
     "sources/Operators.move": [
       {
         "module_func": "Operators::div",
-        "tested": 4,
-        "killed": 4,
+        "tested": 5,
+        "killed": 5,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -83,7 +83,7 @@\n     }\n\n     fun div(x: u64, y: u64): u64 {\n-        x / y\n+        x + y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -83,7 +83,7 @@\n     }\n\n     fun div(x: u64, y: u64): u64 {\n-        x / y\n+        x - y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -83,7 +83,7 @@\n     }\n\n     fun div(x: u64, y: u64): u64 {\n-        x / y\n+        x * y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -83,7 +83,7 @@\n     }\n\n     fun div(x: u64, y: u64): u64 {\n-        x / y\n+        x % y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -83,7 +83,7 @@\n     }\n\n     fun div(x: u64, y: u64): u64 {\n-        x / y\n+        x % y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -83,7 +83,7 @@\n     }\n\n     fun div(x: u64, y: u64): u64 {\n-        x / y\n+        y / x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -168,14 +171,15 @@
       },
       {
         "module_func": "Operators::sub",
-        "tested": 4,
-        "killed": 4,
+        "tested": 5,
+        "killed": 5,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -13,7 +13,7 @@\n     }\n\n     fun sub(x: u64, y: u64): u64 {\n-        x - y\n+        x + y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -13,7 +13,7 @@\n     }\n\n     fun sub(x: u64, y: u64): u64 {\n-        x - y\n+        x * y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -13,7 +13,7 @@\n     }\n\n     fun sub(x: u64, y: u64): u64 {\n-        x - y\n+        x / y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -13,7 +13,7 @@\n     }\n\n     fun sub(x: u64, y: u64): u64 {\n-        x - y\n+        x % y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -13,7 +13,7 @@\n     }\n\n     fun sub(x: u64, y: u64): u64 {\n-        x - y\n+        x % y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -13,7 +13,7 @@\n     }\n\n     fun sub(x: u64, y: u64): u64 {\n-        x - y\n+        y - x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -190,44 +194,50 @@
       },
       {
         "module_func": "Operators::gt",
-        "tested": 5,
-        "killed": 5,
+        "tested": 6,
+        "killed": 6,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        x == y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        x != y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        x < y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        x <= y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        x >= y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        x >= y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -305,7 +305,7 @@\n     }\n\n     fun gt(x: u64, y: u64): bool {\n-        x > y\n+        y > x\n     }\n\n     #[test]\n"
         ]
       },
       {
         "module_func": "Operators::gte",
-        "tested": 5,
-        "killed": 5,
+        "tested": 6,
+        "killed": 6,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        x == y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        x != y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        x < y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        x > y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        x <= y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        x <= y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -321,7 +321,7 @@\n     }\n\n     fun gte(x: u64, y: u64): bool {\n-        x >= y\n+        y >= x\n     }\n\n     #[test]\n"
         ]
       },
       {
         "module_func": "Operators::logical_and",
-        "tested": 1,
+        "tested": 2,
         "killed": 1,
-        "mutants_alive_diffs": [],
+        "mutants_alive_diffs": [
+          "--- original\n+++ modified\n@@ -219,7 +219,7 @@\n     }\n\n     fun logical_and(x: bool, y: bool): bool {\n-        x && y\n+        y && x\n     }\n\n     #[test]\n"
+        ],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -219,7 +219,7 @@\n     }\n\n     fun logical_and(x: bool, y: bool): bool {\n-        x && y\n+        x || y\n     }\n\n     #[test]\n"
         ]
       },
       {
         "module_func": "Operators::logical_or",
-        "tested": 1,
+        "tested": 2,
         "killed": 1,
-        "mutants_alive_diffs": [],
+        "mutants_alive_diffs": [
+          "--- original\n+++ modified\n@@ -207,7 +207,7 @@\n     }\n\n     fun logical_or(x: bool, y: bool): bool {\n-        x || y\n+        y || x\n     }\n\n     #[test]\n"
+        ],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -207,7 +207,7 @@\n     }\n\n     fun logical_or(x: bool, y: bool): bool {\n-        x || y\n+        x && y\n     }\n\n     #[test]\n"
         ]
@@ -243,40 +253,43 @@
       },
       {
         "module_func": "Operators::lt",
-        "tested": 5,
-        "killed": 5,
+        "tested": 6,
+        "killed": 6,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        x == y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        x != y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        x > y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        x <= y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        x >= y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        x >= y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -273,7 +273,7 @@\n     }\n\n     fun lt(x: u64, y: u64): bool {\n-        x < y\n+        y < x\n     }\n\n     #[test]\n"
         ]
       },
       {
         "module_func": "Operators::lte",
-        "tested": 5,
-        "killed": 5,
+        "tested": 6,
+        "killed": 6,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        x == y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        x != y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        x < y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        x > y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        x >= y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        x >= y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -289,7 +289,7 @@\n     }\n\n     fun lte(x: u64, y: u64): bool {\n-        x <= y\n+        y <= x\n     }\n\n     #[test]\n"
         ]
       },
       {
         "module_func": "Operators::mod",
-        "tested": 4,
-        "killed": 4,
+        "tested": 5,
+        "killed": 5,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -54,7 +54,7 @@\n     }\n\n     fun mod(x: u64, y: u64): u64 {\n-        x % y\n+        x + y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -54,7 +54,7 @@\n     }\n\n     fun mod(x: u64, y: u64): u64 {\n-        x % y\n+        x - y\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -54,7 +54,7 @@\n     }\n\n     fun mod(x: u64, y: u64): u64 {\n-        x % y\n+        x * y\n     }\n\n     #[test]\n",
-          "--- original\n+++ modified\n@@ -54,7 +54,7 @@\n     }\n\n     fun mod(x: u64, y: u64): u64 {\n-        x % y\n+        x / y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -54,7 +54,7 @@\n     }\n\n     fun mod(x: u64, y: u64): u64 {\n-        x % y\n+        x / y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -54,7 +54,7 @@\n     }\n\n     fun mod(x: u64, y: u64): u64 {\n-        x % y\n+        y % x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -337,8 +350,8 @@
     "sources/StillSimple.move": [
       {
         "module_func": "StillSimple::sample1",
-        "tested": 23,
-        "killed": 15,
+        "tested": 24,
+        "killed": 16,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::StillSimple {\n     fun sample1(x: u128, y: u128) {\n-        let _sum_r = x + y;\n+        let _sum_r = x * y;\n\n         // Impossible condition here:\n         if ((x + y) < 0) abort 1;\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if (false) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
@@ -360,6 +373,7 @@
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if ((x + y) > 0) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if ((x + y) <= 0) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if ((x + y) >= 0) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
+          "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if (0 < (x + y)) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if ((x - y) < 0) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if ((x / y) < 0) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let _sum_r = x + y;\n\n         // Impossible condition here:\n-        if ((x + y) < 0) abort 1;\n+        if ((x % y) < 0) abort 1;\n     }\n\n     // This test will generate mutants that will survive and indicate the impossible condition in the code.\n",
@@ -390,10 +404,8 @@
       {
         "module_func": "StillSimple::sample3",
         "tested": 26,
-        "killed": 25,
-        "mutants_alive_diffs": [
-          "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            sample3(n, e - 1) * n\n         }\n     }\n\n"
-        ],
+        "killed": 26,
+        "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -36,7 +36,7 @@\n     }\n\n     public fun sample3(n: u64, e: u64): u64 {\n-        if (e == 0) {\n+        if (true) {\n             1\n         } else {\n             n * sample3(n, e - 1)\n",
           "--- original\n+++ modified\n@@ -36,7 +36,7 @@\n     }\n\n     public fun sample3(n: u64, e: u64): u64 {\n-        if (e == 0) {\n+        if (false) {\n             1\n         } else {\n             n * sample3(n, e - 1)\n",
@@ -416,6 +428,7 @@
           "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, e * 1)\n         }\n     }\n\n",
           "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, e / 1)\n         }\n     }\n\n",
           "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, e % 1)\n         }\n     }\n\n",
+          "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, 1 - e)\n         }\n     }\n\n",
           "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, e - 0)\n         }\n     }\n\n",
           "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, e - 18446744073709551615)\n         }\n     }\n\n",
           "--- original\n+++ modified\n@@ -39,7 +39,7 @@\n         if (e == 0) {\n             1\n         } else {\n-            n * sample3(n, e - 1)\n+            n * sample3(n, e - 2)\n         }\n     }\n\n",
@@ -424,8 +437,8 @@
       },
       {
         "module_func": "StillSimple::sample4",
-        "tested": 38,
-        "killed": 28,
+        "tested": 40,
+        "killed": 29,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -67,7 +67,7 @@\n\n     fun sample4(x: u128, y: u128) {\n         loop {\n-            if (x > y) {\n+            if (false) {\n                 y = y + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -68,7 +68,7 @@\n     fun sample4(x: u128, y: u128) {\n         loop {\n             if (x > y) {\n-                y = y + 1;\n+                y = y + 2;\n                 continue\n             };\n             if (y > x) {\n",
@@ -434,6 +447,7 @@
           "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n                 y = y + 1;\n                 continue\n             };\n-            if (y > x) {\n+            if (false) {\n                 x = x + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n                 y = y + 1;\n                 continue\n             };\n-            if (y > x) {\n+            if (y != x) {\n                 x = x + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n                 y = y + 1;\n                 continue\n             };\n-            if (y > x) {\n+            if (y < x) {\n                 x = x + 1;\n                 continue\n             };\n",
+          "--- original\n+++ modified\n@@ -71,7 +71,7 @@\n                 y = y + 1;\n                 continue\n             };\n-            if (y > x) {\n+            if (x > y) {\n                 x = x + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -72,7 +72,7 @@\n                 continue\n             };\n             if (y > x) {\n-                x = x + 1;\n+                x = x + 2;\n                 continue\n             };\n             break\n",
           "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n             };\n             if (y > x) {\n                 x = x + 1;\n-                continue\n+                break\n             };\n             break\n         };\n",
           "--- original\n+++ modified\n@@ -73,7 +73,7 @@\n             };\n             if (y > x) {\n                 x = x + 1;\n-                continue\n+                {}\n             };\n             break\n         };\n"
@@ -446,6 +460,7 @@
           "--- original\n+++ modified\n@@ -67,7 +67,7 @@\n\n     fun sample4(x: u128, y: u128) {\n         loop {\n-            if (x > y) {\n+            if (x < y) {\n                 y = y + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -67,7 +67,7 @@\n\n     fun sample4(x: u128, y: u128) {\n         loop {\n-            if (x > y) {\n+            if (x <= y) {\n                 y = y + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -67,7 +67,7 @@\n\n     fun sample4(x: u128, y: u128) {\n         loop {\n-            if (x > y) {\n+            if (x >= y) {\n                 y = y + 1;\n                 continue\n             };\n",
+          "--- original\n+++ modified\n@@ -67,7 +67,7 @@\n\n     fun sample4(x: u128, y: u128) {\n         loop {\n-            if (x > y) {\n+            if (y > x) {\n                 y = y + 1;\n                 continue\n             };\n",
           "--- original\n+++ modified\n@@ -68,7 +68,7 @@\n     fun sample4(x: u128, y: u128) {\n         loop {\n             if (x > y) {\n-                y = y + 1;\n+                y = y - 1;\n                 continue\n             };\n             if (y > x) {\n",
           "--- original\n+++ modified\n@@ -68,7 +68,7 @@\n     fun sample4(x: u128, y: u128) {\n         loop {\n             if (x > y) {\n-                y = y + 1;\n+                y = y * 1;\n                 continue\n             };\n             if (y > x) {\n",
           "--- original\n+++ modified\n@@ -68,7 +68,7 @@\n     fun sample4(x: u128, y: u128) {\n         loop {\n             if (x > y) {\n-                y = y + 1;\n+                y = y / 1;\n                 continue\n             };\n             if (y > x) {\n",
@@ -471,8 +486,8 @@
       },
       {
         "module_func": "StillSimple::sample5",
-        "tested": 20,
-        "killed": 20,
+        "tested": 22,
+        "killed": 22,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) - (y - 1 as u128)\n     }\n\n     #[test]\n",
@@ -483,6 +498,7 @@
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x * 1 as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x / 1 as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x % 1 as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (1 - x as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 0 as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 340282366920938463463374607431768211455 as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 2 as u128) + (y - 1 as u128)\n     }\n\n     #[test]\n",
@@ -491,6 +507,7 @@
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (y * 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (y / 1 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (y % 1 as u128)\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (1 - y as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (y - 0 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (y - 340282366920938463463374607431768211455 as u128)\n     }\n\n     #[test]\n",
           "--- original\n+++ modified\n@@ -88,7 +88,7 @@\n     }\n\n     fun sample5(x: u128, y: u128): u128 {\n-        (x - 1 as u128) + (y - 1 as u128)\n+        (x - 1 as u128) + (y - 2 as u128)\n     }\n\n     #[test]\n",
@@ -499,14 +516,15 @@
       },
       {
         "module_func": "StillSimple::sample6",
-        "tested": 28,
-        "killed": 28,
+        "tested": 30,
+        "killed": 30,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y + x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y * x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y / x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y % x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
+          "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x*(y + 2)*x/y - x + y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x - y - x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x * y - x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x / y - x*(y + 2)*x/y)\n     }\n\n     #[test, expected_failure]\n",
@@ -515,6 +533,7 @@
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - x*(y + 2)*x-y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - x*(y + 2)*x*y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - x*(y + 2)*x%y)\n     }\n\n     #[test, expected_failure]\n",
+          "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - y / x*(y + 2)*x)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - x*(y + 2)+x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - x*(y + 2)-x/y)\n     }\n\n     #[test, expected_failure]\n",
           "--- original\n+++ modified\n@@ -123,7 +123,7 @@\n     }\n\n     fun sample6(x: u128, y: u128): u128 {\n-        return (x + y - x*(y + 2)*x/y)\n+        return (x + y - x*(y + 2)/x/y)\n     }\n\n     #[test, expected_failure]\n",
@@ -549,5 +568,5 @@
       }
     ]
   },
-  "package_dir": "/Users/stoyankirov/projects/work/aptos/move-mutation-tools/move-mutator/tests/move-assets/simple"
+  "package_dir": "/home/jos/Projects/move-mutation-tools/move-mutator/tests/move-assets/simple"
 }
