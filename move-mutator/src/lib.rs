@@ -15,6 +15,7 @@ pub mod configuration;
 pub(crate) mod coverage;
 mod mutant;
 mod operator;
+pub mod operator_filter;
 mod operators;
 mod output;
 pub mod report;
@@ -74,9 +75,18 @@ pub fn run_move_mutator(
     };
 
     let mut mutator_configuration =
-        Configuration::new(options, Some(original_package_path.to_owned()));
+        Configuration::new(options, Some(original_package_path.to_owned()))?;
 
     trace!("Mutator configuration: {mutator_configuration:?}");
+
+    let enabled_operators = mutator_configuration.operator_mode.get_operators();
+    println!(
+        "Operator types being mutated ({}):",
+        enabled_operators.len()
+    );
+    for (i, op) in enabled_operators.iter().enumerate() {
+        println!("   {}. {}", i + 1, op);
+    }
 
     let package_path = mutator_configuration
         .project_path
