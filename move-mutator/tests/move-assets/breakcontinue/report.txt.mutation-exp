@@ -3,8 +3,8 @@
     "sources/Break.move": [
       {
         "module_func": "Break::smallest_factor",
-        "tested": 35,
-        "killed": 34,
+        "tested": 37,
+        "killed": 36,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun smallest_factor(n: u64): u64 {\n         // assuming the input is not 0 or 1\n         let i = 2;\n-        while (i <= n) {\n+        while (i < n) {\n             if (n % i == 0) break;\n             i = i + 1\n         };\n"
         ],
@@ -20,6 +20,7 @@
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun smallest_factor(n: u64): u64 {\n         // assuming the input is not 0 or 1\n         let i = 2;\n-        while (i <= n) {\n+        while (i != n) {\n             if (n % i == 0) break;\n             i = i + 1\n         };\n",
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun smallest_factor(n: u64): u64 {\n         // assuming the input is not 0 or 1\n         let i = 2;\n-        while (i <= n) {\n+        while (i > n) {\n             if (n % i == 0) break;\n             i = i + 1\n         };\n",
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun smallest_factor(n: u64): u64 {\n         // assuming the input is not 0 or 1\n         let i = 2;\n-        while (i <= n) {\n+        while (i >= n) {\n             if (n % i == 0) break;\n             i = i + 1\n         };\n",
+          "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun smallest_factor(n: u64): u64 {\n         // assuming the input is not 0 or 1\n         let i = 2;\n-        while (i <= n) {\n+        while (n <= i) {\n             if (n % i == 0) break;\n             i = i + 1\n         };\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (true) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (false) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (!(n % i == 0)) break;\n             i = i + 1\n         };\n\n",
@@ -31,6 +32,7 @@
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (n - i == 0) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (n * i == 0) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (n / i == 0) break;\n             i = i + 1\n         };\n\n",
+          "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (i % n == 0) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (n % i == 18446744073709551615) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (n % i == 1) break;\n             i = i + 1\n         };\n\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         // assuming the input is not 0 or 1\n         let i = 2;\n         while (i <= n) {\n-            if (n % i == 0) break;\n+            if (n % i == 0) continue;\n             i = i + 1\n         };\n\n",
@@ -49,8 +51,8 @@
     "sources/BreakContinue.move": [
       {
         "module_func": "BreakContinue::sum_intermediate",
-        "tested": 45,
-        "killed": 45,
+        "tested": 47,
+        "killed": 47,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
           "--- original\n+++ modified\n@@ -1,6 +1,6 @@\n module TestAccount::BreakContinue {\n     fun sum_intermediate(n: u64): u64 {\n-        let sum = 0;\n+        let sum = 18446744073709551615;\n         let i = 0;\n         loop {\n             i = i + 1;\n",
@@ -76,6 +78,7 @@
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i - 10 == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i * 10 == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i / 10 == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
+          "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (10 % i == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i % 0 == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i % 18446744073709551615 == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         loop {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i % 11 == 0) continue;\n             if (i > n) break;\n             sum = sum + i\n         };\n",
@@ -92,6 +95,7 @@
           "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n         loop {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n-            if (i > n) break;\n+            if (i < n) break;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n         loop {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n-            if (i > n) break;\n+            if (i <= n) break;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n         loop {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n-            if (i > n) break;\n+            if (i >= n) break;\n             sum = sum + i\n         };\n\n",
+          "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n         loop {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n-            if (i > n) break;\n+            if (n > i) break;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n         loop {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n-            if (i > n) break;\n+            if (i > n) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -5,7 +5,7 @@\n         loop {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n-            if (i > n) break;\n+            if (i > n) {};\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -6,7 +6,7 @@\n             i = i + 1;\n             if (i % 10 == 0) continue;\n             if (i > n) break;\n-            sum = sum + i\n+            sum = sum - i\n         };\n\n         sum\n",
@@ -104,8 +108,8 @@
     "sources/Continue.move": [
       {
         "module_func": "Continue::sum_intermediate",
-        "tested": 43,
-        "killed": 42,
+        "tested": 45,
+        "killed": 44,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun sum_intermediate(n: u64): u64 {\n         let sum = 0;\n         let i = 0;\n-        while (i < n) {\n+        while (i != n) {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n"
         ],
@@ -121,6 +125,7 @@
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun sum_intermediate(n: u64): u64 {\n         let sum = 0;\n         let i = 0;\n-        while (i < n) {\n+        while (i > n) {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n",
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun sum_intermediate(n: u64): u64 {\n         let sum = 0;\n         let i = 0;\n-        while (i < n) {\n+        while (i <= n) {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n",
           "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun sum_intermediate(n: u64): u64 {\n         let sum = 0;\n         let i = 0;\n-        while (i < n) {\n+        while (i >= n) {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n",
+          "--- original\n+++ modified\n@@ -2,7 +2,7 @@\n     fun sum_intermediate(n: u64): u64 {\n         let sum = 0;\n         let i = 0;\n-        while (i < n) {\n+        while (n < i) {\n             i = i + 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let sum = 0;\n         let i = 0;\n         while (i < n) {\n-            i = i + 1;\n+            i = i - 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n         };\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let sum = 0;\n         let i = 0;\n         while (i < n) {\n-            i = i + 1;\n+            i = i * 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n         };\n",
           "--- original\n+++ modified\n@@ -3,7 +3,7 @@\n         let sum = 0;\n         let i = 0;\n         while (i < n) {\n-            i = i + 1;\n+            i = i / 1;\n             if (i % 10 == 0) continue;\n             sum = sum + i;\n         };\n",
@@ -140,6 +145,7 @@
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i - 10 == 0) continue;\n             sum = sum + i;\n         };\n\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i * 10 == 0) continue;\n             sum = sum + i;\n         };\n\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i / 10 == 0) continue;\n             sum = sum + i;\n         };\n\n",
+          "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (10 % i == 0) continue;\n             sum = sum + i;\n         };\n\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i % 0 == 0) continue;\n             sum = sum + i;\n         };\n\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i % 18446744073709551615 == 0) continue;\n             sum = sum + i;\n         };\n\n",
           "--- original\n+++ modified\n@@ -4,7 +4,7 @@\n         let i = 0;\n         while (i < n) {\n             i = i + 1;\n-            if (i % 10 == 0) continue;\n+            if (i % 11 == 0) continue;\n             sum = sum + i;\n         };\n\n",
@@ -156,8 +162,8 @@
       },
       {
         "module_func": "Continue::sum_intermediate_in_for",
-        "tested": 49,
-        "killed": 48,
+        "tested": 50,
+        "killed": 49,
         "mutants_alive_diffs": [
           "--- original\n+++ modified\n@@ -18,7 +18,7 @@\n     fun sum_intermediate_in_for(n: u64): u64 {\n         let sum = 0;\n\n-        for (i in 0..(n + 1)) {\n+        for (i in 1..(n + 1)) {\n             if (i % 10 == 0) continue;\n             sum = sum + i\n         };\n"
         ],
@@ -198,6 +204,7 @@
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (i - 10 == 0) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (i * 10 == 0) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (i / 10 == 0) continue;\n             sum = sum + i\n         };\n\n",
+          "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (10 % i == 0) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (i % 0 == 0) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (i % 18446744073709551615 == 0) continue;\n             sum = sum + i\n         };\n\n",
           "--- original\n+++ modified\n@@ -19,7 +19,7 @@\n         let sum = 0;\n\n         for (i in 0..(n + 1)) {\n-            if (i % 10 == 0) continue;\n+            if (i % 11 == 0) continue;\n             sum = sum + i\n         };\n\n",
@@ -214,5 +221,5 @@
       }
     ]
   },
-  "package_dir": "move-spec-testing/move-mutator/tests/move-assets/breakcontinue"
+  "package_dir": "/home/jos/Projects/move-mutation-tools/move-mutator/tests/move-assets/breakcontinue"
 }
