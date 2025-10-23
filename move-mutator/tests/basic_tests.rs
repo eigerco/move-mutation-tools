@@ -257,11 +257,11 @@ fn check_mutator_swap_operator_works_correctly_for_corner_cases() {
 
     // Function names and number of swap mutation operations
     let functions_and_exected_swap_op_count = [
-        ("swap_op_should_mutate_once_v1", 1),
-        ("swap_op_should_mutate_once_v2", 1),
-        ("swap_op_should_mutate_once_v3", 1),
-        ("swap_op_should_mutate_seven_times", 7),
-        ("swap_op_should_mutate_three_times", 3),
+        ("swap_op_should_not_mutate_binary_swap", 0),
+        ("swap_op_should_not_mutate_binary_swap_v2", 0),
+        ("swap_op_should_not_mutate_binary_swap_v3", 0),
+        ("swap_op_should_mutate_four_times", 4),
+        ("swap_op_should_not_mutate_binary_swap_v4", 0),
         ("swap_op_should_not_mutate", 0),
     ];
 

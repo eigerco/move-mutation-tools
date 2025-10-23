@@ -47,42 +47,39 @@ module 0x42::m2 {
 //
 // Info 2: Deliberately use funny identation for the sake of the extra test.
 module 0x42::m3 {
-    fun swap_op_should_mutate_once_v1(a: address, b: u64): u64 {
+    fun swap_op_should_not_mutate_binary_swap_v1(a: address, b: u64): u64 {
        0x42::m1::ret_t_mut_ref(a)     * b
     }
 
-    fun swap_op_should_mutate_once_v2(a: address, b: u64): u64 {
+    fun swap_op_should_not_mutate_binary_swap_v2(a: address, b: u64): u64 {
         b |0x42::m1::ret_t_ref(a)
     }
 
-    inline fun swap_op_should_mutate_once_v3(a: u32, f: |u32| u32): u32 {
-        // Expect a swap here:
+    inline fun swap_op_should_not_mutate_binary_swap_v3(a: u32, f: |u32| u32): u32 {
         a + f(3)
     }
 
-    inline fun swap_op_should_mutate_seven_times(a: address, b: u64, closure: |u64| bool): u64 {
+    inline fun swap_op_should_mutate_four_times(a: address, b: u64, closure: |u64| bool): u64 {
        let b1 = false;
        let b2 = false;
 
        // Expect no swaps here:
-       if (b1 || b2) return 0;
-       if (b1 &&    b2) return 0;
        if (b1!= true) return 0;
 
-       // Expect one swap here for each:
-       if (b1 == closure(23)) return 1;
-       if (closure(20 ) !=    closure(23)) return 2;
+       // Expect swaps here - logical operators may short-circuit
+       if (b1 || b2) return 0;
+       if (b1 &&    b2) return 0;
        if (!closure(22) &&true) return   3;
        if (closure(2) || false) return 4;
 
-       // Expect two swaps here:
+       // Expect no swaps here
+       if (b1 == closure(23)) return 1;
+       if (closure(20 ) !=    closure(23)) return 2;
        if (b2 !=    (0x42::m1::ret_t_ref(a)==  1)) return 4;
-
-       // One more swap:
        (b^10) + 0x42::m2::borrow_then_borrow_and_modify_reversed(a)
     }
 
-    fun swap_op_should_mutate_three_times(a: address, b: u64): u64 {
+    fun swap_op_should_not_mutate_binary_swap_v4(a: address, b: u64): u64 {
        (7 *   (0x42::m1::ret_t_mut_ref(a)+ b)) & 259
     }
 
