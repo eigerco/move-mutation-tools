@@ -38,6 +38,11 @@ impl MutationOperator for DeleteStmt {
         );
         let cur_op = &source[start..end];
 
+        // Skip mutation if this is an "assert!" macro.
+        if cur_op == "assert" {
+            return vec![];
+        }
+
         let ops: Vec<&str> = vec![MOVE_EMPTY_STMT];
 
         ops.into_iter()

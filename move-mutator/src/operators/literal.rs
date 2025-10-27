@@ -48,6 +48,11 @@ impl MutationOperator for Literal {
         let end = self.loc.span().end().to_usize();
         let cur_op = &source[start..end];
 
+        // Skip mutation if this is an "assert!" macro.
+        if cur_op == "assert" {
+            return vec![];
+        }
+
         // Group of literal statements for possible Value types.
         // For each group use minimum and maximum values and some additional values:
         // - for u8, u16, u32, u64, u128 use minimum, maximum, value + 1, value - 1
