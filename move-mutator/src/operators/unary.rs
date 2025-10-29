@@ -46,7 +46,7 @@ impl MutationOperator for Unary {
         let start = source[start..]
             .find(|c: char| !c.is_whitespace())
             .map_or(start, |i| start + i);
-        let end = self.loc.span().end().to_usize();
+        let end = start + 1;
         let cur_op = &source[start..end];
 
         // For unary operator mutations, we only need to replace the operator with a space (to ensure the same file length).
