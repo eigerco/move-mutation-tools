@@ -170,6 +170,7 @@ fn run_tests<W: WriteColor + Send>(
         // once_cell value above and then we can't change it back anymore.
         false,
         &mut error_writer,
+        false,
     )
     .map_err(|err| Error::msg(format!("failed to run unit tests: {err:#}")))?;
 
