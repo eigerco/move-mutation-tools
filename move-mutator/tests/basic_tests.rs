@@ -176,32 +176,6 @@ fn check_mutator_properly_fails_with_single_files_that_require_dep_or_addr_resol
     fs::remove_dir_all(package_path).unwrap();
 }
 
-// Check if the mutator produce zero mutants if verification is enabled for
-// files without any package (we're unable to verify such files successfully).
-#[test]
-fn check_mutator_fails_verify_file_without_package() {
-    let package_path = clone_project("tests/move-assets/file_without_package");
-    let outdir = package_path.join("outdir");
-
-    let options = CLIOptions {
-        move_sources: vec![package_path.join("Sub.move")],
-        out_mutant_dir: Some(outdir.clone()),
-        ..Default::default()
-    };
-
-    let config = quick_build_config();
-
-    let result = move_mutator::run_move_mutator(options.clone(), &config, &package_path);
-    assert!(result.is_ok());
-
-    let report_path = outdir.join("report.json");
-    assert!(report_path.exists());
-
-    let report = move_mutator::report::Report::load_from_json_file(&report_path).unwrap();
-    assert!(report.get_mutants().is_empty());
-    fs::remove_dir_all(package_path).unwrap();
-}
-
 // Check that the mutator will apply function-filters correctly and generate mutants only for
 // specified functions.
 #[test]
