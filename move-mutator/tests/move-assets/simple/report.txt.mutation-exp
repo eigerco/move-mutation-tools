@@ -264,11 +264,12 @@
       },
       {
         "module_func": "Operators::lsh",
-        "tested": 1,
-        "killed": 1,
+        "tested": 2,
+        "killed": 2,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -163,7 +163,7 @@\n     }\n\n     fun lsh(x: u64, y: u8): u64 {\n-        x << y\n+        x >> y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -163,7 +163,7 @@\n     }\n\n     fun lsh(x: u64, y: u8): u64 {\n-        x << y\n+        x >> y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -163,7 +163,7 @@\n     }\n\n     fun lsh(x: u64, y: u8): u64 {\n-        x << y\n+        y << x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -337,11 +338,12 @@
       },
       {
         "module_func": "Operators::rsh",
-        "tested": 1,
-        "killed": 1,
+        "tested": 2,
+        "killed": 2,
         "mutants_alive_diffs": [],
         "mutants_killed_diff": [
-          "--- original\n+++ modified\n@@ -185,7 +185,7 @@\n     }\n\n     fun rsh(x: u64, y: u8): u64 {\n-        x >> y\n+        x << y\n     }\n\n     #[test]\n"
+          "--- original\n+++ modified\n@@ -185,7 +185,7 @@\n     }\n\n     fun rsh(x: u64, y: u8): u64 {\n-        x >> y\n+        x << y\n     }\n\n     #[test]\n",
+          "--- original\n+++ modified\n@@ -185,7 +185,7 @@\n     }\n\n     fun rsh(x: u64, y: u8): u64 {\n-        x >> y\n+        y >> x\n     }\n\n     #[test]\n"
         ]
       },
       {
@@ -588,5 +590,5 @@
       }
     ]
   },
-  "package_dir": "/Users/jos/Projects/move-mutation-tools/move-mutator/tests/move-assets/simple"
+  "package_dir": "/home/jos/Projects/move-mutation-tools/move-mutator/tests/move-assets/simple"
 }
