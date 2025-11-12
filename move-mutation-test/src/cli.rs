@@ -118,7 +118,7 @@ pub struct TestBuildConfig {
     #[clap(long, default_value_t = 1_000_000)]
     pub gas_limit: u64,
 
-    /// Whether to stop testing upon the first failure.
+    /// Whether to stop running test for the current mutant upon the first test failure for the mutant.
     #[clap(long, default_value_t = true, action = clap::ArgAction::Set)]
     pub fail_fast: bool,
 }
