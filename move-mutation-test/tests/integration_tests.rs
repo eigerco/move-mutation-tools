@@ -34,6 +34,7 @@ fn test_run_mutation_test(path: &Path, expected_report: String) -> datatest_stab
         ignore_compile_warnings: false,
         compute_coverage: false,
         gas_limit: 2000,
+        fail_fast: true,
     };
 
     let report_file = PathBuf::from("report.txt");

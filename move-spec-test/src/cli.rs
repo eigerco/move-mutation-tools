@@ -47,14 +47,6 @@ pub struct CLIOptions {
     #[clap(long, value_parser)]
     pub use_generated_mutants: Option<PathBuf>,
 
-    /// Indicates if mutants should be verified and made sure mutants can compile.
-    #[clap(
-        long,
-        default_value = "false",
-        conflicts_with = "use_generated_mutants"
-    )]
-    pub verify_mutants: bool,
-
     /// Extra arguments to pass to the prover.
     #[clap(long, value_parser)]
     pub extra_prover_args: Option<Vec<String>>,
@@ -77,7 +69,6 @@ pub fn create_mutator_options(options: &CLIOptions) -> move_mutator::cli::CLIOpt
         move_sources: options.move_sources.clone(),
         mutate_modules: options.mutate_modules.clone(),
         mutate_functions: options.mutate_functions.clone(),
-        verify_mutants: options.verify_mutants,
         downsampling_ratio_percentage: options.downsampling_ratio_percentage,
         ..Default::default()
     }

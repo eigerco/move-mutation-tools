@@ -82,8 +82,6 @@ pub fn create_mutator_options(
         mutate_modules: options.mutate_modules.clone(),
         downsampling_ratio_percentage: options.downsampling_ratio_percentage,
         apply_coverage,
-        // To run tests, compilation must succeed
-        verify_mutants: true,
         mode: options.mode,
         operators: options.operators.clone(),
         ..Default::default()
@@ -119,6 +117,10 @@ pub struct TestBuildConfig {
     /// The default value is large enough for all normal tests in most projects.
     #[clap(long, default_value_t = 1_000_000)]
     pub gas_limit: u64,
+
+    /// Whether to stop running test for the current mutant upon the first test failure for the mutant.
+    #[clap(long, default_value_t = true, action = clap::ArgAction::Set)]
+    pub fail_fast: bool,
 }
 
 impl TestBuildConfig {
@@ -141,6 +143,7 @@ impl TestBuildConfig {
                 .language_version
                 .or_else(|| Some(LanguageVersion::latest_stable())),
             experiments: self.move_options.compute_experiments(),
+            print_errors: false,
         }
     }
 }

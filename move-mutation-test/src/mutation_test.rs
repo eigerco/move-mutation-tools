@@ -154,6 +154,7 @@ fn run_tests<W: WriteColor + Send>(
                     )
                 })
                 .collect(),
+            fail_fast: cfg.fail_fast,
             ..UnitTestingConfig::default()
         },
         natives,
@@ -170,6 +171,7 @@ fn run_tests<W: WriteColor + Send>(
         // once_cell value above and then we can't change it back anymore.
         false,
         &mut error_writer,
+        true,
     )
     .map_err(|err| Error::msg(format!("failed to run unit tests: {err:#}")))?;
 
